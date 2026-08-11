@@ -1,25 +1,44 @@
 // netlify/functions/mark-essay.js
 //
-// SECTION C — server function skeleton, fake-answer mode.
+// SECTION D — the real Groq call, on top of section C's server function.
 //
-// Returns a hard-coded response in the exact JSON shape the real Groq-backed
-// version (section D) will use. No AI call happens here yet — this proves
-// the browser -> server -> browser round trip works before any real marking
-// logic or API key is involved.
+// The three "simulateX" essay-text testing switches from section C are kept
+// and still run BEFORE any Groq call, so error-state testing never costs a
+// real request against Groq's free-tier quota:
+//   "simulateerror"     -> immediate 500
+//   "simulatetimeout"   -> waits ~4s then returns 504
+//   "simulatemalformed" -> returns 200 with a body that is NOT valid JSON
 //
-// TESTING SWITCHES (type these words into the essay box — no URL editing
-// needed, so they're testable from the normal page):
-//   "simulateerror"     -> immediate 500, simulates the server failing outright
-//   "simulatetimeout"   -> waits ~4s then returns 504, simulates Groq being slow/down
-//   "simulatemalformed" -> returns 200 but with a body that is NOT valid JSON,
-//                          to prove the frontend never trusts an unchecked response
+// MODEL CHOICE — openai/gpt-oss-20b, not gpt-oss-120b. Both support Groq's
+// strict Structured Outputs (json_schema mode), which is used here so Groq
+// itself guarantees the response matches RESPONSE_SCHEMA — no more hoping
+// the model produces valid JSON. gpt-oss-20b was chosen over the larger
+// 120b specifically because Netlify's free plan kills synchronous functions
+// at 10 seconds, and 20b's ~1000 tokens/sec leaves a safer margin than
+// 120b's ~500 tokens/sec for a response of this length. If Netlify is later
+// upgraded past the 10s ceiling, 120b is worth re-testing for quality.
 //
-// DECISION (logged per tasks.md section G): tasks.md suggested a query
-// param for these test switches. Essay-text magic strings were used instead
-// because George tests through the real form, not by hand-editing URLs —
-// same effect, easier to actually use.
+// CALIBRATION GATE — per CLAUDE.md: "Never show a numeric mark until it's
+// been checked against essays with a known, agreed mark. Until then, show
+// 'not yet calibrated.'" CALIBRATED stays false until tasks.md task F
+// (running Maxim's real, known-mark essay through this exact pipeline and
+// confirming it lands on the right mark) is actually done — not assumed.
+// The real mark is still computed and returned in this response (so it CAN
+// be checked, e.g. via the browser's network tab, for calibration testing)
+// but the frontend must not display it to a normal visitor while this is
+// false. Flip this only after task F passes, and log why in tasks.md.
+const CALIBRATED = false;
+
+const { loadGrounding, GroundingNotLoadedError } = require('./lib/mark-scheme-loader');
+const { SYSTEM_PROMPT_VERSION, RESPONSE_SCHEMA, buildSystemPrompt } = require('./lib/system-prompt-v1');
+
+const GROQ_MODEL = 'openai/gpt-oss-20b';
+const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_TIMEOUT_MS = 8500; // Netlify free plan kills the function at 10s — return our own clean timeout before that happens
 
 exports.handler = async (event) => {
+  const startedAt = Date.now();
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
@@ -31,7 +50,7 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Malformed request body — not valid JSON.' }) };
   }
 
-  const { paper, theme, knownQuestionId, question, essay } = payload;
+  const { paper, theme, knownQuestionId, question, essay, diagram } = payload;
 
   if (!paper || !theme || !question || !essay) {
     return {
@@ -42,63 +61,163 @@ exports.handler = async (event) => {
 
   const essayLower = String(essay).toLowerCase();
 
+  // ---- Free testing switches — never reach Groq, never cost quota ----
   if (essayLower.includes('simulateerror')) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Simulated server failure, for testing.' }) };
   }
-
   if (essayLower.includes('simulatetimeout')) {
     await new Promise((resolve) => setTimeout(resolve, 4000));
     return { statusCode: 504, body: JSON.stringify({ error: 'Simulated timeout, for testing.' }) };
   }
-
   if (essayLower.includes('simulatemalformed')) {
-    // Deliberately broken JSON — the frontend must catch this, not crash.
     return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: '{ "mark": 23, "this is not valid JSON' };
   }
 
-  // ---- Normal fake success response, matching the real JSON shape ----
-  const confidenceTier = knownQuestionId ? 'exact-match' : 'general-only';
+  // ---- Load grounding — fail loudly if it's missing, never guess ----
+  let grounding;
+  try {
+    grounding = loadGrounding({ paper, theme, knownQuestionId: knownQuestionId || null });
+  } catch (e) {
+    if (e instanceof GroundingNotLoadedError) {
+      logRequest({ startedAt, success: false, reason: 'grounding-not-loaded' });
+      return { statusCode: 422, body: JSON.stringify({ error: 'Mark scheme not loaded for this paper/theme/question. Refusing to mark rather than guess.' }) };
+    }
+    logRequest({ startedAt, success: false, reason: 'grounding-error' });
+    return { statusCode: 500, body: JSON.stringify({ error: 'Unexpected error loading grounding data.' }) };
+  }
 
-  const fakeResponse = {
-    confidenceTier,
-    sourceNote: confidenceTier === 'exact-match'
-      ? 'Matched to a real past question: June 2024, Paper 1 — rising energy bills (hotel industry).'
-      : 'No exact past-paper match — marked against the general 25-mark banding grid only.',
-    mark: 23,
-    outOf: 25,
-    overallLevel: 'Level 4 — high',
-    // Two holistic components, matching how Edexcel actually marks a
-    // 25-mark essay — NOT four additive AO sub-scores. (This corrects an
-    // inconsistency from the section B mockup — see tasks.md section G.)
-    components: [
-      {
-        key: 'kaa',
-        label: 'Knowledge, Application & Analysis',
-        maxMarks: 16,
-        marksAwarded: 15,
-        level: 'Level 4',
-        commentary: 'FAKE DATA (section C). Real commentary will cite specific sentences from your essay and the mark scheme once section D wires up the real AI call.',
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    logRequest({ startedAt, success: false, reason: 'missing-api-key' });
+    return { statusCode: 500, body: JSON.stringify({ error: 'Server is not configured with a Groq API key.' }) };
+  }
+
+  const systemPrompt = buildSystemPrompt({
+    paper,
+    theme,
+    groundingText: grounding.groundingText,
+    confidenceTier: grounding.confidenceTier,
+    sourceNote: grounding.sourceNote,
+  });
+
+  const userMessage = [
+    `EXAM QUESTION:\n${question}`,
+    `STUDENT'S ESSAY:\n${essay}`,
+    diagram ? `STUDENT'S DIAGRAM DESCRIPTION (in their own words):\n${diagram}` : `STUDENT'S DIAGRAM DESCRIPTION: (none given — do not assume or invent a diagram)`,
+  ].join('\n\n');
+
+  const controller = new AbortController();
+  const groqTimeout = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
+
+  let groqResponse;
+  try {
+    groqResponse = await fetch(GROQ_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
       },
-      {
-        key: 'eval',
-        label: 'Evaluation',
-        maxMarks: 9,
-        marksAwarded: 8,
-        level: 'Level 4',
-        commentary: 'FAKE DATA (section C). This is placeholder text from mark-essay.js, not a real assessment.',
-      },
-    ],
-    issues: [
-      { category: 'diagram', severity: 'quality', text: 'FAKE — this is placeholder output from the server function skeleton.' },
-      { category: 'theory', severity: 'serious', text: 'FAKE — replace mark-essay.js with the real Groq call in section D.' },
-      { category: 'structure', severity: 'quality', text: 'FAKE — structure/phrasing checks will use your real essay text once wired to Groq.' },
-    ],
-    improvement: 'FAKE DATA. This field will show one specific, sentence-level improvement once the real AI call is wired up in section D.',
-  };
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        temperature: 0.2, // fixed low temperature — same essay marked twice should give the same answer (CLAUDE.md)
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage },
+        ],
+        response_format: {
+          type: 'json_schema',
+          json_schema: { name: 'essay_mark', schema: RESPONSE_SCHEMA },
+        },
+      }),
+      signal: controller.signal,
+    });
+  } catch (fetchErr) {
+    clearTimeout(groqTimeout);
+    const isAbort = fetchErr.name === 'AbortError';
+    logRequest({ startedAt, success: false, reason: isAbort ? 'groq-timeout' : 'groq-network-error' });
+    return {
+      statusCode: isAbort ? 504 : 500,
+      body: JSON.stringify({ error: isAbort ? 'Timed out waiting for the AI service.' : 'Could not reach the AI service.' }),
+    };
+  }
+  clearTimeout(groqTimeout);
+
+  if (!groqResponse.ok) {
+    const errText = await groqResponse.text().catch(() => '');
+    logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}` });
+    // Groq's own rate-limit status is 429 — surface distinctly so a future
+    // section E guardrail can handle it with its own message.
+    return {
+      statusCode: groqResponse.status === 429 ? 429 : 502,
+      body: JSON.stringify({ error: `AI service returned an error (status ${groqResponse.status}).` }),
+    };
+  }
+
+  const raw = await groqResponse.text();
+  let groqBody;
+  try {
+    groqBody = JSON.parse(raw);
+  } catch (e) {
+    logRequest({ startedAt, success: false, reason: 'groq-body-not-json' });
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: '{ "malformed": true, this triggers the frontend malformed-response path' };
+  }
+
+  const contentText = groqBody && groqBody.choices && groqBody.choices[0] && groqBody.choices[0].message && groqBody.choices[0].message.content;
+  let parsed;
+  try {
+    parsed = JSON.parse(contentText);
+  } catch (e) {
+    logRequest({ startedAt, success: false, reason: 'model-content-not-json' });
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: '{ "malformed": true, this triggers the frontend malformed-response path' };
+  }
+
+  // Never trust an unchecked response, even a "structured output" one —
+  // validate the shape ourselves before it goes anywhere near the frontend.
+  const componentsOk = Array.isArray(parsed.components) && parsed.components.length === 2 &&
+    parsed.components.every((c) => c && typeof c.marksAwarded === 'number' && typeof c.maxMarks === 'number' &&
+      typeof c.level === 'string' && typeof c.commentary === 'string');
+  const shapeOk = parsed && typeof parsed.overallLevel === 'string' && componentsOk &&
+    Array.isArray(parsed.issues) && typeof parsed.improvement === 'string';
+
+  if (!shapeOk) {
+    logRequest({ startedAt, success: false, reason: 'shape-validation-failed' });
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: '{ "malformed": true, this triggers the frontend malformed-response path' };
+  }
+
+  // The headline mark is summed here, server-side, from the model's own two
+  // component marks — the model is never asked for a top-line number, so it
+  // can never state one that's inconsistent with its own components.
+  const mark = parsed.components.reduce((sum, c) => sum + c.marksAwarded, 0);
+
+  logRequest({ startedAt, success: true, reason: 'ok' });
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(fakeResponse),
+    body: JSON.stringify({
+      confidenceTier: grounding.confidenceTier,
+      sourceNote: grounding.sourceNote,
+      mark,
+      outOf: 25,
+      overallLevel: parsed.overallLevel,
+      components: parsed.components,
+      issues: parsed.issues,
+      improvement: parsed.improvement,
+      calibrated: CALIBRATED,
+    }),
   };
 };
+
+// One request-level log line: time, model, prompt version, success/fail,
+// duration. Never the essay or question text (CLAUDE.md: never log the
+// pasted question or essay beyond serving that one request).
+function logRequest({ startedAt, success, reason }) {
+  console.log(JSON.stringify({
+    ts: new Date().toISOString(),
+    model: GROQ_MODEL,
+    promptVersion: SYSTEM_PROMPT_VERSION,
+    success,
+    reason,
+    durationMs: Date.now() - startedAt,
+  }));
+}

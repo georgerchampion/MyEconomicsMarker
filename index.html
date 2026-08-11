@@ -90,6 +90,10 @@
   .improve p{margin:0;font-size:13.5px;color:#0F3D38;}
 
   .disclaimer{font-size:11.5px;color:var(--sub);margin-top:16px;text-align:center;}
+
+  .calibration-note{background:var(--amber-light);border:1px solid #F3D19E;border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#92400E;}
+  .calibration-note strong{display:block;margin-bottom:2px;}
+  .not-calibrated{font-size:13px;font-weight:700;color:var(--amber);}
 </style>
 </head>
 <body>
@@ -161,9 +165,13 @@
   </div>
 
   <div id="resultArea">
+    <div class="calibration-note" id="calibrationNote" style="display:none;">
+      <strong>Marks aren't shown yet.</strong>
+      This tool hasn't been checked against a real essay with a known, correct mark yet — so numeric marks are hidden until that's done, rather than showing a number that might be wrong. The level and written feedback below are still real.
+    </div>
     <div class="score-card">
       <div class="n" id="scoreN">—</div>
-      <div class="of">out of 25</div>
+      <div class="of" id="scoreOf">out of 25</div>
       <div class="lvl" id="scoreLevel">—</div>
       <div class="tier" id="scoreTier"></div>
     </div>
@@ -479,7 +487,20 @@ document.getElementById('markAnotherBtn').addEventListener('click', () => {
 });
 
 function renderResult(r) {
-  document.getElementById('scoreN').textContent = `${r.mark}`;
+  const calibrated = r.calibrated !== false; // default true only if the field is genuinely absent (fake/older responses)
+  document.getElementById('calibrationNote').style.display = calibrated ? 'none' : 'block';
+
+  const scoreN = document.getElementById('scoreN');
+  const scoreOf = document.getElementById('scoreOf');
+  if (calibrated) {
+    scoreN.textContent = `${r.mark}`;
+    scoreN.style.fontSize = '';
+    scoreOf.textContent = `out of ${r.outOf || 25}`;
+  } else {
+    scoreN.textContent = 'Not yet calibrated';
+    scoreN.style.fontSize = '20px';
+    scoreOf.textContent = '';
+  }
   document.getElementById('scoreLevel').textContent = r.overallLevel;
   document.getElementById('scoreTier').textContent = r.sourceNote || (r.confidenceTier === 'exact-match'
     ? 'Matched to a real past question'
@@ -489,10 +510,11 @@ function renderResult(r) {
     <div class="component">
       <div class="component-head">
         <span class="name">${c.label}</span>
-        <span class="marks">${c.marksAwarded} / ${c.maxMarks}</span>
+        <span class="marks">${calibrated ? `${c.marksAwarded} / ${c.maxMarks}` : ''}</span>
       </div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round((c.marksAwarded / c.maxMarks) * 100)}%"></div></div>
+      ${calibrated ? `<div class="bar-track"><div class="bar-fill" style="width:${Math.round((c.marksAwarded / c.maxMarks) * 100)}%"></div></div>` : ''}
       <span class="level-badge">${c.level}</span>
+      ${!calibrated ? '<span class="not-calibrated"> — not yet calibrated to an exact mark</span>' : ''}
       <p>${c.commentary}</p>
     </div>`).join('');
 
