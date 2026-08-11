@@ -144,7 +144,10 @@ exports.handler = async (event) => {
 
   if (!groqResponse.ok) {
     const errText = await groqResponse.text().catch(() => '');
-    logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}` });
+    // Log Groq's own error message, truncated. Without this the logs only
+    // say "something failed" — this is the difference between a fixable
+    // bug report and a guess. Contains no student essay text.
+    logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}`, detail: errText.slice(0, 500) });
     // Groq's own rate-limit status is 429 — surface distinctly so a future
     // section E guardrail can handle it with its own message.
     return {
@@ -211,13 +214,14 @@ exports.handler = async (event) => {
 // One request-level log line: time, model, prompt version, success/fail,
 // duration. Never the essay or question text (CLAUDE.md: never log the
 // pasted question or essay beyond serving that one request).
-function logRequest({ startedAt, success, reason }) {
+function logRequest({ startedAt, success, reason, detail }) {
   console.log(JSON.stringify({
     ts: new Date().toISOString(),
     model: GROQ_MODEL,
     promptVersion: SYSTEM_PROMPT_VERSION,
     success,
     reason,
+    ...(detail ? { detail } : {}),
     durationMs: Date.now() - startedAt,
   }));
 }
