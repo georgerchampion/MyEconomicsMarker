@@ -377,6 +377,14 @@ async function markEssay(payload) {
     e.kind = 'timeout';
     throw e;
   }
+  if (response.status === 429) {
+    let retryAfterSeconds = null;
+    try { retryAfterSeconds = JSON.parse(rawText).retryAfterSeconds; } catch (e) { /* fine, just show the generic message */ }
+    const e = new Error('Rate limited.');
+    e.kind = 'rate-limited';
+    e.retryAfterSeconds = retryAfterSeconds;
+    throw e;
+  }
   if (!response.ok) {
     const e = new Error(`Server returned an error (status ${response.status}).`);
     e.kind = 'server-error';
@@ -447,13 +455,13 @@ form.addEventListener('submit', async (e) => {
     resultArea.style.display = 'block';
   } catch (err) {
     loadingState.style.display = 'none';
-    showError(err.kind);
+    showError(err.kind, err);
   } finally {
     submitBtn.disabled = false;
   }
 });
 
-function showError(kind) {
+function showError(kind, err) {
   const headline = document.getElementById('errorHeadline');
   const detail = document.getElementById('errorDetail');
   if (kind === 'timeout') {
@@ -462,6 +470,12 @@ function showError(kind) {
   } else if (kind === 'malformed') {
     headline.textContent = "Got a response that didn't make sense.";
     detail.textContent = "The server replied, but not in a shape we could trust — so nothing was shown as if it were a real mark. Try again.";
+  } else if (kind === 'rate-limited') {
+    const mins = err && err.retryAfterSeconds ? Math.ceil(err.retryAfterSeconds / 60) : null;
+    headline.textContent = "You've made several requests in a short time.";
+    detail.textContent = mins
+      ? `To keep this fair for everyone testing it (and within the free AI quota), please wait about ${mins} minute${mins === 1 ? '' : 's'} before trying again.`
+      : 'To keep this fair for everyone testing it (and within the free AI quota), please wait a few minutes before trying again.';
   } else {
     headline.textContent = 'Nothing came back.';
     detail.textContent = "The marker didn't respond — this can happen if the server is busy. Nothing was lost; try again.";

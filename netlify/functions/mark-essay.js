@@ -36,6 +36,54 @@ const GROQ_MODEL = 'openai/gpt-oss-20b';
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_TIMEOUT_MS = 8500; // Netlify free plan kills the function at 10s — return our own clean timeout before that happens
 
+// ---- SECTION E: per-visitor request cap ----
+// No login means there's nothing else stopping one visitor (or one person
+// double-clicking, or refreshing) from spending the whole day's Groq free
+// quota by themselves (CLAUDE.md guardrail). This caps each visitor to
+// RATE_LIMIT_MAX requests per RATE_LIMIT_WINDOW_MS.
+//
+// HONEST LIMITATION: this is an in-memory Map, kept only for as long as
+// this particular function instance stays warm — it resets on a cold start
+// and isn't shared across multiple simultaneous instances. CLAUDE.md rules
+// out a database for this project, so this is the best available guardrail
+// without adding infrastructure. It stops the realistic accidental case
+// (one person's browser looping) — it is NOT a hardened defence against a
+// deliberate attacker with multiple devices. That distinction is worth
+// knowing, not hiding.
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 5 requests per 10 minutes per visitor
+const requestLog = new Map(); // ip -> array of request timestamps (ms)
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const timestamps = (requestLog.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    const retryAfterMs = RATE_LIMIT_WINDOW_MS - (now - timestamps[0]);
+    return { allowed: false, retryAfterSeconds: Math.ceil(retryAfterMs / 1000) };
+  }
+
+  timestamps.push(now);
+  requestLog.set(ip, timestamps);
+
+  // Prevent unbounded growth over a long-lived warm instance — drop entries
+  // for visitors who haven't made a request in over an hour.
+  if (requestLog.size > 500) {
+    for (const [key, times] of requestLog) {
+      if (times.every((t) => now - t > 60 * 60 * 1000)) requestLog.delete(key);
+    }
+  }
+
+  return { allowed: true };
+}
+
+function getClientIp(event) {
+  const headers = event.headers || {};
+  return headers['x-nf-client-connection-ip']
+    || (headers['x-forwarded-for'] || '').split(',')[0].trim()
+    || 'unknown';
+}
+
 exports.handler = async (event) => {
   const startedAt = Date.now();
 
@@ -61,7 +109,8 @@ exports.handler = async (event) => {
 
   const essayLower = String(essay).toLowerCase();
 
-  // ---- Free testing switches — never reach Groq, never cost quota ----
+  // ---- Free testing switches — never reach Groq, never cost quota, and
+  // deliberately not rate-limited so testing error states stays convenient ----
   if (essayLower.includes('simulateerror')) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Simulated server failure, for testing.' }) };
   }
@@ -71,6 +120,23 @@ exports.handler = async (event) => {
   }
   if (essayLower.includes('simulatemalformed')) {
     return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: '{ "mark": 23, "this is not valid JSON' };
+  }
+  if (essayLower.includes('simulateratelimit')) {
+    return { statusCode: 429, body: JSON.stringify({ error: 'Too many requests. Simulated for testing — wait a minute and try again.', retryAfterSeconds: 60 }) };
+  }
+
+  // ---- Rate limit real requests only, per visitor IP ----
+  const clientIp = getClientIp(event);
+  const rateLimit = checkRateLimit(clientIp);
+  if (!rateLimit.allowed) {
+    logRequest({ startedAt, success: false, reason: 'rate-limited' });
+    return {
+      statusCode: 429,
+      body: JSON.stringify({
+        error: `You've made several requests in a short time. Please wait ${Math.ceil(rateLimit.retryAfterSeconds / 60)} minute(s) and try again.`,
+        retryAfterSeconds: rateLimit.retryAfterSeconds,
+      }),
+    };
   }
 
   // ---- Load grounding — fail loudly if it's missing, never guess ----
@@ -148,8 +214,9 @@ exports.handler = async (event) => {
     // say "something failed" — this is the difference between a fixable
     // bug report and a guess. Contains no student essay text.
     logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}`, detail: errText.slice(0, 500) });
-    // Groq's own rate-limit status is 429 — surface distinctly so a future
-    // section E guardrail can handle it with its own message.
+    // Groq's own rate-limit status is 429 too — passed through as the same
+    // status code our own per-visitor cap uses, so the frontend's one
+    // "rate-limited" handler covers both causes with one honest message.
     return {
       statusCode: groqResponse.status === 429 ? 429 : 502,
       body: JSON.stringify({ error: `AI service returned an error (status ${groqResponse.status}).` }),
