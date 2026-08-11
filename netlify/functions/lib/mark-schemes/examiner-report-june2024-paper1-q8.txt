@@ -1,0 +1,42 @@
+SOURCE: Pearson Edexcel GCE A Level Economics A (9EC0/01), Examiners' Report, June 2024.
+Official URL: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-pef-20240815.pdf
+© Pearson Education Ltd 2024. Internal grounding use only.
+
+=== EXAMINER COMMENTARY ON QUESTION 8 ===
+
+"This question ... expected candidates to evaluate the level of contestability in the fragrance
+industry. It was asking whether the level of contestability is high or low in that particular
+industry. ... This was not a popular question, and the quality of responses was significantly
+poorer than those seen in Q7. Many candidates did not discuss contestability. A contestable
+market occurs when there is freedom of entry and exit into the market. It is not the same as
+the existing level of competition in a market. In a contestable market, it is not the number of
+firms that is important but the ease with which potential competition can become actual
+competition. When candidates talked about the extent of barriers to entry or the extent of
+sunk costs they were able to access marks. However, many candidates talked about perfect
+and monopolistic competition and neglected to mention sunk costs or hit and run
+competition at all. The key takeaway from this example is to only attempt questions when
+the content is fully understood."
+
+=== REAL GRADED EXAMPLE 1 — SCORED 14/25 ===
+Discussed the supermarket industry and its barriers to entry (oligopolistic), with some
+confused evaluation about collusive equilibrium and price wars. Second KAA paragraph on
+limit pricing was well developed, reaching Level 3. Overall: the essay mixed elements of
+competitiveness (actual competition) and contestability (potential competition) and
+struggled to fully answer the question as set.
+RESULT: bottom Level 3 KAA = 10 marks, bottom Level 2 evaluation = 4 marks. Total 14/25.
+
+=== REAL GRADED EXAMPLE 2 — SCORED 20/25 ===
+Clear definition of contestability stated up front. Discussed sunk costs, limit pricing, with a
+clear diagram explaining the theory. Good contextual examples. Discussion of competition
+authority intervention to increase contestability. Strength specifically noted by the examiner:
+"clear signposting to say why their point either increases or reduces contestability" — e.g.
+explicitly stating that the Tesco Clubcard, discussed in the context of brand loyalty,
+constitutes a significant barrier to entry which REDUCES contestability.
+RESULT: Level 4 KAA = 15 marks, Level 2 evaluation = 5 marks. Total 20/25.
+
+KEY LESSON FOR FEEDBACK: on this specific question, the single highest-value theory check
+is whether the essay ever actually defines/uses "contestability" correctly (potential
+competition, sunk costs, hit-and-run competition, barriers to entry/exit) as opposed to
+drifting into a general discussion of market structure and actual competition
+(competitiveness) — a subtly different concept that this question does not ask about, however
+well-argued.

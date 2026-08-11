@@ -1,0 +1,54 @@
+SOURCE: Pearson Edexcel GCE A Level Economics A (9EC0), Paper 01, June 2024 series.
+Question paper: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-que-20240516.pdf
+Mark scheme: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-rms-20240815.pdf
+© Pearson Education Ltd 2024. Internal grounding use only.
+
+=== EXACT QUESTION AS SET (Section C, Question 7, 25 marks) ===
+
+"A small hotel in Scarborough has seen its energy bills increase from £2000 to £8000 per
+month. Small businesses do not have the energy management teams of larger companies to
+negotiate better deals."
+(Source adapted from: https://www.ft.com/content/d07797e7-2eb7-4240-b15d-692b39510def)
+
+"Evaluate the microeconomic effects of rising energy bills on the hotel industry or an
+industry of your choice. (Total for Question 7 = 25 marks)"
+
+=== SPECIFIC INDICATIVE CONTENT (this question only) ===
+Knowledge 4, Application 4, Analysis 8, Evaluation 9
+
+Likely content:
+- Increase in energy bills (Fixed Cost) shifts AC upwards OR Variable Costs increase
+  shifting AC and MC upwards
+- Loss area/smaller profit connected with MC=MR
+- Short-term (AVC) or long-term (AC) shut down point reached for firms in industry
+- Cost and Revenue/Supply and Demand analysis - higher prices and lower output
+- Industry energy intensive
+- Cut in costs - wages/redundancies/investment/impact on hotel guests/customers
+- Wider impacts on employees and suppliers
+- Reduction in the level of competition/contestability in the industry as smaller firms are
+  forced to exit
+- Diagram showing fixed costs changing is creditable
+- Change in business objective e.g. to sales maximisation
+- Incentive to put in place energy saving devices, insulation, solar panels to reduce energy use
+
+NB For a Level 4 KAA response, candidates must refer to a specific industry.
+NB For a Level 4 KAA response, a diagram is NOT required (unlike some other questions).
+
+Evaluation indicative content:
+- Energy prices are very volatile
+- Energy bill as proportion of total cost
+- Cover AVC in short run - contribute to energy bills; cover AC in long run
+- Long-term changes e.g. energy price falls
+- Industry/market structure - monopsony power - larger companies can negotiate better deals
+- Information/education campaigns to encourage customers to reduce energy consumption
+- Reward magnitude arguments e.g. the size of the increase in energy costs
+- Extent to which costs can be offset by energy saving measures/or increase in demand for
+  hotel rooms
+- Government intervention to support businesses with higher bills
+- Impact depends on size of the hotel e.g. Premier Inn (large chain) vs. independent
+- Candidates can use PED as impact on revenue
+
+Level descriptors: use the general 25-mark KAA (16) + Evaluation (9) banding grid — see
+mark-schemes-general-25-mark-banding.txt. This question does not have different level
+wording from the general grid; the indicative content above is what examiners map
+against those levels for this specific question.

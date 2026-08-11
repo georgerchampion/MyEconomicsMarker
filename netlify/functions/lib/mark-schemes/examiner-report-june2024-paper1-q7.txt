@@ -1,0 +1,50 @@
+SOURCE: Pearson Edexcel GCE A Level Economics A (9EC0/01), Examiners' Report, June 2024.
+Official URL: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-pef-20240815.pdf
+© Pearson Education Ltd 2024. Internal grounding use only — this is for checking WHY marks
+were awarded/withheld and generating precise, specific feedback. Never used to override the
+mark scheme itself (mark-scheme-june2024-paper1-q7.txt is the authority on marks).
+
+=== EXAMINER COMMENTARY ON QUESTION 7 ===
+
+"In this question, candidates were asked to evaluate the microeconomic effects of rising
+energy bills on the hotel industry or an industry of the candidates' choice. Inevitably, most
+responses focussed on the hotel industry because the stem provided a location, a specific
+real world example, and a pathway into a discussion about the buying power of larger
+hotels. The responses to this question tended to follow the impact of cost and quality of
+provision, as hotels reduced services in a struggle to balance the books. There were many
+imaginative responses which discussed the differential impact depending on location, time
+of year, and whether the hotel was small or part of a large chain. Again, the good use of
+accurately drawn cost and revenue diagrams often significantly enhanced the quality of many
+responses. Short run shutdown scenarios were particularly effective."
+
+=== REAL GRADED EXAMPLE 1 — SCORED 11/25 ===
+Two KAA paragraphs. First: rising energy bills reduce profits, reducing hotels' ability to
+expand — awarded Level 2. Evaluative point: hotels could raise prices, but this depends on
+price elasticity of demand of customers — awarded Level 2 evaluation. Second KAA point:
+falling customer demand affecting the industry because of scale of cost increase — not well
+developed, awarded Level 2, no further evaluation.
+RESULT: Level 2 KAA = 7 marks, Level 2 evaluation = 4 marks. Total 11/25.
+
+Examiner's generalised advice from this example: "Writing a 25 mark essay is a crucially
+important skill. There should be at least two KAA paragraphs to develop both the depth and
+breadth of argument. There should be in depth evaluation of EACH KAA paragraph. At the
+end of the essay there should be a conclusion that works towards a justified judgement."
+
+=== REAL GRADED EXAMPLE 2 — SCORED 23/25 ===
+First KAA paragraph: rising costs reduce abnormal profits, deepened by a carefully drawn
+diagram showing increased AC and MC and reduced profits; explains reduced quality of
+service and potential job losses — awarded Level 4. Evaluation: negative impacts depend on
+hotel location (location may matter more than service quality) — awarded Level 3
+evaluation. Second KAA paragraph: negative impact on competition — smaller hotels can't
+absorb cost increases the way bigger hotels can; discussion of possible oligopolistic collusion
+leading to higher prices — awarded Level 4. Evaluation: government may take measures to
+offset negative effects on competition — awarded Level 2 evaluation (lower, because the
+conclusion introduced new, undeveloped material on Airbnb/contestability rather than
+synthesising the existing argument).
+RESULT: 16 marks KAA + 7 marks evaluation = 23/25.
+
+KEY LESSON FOR FEEDBACK: the single mark lost between an excellent Level 4 answer and a
+perfect one was in the CONCLUSION — introducing a brand new, undeveloped point (Airbnb/
+contestability) instead of synthesising and prioritising the arguments already made. This is a
+precise, specific, checkable failure mode worth flagging whenever an essay's conclusion
+introduces new unintegrated material.

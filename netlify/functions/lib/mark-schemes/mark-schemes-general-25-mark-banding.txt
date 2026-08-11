@@ -1,0 +1,73 @@
+SOURCE: Pearson Edexcel GCE A Level Economics A (9EC0), Paper 01 Market and Business
+Behaviour, Mark Scheme (Results), Summer 2024. Publications Code 9EC0_01_2406_MS.
+Official URL: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-rms-20240815.pdf
+© Pearson Education Ltd 2024. Extracted for internal grounding use in this project only —
+not redistributed to end users verbatim (see constitution: paraphrase in output, never
+reproduce mark scheme text at length).
+
+This is the GENERAL banding grid for a 25-mark Section C essay under this specification
+(9EC0/01, and the same generic wording is used across the specification's 25-mark
+questions). Applies regardless of which specific question is asked — this is the baseline
+grounding document, always loaded.
+
+=== GENERAL MARKING GUIDANCE ===
+- All candidates must receive the same treatment. Examiners must mark the first candidate
+  in exactly the same way as they mark the last.
+- Mark schemes should be applied positively. Candidates must be rewarded for what they
+  have shown they can do rather than penalised for omissions.
+- Examiners should mark according to the mark scheme not according to their perception
+  of where the grade boundaries may lie.
+- There is no ceiling on achievement. All marks on the mark scheme should be used
+  appropriately.
+- All the marks on the mark scheme are designed to be awarded. Examiners should always
+  award full marks if deserved, i.e. if the answer matches the mark scheme. Examiners
+  should also be prepared to award zero marks if the candidate's response is not worthy of
+  credit according to the mark scheme.
+- Where some judgement is required, mark schemes will provide the principles by which
+  marks will be awarded and exemplification may be limited.
+- Crossed out work should be marked UNLESS the candidate has replaced it with an
+  alternative response.
+
+=== KNOWLEDGE, APPLICATION AND ANALYSIS (16 marks) ===
+
+Level 0 (0 marks): A completely inaccurate response.
+
+Level 1 (1-4 marks): Displays isolated or imprecise knowledge and understanding of terms,
+concepts, theories and models. Use of generic or irrelevant information or examples.
+Descriptive approach which has no chains of reasoning or links between causes and
+consequences.
+
+Level 2 (5-8 marks): Displays elements of knowledge and understanding of economic
+principles, concepts and theories. Applies economic ideas and relates them to economic
+problems in context, although does not focus on the broad elements of the question. A
+narrow response or superficial, two stage chains of reasoning only.
+
+Level 3 (9-12 marks): Demonstrates accurate knowledge and understanding of the concepts,
+principles and models. Ability to apply economic concepts and relate them directly to the
+broad elements of the question with evidence integrated into the answer. Analysis is clear
+and coherent, although it may lack balance. Chains of reasoning are developed but the
+answer may lack balance.
+
+Level 4 (13-16 marks): Demonstrates precise knowledge and understanding of the concepts,
+principles and models. Ability to link knowledge and understanding in context using
+appropriate examples. Analysis is relevant and focused with evidence fully and reliably
+integrated. Economic ideas are carefully selected and applied appropriately to economic
+issues and problems. The answer demonstrates logical and coherent chains of reasoning.
+
+=== EVALUATION (9 marks) ===
+
+Level 0 (0 marks): No evaluative comments.
+
+Level 1 (1-3 marks): Identification of generic evaluative comments without supporting
+evidence/reference to context. No evidence of a logical chain of reasoning.
+
+Level 2 (4-6 marks): Evidence of evaluation of alternative approaches which is unbalanced
+leading to unsubstantiated judgements. Evaluative comments with supporting
+evidence/reference to context and a partially-developed chain of reasoning.
+
+Level 3 (7-9 marks): Evaluative comments supported by relevant reasoning and appropriate
+reference to context. Evaluation recognises different viewpoints and is critical of the
+evidence provided and/or the assumptions underlying the analysis enabling informed
+judgements to be made.
+
+TOTAL: 16 + 9 = 25 marks.

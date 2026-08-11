@@ -1,0 +1,59 @@
+SOURCE: Pearson Edexcel GCE A Level Economics A (9EC0), Paper 01, June 2024 series.
+Question paper: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-que-20240516.pdf
+Mark scheme: https://qualifications.pearson.com/content/dam/pdf/A-Level/Economics/2015/Exam-materials/9ec0-01-rms-20240815.pdf
+© Pearson Education Ltd 2024. Internal grounding use only.
+
+=== EXACT QUESTION AS SET (Section C, Question 8, 25 marks) ===
+
+"Bytedance, which owns TikTok, has launched its own fragrance 'Emotif'. The Beijing-based
+social media giant has already entered the food and drink markets."
+(Source adapted from: https://www.businessoffashion.com/news/china/tiktoks-parent-company-enters-chinas-perfume-market/)
+
+"Evaluate the level of contestability in the fragrance industry or another industry of your
+choice. (Total for Question 8 = 25 marks)"
+
+=== SPECIFIC INDICATIVE CONTENT (this question only) ===
+Knowledge 4, Application 4, Analysis 8, Evaluation 9
+
+An industry is contestable when there is freedom of entry and exit into it. It is not the
+number of firms that is important, but the ease with which new firms can enter the market.
+This alters the behaviour of incumbent firms.
+
+"Not contestable" indicative content:
+- High barriers to entry
+- Collusion
+- Highly concentrated market implies high barriers to entry
+- Strong brand names imply high sunk costs (advertising/social media platform) to reach
+  mass market
+- Entry only by well-established firms with finance to invest
+- High start-up mass production costs - large economies of scale
+- Profit maximising firm(s) dominate the market - abuse of monopoly/monopsony practices
+- Use of limit pricing/collusive practices by incumbents
+- Barriers to exit - sunk costs
+
+"Contestable" indicative content:
+- Barriers to entry lowered - technological advances
+- Limit pricing suggestive of contestability
+- Products more homogenous - compete on price
+- Market more competitive - consumers prepared to switch, demand more relatively price
+  elastic
+- Small scale production - may secure niche market/different market segments
+- Large incumbents making losses - vulnerable to new entrants
+- Barriers to exit lowered - rent land, capital, temporary labour contracts
+- Degree of contestability / extent of hit-and-run competition
+- Easily available information on industry
+- Regulators may intervene to increase contestability
+
+NB KAA may be used as Evaluation and vice-versa.
+NB For a Level 4 KAA response, candidates must refer to a specific industry.
+
+=== THE COMMON MISTAKE ON THIS EXACT TOPIC (from the examiner's report) ===
+Contestability is routinely confused with competitiveness. Competitiveness is about the
+extent of ACTUAL competition in an industry. Contestability is about the threat of
+POTENTIAL competition becoming actual. An essay that discusses market structure
+(monopoly/oligopoly/monopolistic competition) without discussing sunk costs, barriers to
+entry/exit, or hit-and-run competition is answering the wrong question, however well
+written it is. This is the single most important theory-accuracy check for this question.
+
+Level descriptors: use the general 25-mark KAA (16) + Evaluation (9) banding grid — see
+mark-schemes-general-25-mark-banding.txt.
