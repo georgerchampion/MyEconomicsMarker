@@ -126,7 +126,7 @@ exports.handler = async (event) => {
         ],
         response_format: {
           type: 'json_schema',
-          json_schema: { name: 'essay_mark', schema: RESPONSE_SCHEMA },
+          json_schema: { name: 'essay_mark', strict: true, schema: RESPONSE_SCHEMA },
         },
       }),
       signal: controller.signal,

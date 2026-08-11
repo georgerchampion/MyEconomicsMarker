@@ -35,9 +35,13 @@ const RESPONSE_SCHEMA = {
       description: 'One short phrase describing the overall standard, e.g. "Level 4 — high" or "boundary Level 2/3".',
     },
     components: {
+      // NOTE: minItems/maxItems deliberately left out — Groq's strict
+      // Structured Outputs schema doesn't document support for them, and an
+      // unsupported keyword makes Groq reject the whole request with a 400
+      // (this caused the "nothing came back" failures on 2026-08-11). The
+      // "always exactly 2, kaa then eval" guarantee is instead enforced by
+      // shape validation in mark-essay.js, which already checked this.
       type: 'array',
-      minItems: 2,
-      maxItems: 2,
       items: {
         type: 'object',
         properties: {
