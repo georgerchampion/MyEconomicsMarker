@@ -66,17 +66,23 @@
   .score-card .lvl{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;display:inline-block;}
   .score-card .tier{margin-top:10px;font-size:12px;opacity:.85;}
 
-  .ao-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-  .ao-row .label{width:36px;font-size:12px;font-weight:700;color:var(--sub);}
-  .bar-track{flex:1;height:7px;border-radius:5px;background:#EEF0F5;overflow:hidden;}
+  .component{padding:14px 0;border-top:1px solid var(--line);}
+  .component:first-child{border-top:none;padding-top:0;}
+  .component-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .component-head .name{font-size:13.5px;font-weight:700;}
+  .component-head .marks{font-size:13px;color:var(--sub);font-weight:600;}
+  .bar-track{height:7px;border-radius:5px;background:#EEF0F5;overflow:hidden;margin-bottom:8px;}
   .bar-fill{height:100%;border-radius:5px;background:var(--indigo);}
-  .ao-row .pct{width:34px;text-align:right;font-size:11.5px;color:var(--sub);font-weight:600;}
+  .component .level-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;background:var(--indigo-light);color:var(--indigo);padding:2px 8px;border-radius:5px;margin-bottom:6px;}
+  .component p{margin:0;font-size:13px;color:#334155;}
 
-  .issue{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--line);}
+  .issue{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--line);align-items:flex-start;}
   .issue:first-child{border-top:none;padding-top:0;}
-  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;height:fit-content;}
+  .issue .tags{display:flex;flex-direction:column;gap:4px;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;height:fit-content;text-align:center;}
   .tag.serious{background:var(--red-light);color:var(--red);}
   .tag.quality{background:var(--amber-light);color:var(--amber);}
+  .tag.category{background:#EEF0F5;color:var(--sub);}
   .issue p{margin:0;font-size:13px;color:#334155;}
 
   .improve{background:var(--teal-light);border:1px solid #99E6DA;border-radius:12px;padding:18px 20px;margin-top:16px;}
@@ -148,8 +154,8 @@
   </div>
 
   <div class="error-state" id="errorState">
-    <strong>Nothing came back.</strong>
-    <p style="margin:8px 0 0;font-size:13px;">The marker didn't respond — this can happen if the AI service is busy. Nothing was lost; try again.</p>
+    <strong id="errorHeadline">Nothing came back.</strong>
+    <p id="errorDetail" style="margin:8px 0 0;font-size:13px;">The marker didn't respond — this can happen if the AI service is busy. Nothing was lost; try again.</p>
     <button id="retryBtn">Try again</button>
   </div>
 
@@ -162,8 +168,8 @@
     </div>
 
     <div class="panel">
-      <label style="margin-bottom:12px;">AO breakdown</label>
-      <div id="aoBreakdown"></div>
+      <label style="margin-bottom:12px;">Component breakdown</label>
+      <div id="componentBreakdown"></div>
     </div>
 
     <div class="panel">
@@ -278,36 +284,66 @@ function validateField(el, condition) {
   return false;
 }
 
-// ---- Fake-answer mode (task C, built here so B can be tested standalone) ----
-// Swap this function's body for a real fetch() to the Netlify function once
-// section C/D exist. Everything else on this page stays the same.
-function markEssayFake({ paper, theme, knownQuestionId, question, essay, diagram }) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // simulate a "nothing came back" failure via a magic test phrase, so
-      // the error state is reachable without editing code
-      if (essay.toLowerCase().includes('simulateerror')) {
-        reject(new Error('Simulated failure for testing'));
-        return;
-      }
-      resolve({
-        confidenceTier: knownQuestionId ? 'exact-match' : 'general-only',
-        mark: 23,
-        level: 'Level 4 — high',
-        ao: [
-          { label: 'AO1', pct: 95 },
-          { label: 'AO2', pct: 90 },
-          { label: 'AO3', pct: 85 },
-          { label: 'AO4', pct: 60 },
-        ],
-        issues: [
-          { severity: 'serious', text: 'Fake data — this is placeholder output from markEssayFake(), not a real mark.' },
-          { severity: 'quality', text: 'Replace this function with a real fetch() once the server function exists (section C/D).' },
-        ],
-        improvement: 'This is fake-answer mode (task C). Once wired to Groq, this field will show one specific, sentence-level improvement.',
-      });
-    }, 900);
-  });
+// ---- Section C: real fetch to the Netlify function (still fake-answer mode
+// server-side — see mark-essay.js). This replaces the section-B client-only
+// mock; everything downstream of this function is unchanged. ----
+async function markEssay(payload) {
+  const controller = new AbortController();
+  const clientTimeout = setTimeout(() => controller.abort(), 12000); // safety net separate from the server's own simulated timeout
+
+  let response;
+  try {
+    response = await fetch('/.netlify/functions/mark-essay', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+  } catch (networkErr) {
+    clearTimeout(clientTimeout);
+    if (networkErr.name === 'AbortError') {
+      const e = new Error('Client-side timeout waiting for the server.');
+      e.kind = 'timeout';
+      throw e;
+    }
+    const e = new Error('Could not reach the server at all.');
+    e.kind = 'network';
+    throw e;
+  }
+  clearTimeout(clientTimeout);
+
+  const rawText = await response.text();
+
+  if (response.status === 504) {
+    const e = new Error('Server reported a timeout.');
+    e.kind = 'timeout';
+    throw e;
+  }
+  if (!response.ok) {
+    const e = new Error(`Server returned an error (status ${response.status}).`);
+    e.kind = 'server-error';
+    throw e;
+  }
+
+  // Never trust an unchecked response — parse defensively, then validate shape.
+  let data;
+  try {
+    data = JSON.parse(rawText);
+  } catch (parseErr) {
+    const e = new Error('Server response was not valid JSON.');
+    e.kind = 'malformed';
+    throw e;
+  }
+
+  const shapeOk = data && typeof data.mark === 'number' && Array.isArray(data.components) &&
+    data.components.length === 2 && Array.isArray(data.issues) && typeof data.improvement === 'string';
+  if (!shapeOk) {
+    const e = new Error('Server response was valid JSON but not the expected shape.');
+    e.kind = 'malformed';
+    throw e;
+  }
+
+  return data;
 }
 
 // ---- Form submit ----
@@ -340,7 +376,7 @@ form.addEventListener('submit', async (e) => {
   submitBtn.disabled = true;
 
   try {
-    const result = await markEssayFake({
+    const result = await markEssay({
       paper: paperEl.value,
       theme: themeEl.value,
       knownQuestionId: knownQuestionEl.value || null,
@@ -353,11 +389,27 @@ form.addEventListener('submit', async (e) => {
     resultArea.style.display = 'block';
   } catch (err) {
     loadingState.style.display = 'none';
-    errorState.style.display = 'block';
+    showError(err.kind);
   } finally {
     submitBtn.disabled = false;
   }
 });
+
+function showError(kind) {
+  const headline = document.getElementById('errorHeadline');
+  const detail = document.getElementById('errorDetail');
+  if (kind === 'timeout') {
+    headline.textContent = 'The marker took too long.';
+    detail.textContent = 'This can happen if the AI service is slow or overloaded. Nothing was lost — try again.';
+  } else if (kind === 'malformed') {
+    headline.textContent = "Got a response that didn't make sense.";
+    detail.textContent = "The server replied, but not in a shape we could trust — so nothing was shown as if it were a real mark. Try again.";
+  } else {
+    headline.textContent = 'Nothing came back.';
+    detail.textContent = "The marker didn't respond — this can happen if the server is busy. Nothing was lost; try again.";
+  }
+  errorState.style.display = 'block';
+}
 
 document.getElementById('retryBtn').addEventListener('click', () => {
   errorState.style.display = 'none';
@@ -376,22 +428,29 @@ document.getElementById('markAnotherBtn').addEventListener('click', () => {
 });
 
 function renderResult(r) {
-  document.getElementById('scoreN').textContent = r.mark;
-  document.getElementById('scoreLevel').textContent = r.level;
-  document.getElementById('scoreTier').textContent = r.confidenceTier === 'exact-match'
+  document.getElementById('scoreN').textContent = `${r.mark}`;
+  document.getElementById('scoreLevel').textContent = r.overallLevel;
+  document.getElementById('scoreTier').textContent = r.sourceNote || (r.confidenceTier === 'exact-match'
     ? 'Matched to a real past question'
-    : 'General grid only — no exact past-paper match';
+    : 'General grid only — no exact past-paper match');
 
-  document.getElementById('aoBreakdown').innerHTML = r.ao.map(a => `
-    <div class="ao-row">
-      <span class="label">${a.label}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${a.pct}%"></div></div>
-      <span class="pct">${a.pct}%</span>
+  document.getElementById('componentBreakdown').innerHTML = r.components.map(c => `
+    <div class="component">
+      <div class="component-head">
+        <span class="name">${c.label}</span>
+        <span class="marks">${c.marksAwarded} / ${c.maxMarks}</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round((c.marksAwarded / c.maxMarks) * 100)}%"></div></div>
+      <span class="level-badge">${c.level}</span>
+      <p>${c.commentary}</p>
     </div>`).join('');
 
   document.getElementById('issuesList').innerHTML = r.issues.map(i => `
     <div class="issue">
-      <span class="tag ${i.severity}">${i.severity}</span>
+      <div class="tags">
+        <span class="tag category">${i.category}</span>
+        <span class="tag ${i.severity}">${i.severity}</span>
+      </div>
       <p>${i.text}</p>
     </div>`).join('');
 
