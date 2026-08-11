@@ -1,1 +1,402 @@
-<h1>Hello, it works</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GradeGrid — Edexcel Economics 25-Mark Essay Marker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7FA; --panel:#FFFFFF; --line:#E6E9F0; --ink:#0F172A; --sub:#64748B;
+    --indigo:#4F46E5; --indigo-light:#EEF0FF; --teal:#0D9488; --teal-light:#E6FBF8;
+    --amber:#D97706; --amber-light:#FEF3E2; --red:#DC2626; --red-light:#FEECEC;
+    --green:#16A34A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;}
+  header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px 40px;}
+  .logo{max-width:820px;margin:0 auto;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px;}
+  .logo .dot{width:10px;height:10px;border-radius:3px;background:var(--indigo);display:inline-block;}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 24px 80px;}
+  h1{font-size:22px;margin:0 0 6px;}
+  .tagline{color:var(--sub);font-size:14px;margin:0 0 28px;}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:20px;}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .field{margin-bottom:18px;}
+  .hint{font-size:12px;color:var(--sub);margin-top:4px;}
+  select, textarea, input[type=text]{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+    font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:#fff;
+  }
+  select:focus, textarea:focus, input:focus{outline:2px solid var(--indigo);outline-offset:1px;border-color:var(--indigo);}
+  textarea{resize:vertical;min-height:80px;}
+  textarea#essay{min-height:220px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .char-count{font-size:11.5px;color:var(--sub);text-align:right;margin-top:4px;}
+  .char-count.warn{color:var(--amber);font-weight:600;}
+  .char-count.over{color:var(--red);font-weight:600;}
+  .error-msg{font-size:12.5px;color:var(--red);margin-top:6px;display:none;}
+  .field.invalid textarea, .field.invalid select{border-color:var(--red);}
+  .field.invalid .error-msg{display:block;}
+
+  .tier-note{font-size:12.5px;padding:10px 12px;border-radius:8px;margin-top:8px;display:none;}
+  .tier-note.exact{display:block;background:var(--teal-light);color:#0D9488;}
+  .tier-note.general{display:block;background:var(--amber-light);color:#92400E;}
+
+  button.submit{
+    width:100%;background:var(--indigo);color:white;border:none;border-radius:10px;
+    padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+  button.submit:hover{background:#4338CA;}
+  button.submit:disabled{background:#B7B4F0;cursor:not-allowed;}
+
+  #resultArea{display:none;}
+  .loading{display:none;text-align:center;padding:40px 0;color:var(--sub);font-size:14px;}
+  .spinner{width:32px;height:32px;border:3px solid var(--indigo-light);border-top-color:var(--indigo);border-radius:50%;margin:0 auto 14px;animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .error-state{display:none;text-align:center;padding:30px;background:var(--red-light);border-radius:12px;color:#991B1B;}
+  .error-state button{margin-top:12px;background:white;border:1px solid #991B1B;color:#991B1B;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+
+  .score-card{background:linear-gradient(135deg,#4F46E5,#4338CA);border-radius:14px;padding:22px 24px;color:white;text-align:center;margin-bottom:16px;}
+  .score-card .n{font-size:40px;font-weight:800;}
+  .score-card .of{font-size:14px;opacity:.8;}
+  .score-card .lvl{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;display:inline-block;}
+  .score-card .tier{margin-top:10px;font-size:12px;opacity:.85;}
+
+  .ao-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .ao-row .label{width:36px;font-size:12px;font-weight:700;color:var(--sub);}
+  .bar-track{flex:1;height:7px;border-radius:5px;background:#EEF0F5;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:5px;background:var(--indigo);}
+  .ao-row .pct{width:34px;text-align:right;font-size:11.5px;color:var(--sub);font-weight:600;}
+
+  .issue{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--line);}
+  .issue:first-child{border-top:none;padding-top:0;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;height:fit-content;}
+  .tag.serious{background:var(--red-light);color:var(--red);}
+  .tag.quality{background:var(--amber-light);color:var(--amber);}
+  .issue p{margin:0;font-size:13px;color:#334155;}
+
+  .improve{background:var(--teal-light);border:1px solid #99E6DA;border-radius:12px;padding:18px 20px;margin-top:16px;}
+  .improve .eyebrow{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+  .improve p{margin:0;font-size:13.5px;color:#0F3D38;}
+
+  .disclaimer{font-size:11.5px;color:var(--sub);margin-top:16px;text-align:center;}
+</style>
+</head>
+<body>
+<header><div class="logo"><span class="dot"></span>GradeGrid</div></header>
+<div class="wrap">
+  <h1>Edexcel A-Level Economics A — 25-Mark Essay Marker</h1>
+  <p class="tagline">Paste your question and essay. One structured critique, grounded in the real mark scheme.</p>
+
+  <form id="markForm" class="panel" novalidate>
+    <div class="row2">
+      <div class="field">
+        <label for="paper">Paper</label>
+        <select id="paper" required>
+          <option value="">Select a paper…</option>
+          <option value="paper1">Paper 1 — Markets and business behaviour</option>
+          <option value="paper2">Paper 2 — The national and global economy</option>
+        </select>
+        <div class="error-msg">Choose a paper.</div>
+      </div>
+      <div class="field">
+        <label for="theme">Theme</label>
+        <select id="theme" required disabled>
+          <option value="">Select a paper first…</option>
+        </select>
+        <div class="error-msg">Choose a theme.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="knownQuestion">Which question is this? (optional, but more precise if it matches)</label>
+      <select id="knownQuestion" disabled>
+        <option value="">Select a theme first…</option>
+      </select>
+      <div id="tierNote" class="tier-note"></div>
+    </div>
+
+    <div class="field" id="questionField">
+      <label for="question">The exam question</label>
+      <textarea id="question" placeholder="Paste the exact question as set…" required></textarea>
+      <div class="error-msg">Paste the question — this can't be marked without it.</div>
+    </div>
+
+    <div class="field" id="essayField">
+      <label for="essay">Your essay</label>
+      <textarea id="essay" placeholder="Paste your full essay here…" required></textarea>
+      <div class="char-count" id="essayCount">0 characters</div>
+      <div class="error-msg">Paste your essay — this can't be marked without it.</div>
+    </div>
+
+    <div class="field">
+      <label for="diagram">Diagram description (optional — describe any diagram in words, no image upload)</label>
+      <textarea id="diagram" placeholder="e.g. 'I drew a cost and revenue diagram showing AC and MC shifting up, with a shaded loss area between P and AC at Q1'…"></textarea>
+    </div>
+
+    <button type="submit" class="submit" id="submitBtn">Mark my essay</button>
+    <p class="disclaimer">This gives an AI estimate against the mark scheme — not an official Edexcel result. What you type is sent to a third-party AI service and isn't stored.</p>
+  </form>
+
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    Marking your essay against the real mark scheme…
+  </div>
+
+  <div class="error-state" id="errorState">
+    <strong>Nothing came back.</strong>
+    <p style="margin:8px 0 0;font-size:13px;">The marker didn't respond — this can happen if the AI service is busy. Nothing was lost; try again.</p>
+    <button id="retryBtn">Try again</button>
+  </div>
+
+  <div id="resultArea">
+    <div class="score-card">
+      <div class="n" id="scoreN">—</div>
+      <div class="of">out of 25</div>
+      <div class="lvl" id="scoreLevel">—</div>
+      <div class="tier" id="scoreTier"></div>
+    </div>
+
+    <div class="panel">
+      <label style="margin-bottom:12px;">AO breakdown</label>
+      <div id="aoBreakdown"></div>
+    </div>
+
+    <div class="panel">
+      <label style="margin-bottom:4px;">Issues found</label>
+      <div id="issuesList"></div>
+    </div>
+
+    <div class="improve">
+      <div class="eyebrow">Your one move to 25/25</div>
+      <p id="improvementText"></p>
+    </div>
+
+    <button type="button" class="submit" id="markAnotherBtn" style="margin-top:20px;background:white;color:var(--indigo);border:1.5px solid var(--indigo);">Mark another essay</button>
+  </div>
+</div>
+
+<script>
+// ---- Data: paper -> themes, and the known-question manifest (mirrors the
+// server-side loader's KNOWN_QUESTIONS so the dropdown only ever offers real
+// matches — never guessed, always explicit). ----
+const THEMES = {
+  paper1: [
+    { value: 'theme1', label: 'Theme 1 — Introduction to markets and market failure' },
+    { value: 'theme3', label: 'Theme 3 — Business behaviour and the labour market' },
+  ],
+  paper2: [
+    { value: 'theme2', label: 'Theme 2 — The UK economy: performance and policies' },
+    { value: 'theme4', label: 'Theme 4 — A global perspective' },
+  ],
+};
+
+const KNOWN_QUESTIONS = {
+  paper1: {
+    theme1: [
+      { value: 'june2024-paper1-q7', label: 'June 2024, Q7 — rising energy bills (hotel industry)' },
+    ],
+    theme3: [
+      { value: 'june2024-paper1-q8', label: 'June 2024, Q8 — contestability (fragrance industry)' },
+    ],
+  },
+  paper2: { theme2: [], theme4: [] },
+};
+
+const paperEl = document.getElementById('paper');
+const themeEl = document.getElementById('theme');
+const knownQuestionEl = document.getElementById('knownQuestion');
+const tierNote = document.getElementById('tierNote');
+
+paperEl.addEventListener('change', () => {
+  const paper = paperEl.value;
+  themeEl.innerHTML = '';
+  knownQuestionEl.innerHTML = '<option value="">Select a theme first…</option>';
+  knownQuestionEl.disabled = true;
+  tierNote.className = 'tier-note';
+  if (!paper) {
+    themeEl.disabled = true;
+    themeEl.innerHTML = '<option value="">Select a paper first…</option>';
+    return;
+  }
+  themeEl.disabled = false;
+  themeEl.innerHTML = '<option value="">Select a theme…</option>' +
+    THEMES[paper].map(t => `<option value="${t.value}">${t.label}</option>`).join('');
+});
+
+themeEl.addEventListener('change', () => {
+  const paper = paperEl.value;
+  const theme = themeEl.value;
+  tierNote.className = 'tier-note';
+  if (!theme) {
+    knownQuestionEl.disabled = true;
+    knownQuestionEl.innerHTML = '<option value="">Select a theme first…</option>';
+    return;
+  }
+  const matches = (KNOWN_QUESTIONS[paper] && KNOWN_QUESTIONS[paper][theme]) || [];
+  knownQuestionEl.disabled = false;
+  const options = ['<option value="">A different question (general marking only)</option>']
+    .concat(matches.map(q => `<option value="${q.value}">${q.label}</option>`));
+  knownQuestionEl.innerHTML = options.join('');
+  updateTierNote();
+});
+
+knownQuestionEl.addEventListener('change', updateTierNote);
+
+function updateTierNote() {
+  if (knownQuestionEl.value) {
+    tierNote.className = 'tier-note exact';
+    tierNote.textContent = 'Exact match — will be marked against the real, specific mark scheme and examiner\'s report for this question.';
+  } else if (themeEl.value) {
+    tierNote.className = 'tier-note general';
+    tierNote.textContent = 'No exact past-paper match — will be marked against the general 25-mark banding grid only.';
+  }
+}
+
+// ---- Awkward-state handling ----
+const essayEl = document.getElementById('essay');
+const essayCount = document.getElementById('essayCount');
+const MAX_ESSAY_CHARS = 8000; // generous ceiling — a real 25-mark essay is nowhere near this
+
+essayEl.addEventListener('input', () => {
+  const len = essayEl.value.length;
+  essayCount.textContent = `${len.toLocaleString()} characters`;
+  essayCount.className = 'char-count' + (len > MAX_ESSAY_CHARS ? ' over' : len > MAX_ESSAY_CHARS * 0.8 ? ' warn' : '');
+});
+
+function validateField(el, condition) {
+  const field = el.closest('.field');
+  if (condition) {
+    field.classList.remove('invalid');
+    return true;
+  }
+  field.classList.add('invalid');
+  return false;
+}
+
+// ---- Fake-answer mode (task C, built here so B can be tested standalone) ----
+// Swap this function's body for a real fetch() to the Netlify function once
+// section C/D exist. Everything else on this page stays the same.
+function markEssayFake({ paper, theme, knownQuestionId, question, essay, diagram }) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // simulate a "nothing came back" failure via a magic test phrase, so
+      // the error state is reachable without editing code
+      if (essay.toLowerCase().includes('simulateerror')) {
+        reject(new Error('Simulated failure for testing'));
+        return;
+      }
+      resolve({
+        confidenceTier: knownQuestionId ? 'exact-match' : 'general-only',
+        mark: 23,
+        level: 'Level 4 — high',
+        ao: [
+          { label: 'AO1', pct: 95 },
+          { label: 'AO2', pct: 90 },
+          { label: 'AO3', pct: 85 },
+          { label: 'AO4', pct: 60 },
+        ],
+        issues: [
+          { severity: 'serious', text: 'Fake data — this is placeholder output from markEssayFake(), not a real mark.' },
+          { severity: 'quality', text: 'Replace this function with a real fetch() once the server function exists (section C/D).' },
+        ],
+        improvement: 'This is fake-answer mode (task C). Once wired to Groq, this field will show one specific, sentence-level improvement.',
+      });
+    }, 900);
+  });
+}
+
+// ---- Form submit ----
+const form = document.getElementById('markForm');
+const loadingState = document.getElementById('loadingState');
+const errorState = document.getElementById('errorState');
+const resultArea = document.getElementById('resultArea');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const paperValid = validateField(paperEl, !!paperEl.value);
+  const themeValid = validateField(themeEl, !!themeEl.value);
+  const questionValid = validateField(document.getElementById('question'), document.getElementById('question').value.trim().length > 0);
+  const essayValid = validateField(essayEl, essayEl.value.trim().length > 0);
+
+  if (!paperValid || !themeValid || !questionValid || !essayValid) {
+    return; // refuse clearly rather than guessing what was meant
+  }
+  if (essayEl.value.length > MAX_ESSAY_CHARS) {
+    alert(`Essay is too long (${essayEl.value.length} characters, max ${MAX_ESSAY_CHARS}). Trim it and try again.`);
+    return;
+  }
+
+  form.style.display = 'none';
+  resultArea.style.display = 'none';
+  errorState.style.display = 'none';
+  loadingState.style.display = 'block';
+  submitBtn.disabled = true;
+
+  try {
+    const result = await markEssayFake({
+      paper: paperEl.value,
+      theme: themeEl.value,
+      knownQuestionId: knownQuestionEl.value || null,
+      question: document.getElementById('question').value,
+      essay: essayEl.value,
+      diagram: document.getElementById('diagram').value,
+    });
+    renderResult(result);
+    loadingState.style.display = 'none';
+    resultArea.style.display = 'block';
+  } catch (err) {
+    loadingState.style.display = 'none';
+    errorState.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  errorState.style.display = 'none';
+  form.style.display = 'block';
+});
+
+document.getElementById('markAnotherBtn').addEventListener('click', () => {
+  resultArea.style.display = 'none';
+  form.reset();
+  paperEl.dispatchEvent(new Event('change')); // resets theme + knownQuestion dropdowns and disables them
+  essayCount.textContent = '0 characters';
+  essayCount.className = 'char-count';
+  document.querySelectorAll('.field.invalid').forEach(f => f.classList.remove('invalid'));
+  form.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function renderResult(r) {
+  document.getElementById('scoreN').textContent = r.mark;
+  document.getElementById('scoreLevel').textContent = r.level;
+  document.getElementById('scoreTier').textContent = r.confidenceTier === 'exact-match'
+    ? 'Matched to a real past question'
+    : 'General grid only — no exact past-paper match';
+
+  document.getElementById('aoBreakdown').innerHTML = r.ao.map(a => `
+    <div class="ao-row">
+      <span class="label">${a.label}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${a.pct}%"></div></div>
+      <span class="pct">${a.pct}%</span>
+    </div>`).join('');
+
+  document.getElementById('issuesList').innerHTML = r.issues.map(i => `
+    <div class="issue">
+      <span class="tag ${i.severity}">${i.severity}</span>
+      <p>${i.text}</p>
+    </div>`).join('');
+
+  document.getElementById('improvementText').textContent = r.improvement;
+}
+</script>
+</body>
+</html>
