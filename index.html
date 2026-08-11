@@ -129,6 +129,7 @@
     <div class="field" id="questionField">
       <label for="question">The exam question</label>
       <textarea id="question" placeholder="Paste the exact question as set…" required></textarea>
+      <div class="hint" id="questionAutofillNote" style="display:none;">Auto-filled with the exact question as set — you picked this question above, so it can't be edited here.</div>
       <div class="error-msg">Paste the question — this can't be marked without it.</div>
     </div>
 
@@ -213,6 +214,15 @@ const KNOWN_QUESTIONS = {
   paper2: { theme2: [], theme4: [] },
 };
 
+// Exact question wording, sourced verbatim from the real Pearson question
+// paper — used to auto-fill the question box when a known question is
+// picked, so it's never retyped by hand (and can't drift from the real
+// text).
+const QUESTION_TEXT = {
+  'june2024-paper1-q7': `"A small hotel in Scarborough has seen its energy bills increase from £2000 to £8000 per month. Small businesses do not have the energy management teams of larger companies to negotiate better deals."\n\nEvaluate the microeconomic effects of rising energy bills on the hotel industry or an industry of your choice. (25 marks)`,
+  'june2024-paper1-q8': `"Bytedance, which owns TikTok, has launched its own fragrance 'Emotif'. The Beijing-based social media giant has already entered the food and drink markets."\n\nEvaluate the level of contestability in the fragrance industry or another industry of your choice. (25 marks)`,
+};
+
 const paperEl = document.getElementById('paper');
 const themeEl = document.getElementById('theme');
 const knownQuestionEl = document.getElementById('knownQuestion');
@@ -224,6 +234,7 @@ paperEl.addEventListener('change', () => {
   knownQuestionEl.innerHTML = '<option value="">Select a theme first…</option>';
   knownQuestionEl.disabled = true;
   tierNote.className = 'tier-note';
+  resetQuestionField();
   if (!paper) {
     themeEl.disabled = true;
     themeEl.innerHTML = '<option value="">Select a paper first…</option>';
@@ -238,6 +249,7 @@ themeEl.addEventListener('change', () => {
   const paper = paperEl.value;
   const theme = themeEl.value;
   tierNote.className = 'tier-note';
+  resetQuestionField();
   if (!theme) {
     knownQuestionEl.disabled = true;
     knownQuestionEl.innerHTML = '<option value="">Select a theme first…</option>';
@@ -251,7 +263,13 @@ themeEl.addEventListener('change', () => {
   updateTierNote();
 });
 
-knownQuestionEl.addEventListener('change', updateTierNote);
+const questionEl = document.getElementById('question');
+const questionAutofillNote = document.getElementById('questionAutofillNote');
+
+knownQuestionEl.addEventListener('change', () => {
+  updateTierNote();
+  applyQuestionAutofill();
+});
 
 function updateTierNote() {
   if (knownQuestionEl.value) {
@@ -260,6 +278,38 @@ function updateTierNote() {
   } else if (themeEl.value) {
     tierNote.className = 'tier-note general';
     tierNote.textContent = 'No exact past-paper match — will be marked against the general 25-mark banding grid only.';
+  }
+}
+
+// If a real known question is picked, the exact question text is already
+// known — auto-fill it and lock the box so it's never retyped by hand
+// (which would risk drifting from the real wording it's graded against).
+// Switching back to "a different question" unlocks it for manual entry.
+function resetQuestionLock() {
+  questionEl.readOnly = false;
+  questionEl.style.background = '';
+  questionAutofillNote.style.display = 'none';
+}
+
+function resetQuestionField() {
+  resetQuestionLock();
+  // Only clear it if it still matches a known question's text (i.e. the
+  // student didn't type their own text over it) — don't nuke real typing.
+  if (Object.values(QUESTION_TEXT).includes(questionEl.value)) {
+    questionEl.value = '';
+  }
+}
+
+function applyQuestionAutofill() {
+  const id = knownQuestionEl.value;
+  if (id && QUESTION_TEXT[id]) {
+    questionEl.value = QUESTION_TEXT[id];
+    questionEl.readOnly = true;
+    questionEl.style.background = '#F5F7FA';
+    questionAutofillNote.style.display = 'block';
+    validateField(questionEl, true);
+  } else {
+    resetQuestionField();
   }
 }
 
@@ -419,6 +469,7 @@ document.getElementById('retryBtn').addEventListener('click', () => {
 document.getElementById('markAnotherBtn').addEventListener('click', () => {
   resultArea.style.display = 'none';
   form.reset();
+  resetQuestionLock(); // form.reset() clears the value but not our readonly/style/note
   paperEl.dispatchEvent(new Event('change')); // resets theme + knownQuestion dropdowns and disables them
   essayCount.textContent = '0 characters';
   essayCount.className = 'char-count';
