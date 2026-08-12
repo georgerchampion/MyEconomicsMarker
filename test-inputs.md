@@ -147,18 +147,9 @@ However, Thames water may operate efficiently due to strict regulation by Ofwat.
 
 Overall, the most likely outcome is that monopolies become inefficient due to high barriers to entry. The lack of contestability of the industry and lack of external competition due to high fixed costs and EOS mean that Thames water can satisfice and pay high dividends while they are inefficient, satisfying employees who work less hard and shareholders who still earn high dividends due to SNP.
 
-**Known correct mark:** 21 out of 25.
-
-**PROVENANCE — needs confirming before this counts as a calibration anchor.**
-Recorded as "scored 21" but the marker was not specified. This matters: Seb's
-interview (see spec.md) describes him **self-marking against a real mark
-scheme** rather than being marked by a teacher or examiner. If this 21 is
-Seb's own self-assessment, it is weaker evidence than Test 1's examiner-
-confirmed range, and per this file's own rule ("must come from a real source —
-a teacher, an examiner, or your own check against the actual mark scheme")
-it should be labelled as such rather than treated as equivalent. **Ask Seb who
-marked it.** Still useful either way as a mid-range comparison case; just not
-interchangeable with an examiner mark.
+**Known correct mark:** 21 out of 25, **marked by his teacher** (confirmed with
+George 2026-08-12 — not Seb's own self-assessment, which was the thing worth
+ruling out given Seb's interview describes him self-marking).
 
 **Two things worth noting about this essay as a test case — both useful:**
 1. **It comes with a real diagram description**, unlike Test 1. That makes it
@@ -172,11 +163,63 @@ interchangeable with an examiner mark.
    violation and a genuine bug — making this an accidental but valuable test
    of that rule.
 
-## Test 3
-**Paper/Theme:**
-**Question:**
+## Test 3 — carbon emissions / road traffic essay
+**Paper/Theme:** Paper 1, Theme 1 (Introduction to markets and market failure)
+— the manifest's only Theme 1 entry is June 2024 Q7 (rising energy bills,
+hotel industry), a different question, so this is another **general-only**
+confidence-tier case.
+**Question:** "Evaluate the methods a government could use to reduce carbon
+emissions from road traffic." (25 marks)
+**Diagram descriptions (two given — the richest diagram test so far):**
+1. *Negative externality diagram:* MPB=MSB (demand) with two supply/cost
+   curves, MPC+tax and MSC, MPC below both. Price axis shows P1 (social
+   optimum) above Pf and P1 (private equilibrium); quantity axis shows Q1
+   (socially efficient) and Q (market equilibrium). Market equilibrium at Q
+   where MPC=MPB produces over-consumption relative to the social optimum Q1,
+   with the shaded triangle between MSC and MPC as the deadweight welfare loss.
+2. *Maximum price diagram:* standard D and S curves, equilibrium price P and
+   quantity Q. A maximum price (Pmax) set below equilibrium creates excess
+   demand — quantity supplied falls to Q1 while quantity demanded rises to Q2,
+   illustrating a shortage in public transport provision (Q2 − Q1).
 **Essay:**
-**Known correct mark:**
+
+One method to reduce carbon emissions by road traffic is through taxation. For example the UK government have put into place congestion charges in London and taxes fuel-inefficient cars such as diesel cars. These taxes increase the cost of owning and running a car for individuals in the UK, and therefore more households are incentivised to switch to electric cars or increase public transport usage. Therefore, initially there was a negative externality of consumption, due to the consumption of fossil fuels leading to a negative 3rd party effect. This therefore caused a DWL (as shown by the shaded region) and market failure to occur. However, government taxation causes consumers to face the true social costs and slight behaviour to buy more sustainable cars, so MPC=MSC, thus shifting behaviour to switch (MPC + tax) fully internalising the DWL and eliminating market failure.
+
+However, this deadweight loss may only be partially internalised due to taxation. Therefore market failure may still be occurring. For example, electric cars require lithium batteries that lead to 3× the emissions from production than regular diesel cars. Additionally, public transport such as HS2 caused 250 hectares of forest to be cut down and high levels of petrol-heavy machinery to be used, demonstrating how seemingly "clean" alternatives may also cause market failure.
+
+Another way the UK government could reduce carbon emissions is by implementing a maximum price on public transport. For example the UK have a maximum price of £3 for all bus journeys in the UK. This maximum price is set below the equilibrium price P1>Pmax, therefore leading to greater demand for public transport (Q2>Q). More demand for public transport means that consumers switch from travelling individually in high emission cars, instead trying to travel collectively in a bus, reducing the number of cars on roads and the quantity of fuel used up.
+
+However, maximum prices may not lead to a decrease in emissions due to government failure. Equilibrium price for buses is hard to measure and therefore the UK government may set the price too high or low, which can lead to no increase in demand for buses (thus no decrease in emissions) or too much demand (leading to overcrowding), therefore leading to government failure. This is because future consequences and consumer behaviour is hard to measure and there is an information gap.
+
+Overall, the best method for reducing carbon emissions via government intervention is taxation. This is because it reduces market failure effectively due to disincentivising high emission behaviour. Additionally it is easier to implement than max prices as there are less information gaps associated and therefore less risk of government failure.
+
+**Known correct mark:** 22 out of 25. **Marker not yet specified — confirm
+whether this was a teacher or an examiner** before treating it as a firm anchor
+(same standard applied to Test 2).
+
+**Why this is the most valuable test case so far:**
+1. **Two diagram descriptions**, both substantial. This is the real test of the
+   charitable-reading rule.
+2. **Diagram 1's description is internally muddled** — the student writes "P1"
+   for both the social optimum and the private equilibrium, and mentions a
+   third label "Pf". A human examiner would read past that and credit the
+   economics, since the rest of the description makes the intent clear. The
+   tool must do the same: per the prompt's charitable-reading rule it should
+   judge the economics represented, not the precision of the labelling. If it
+   raises this as a serious diagram error, that is over-penalising a labelling
+   slip and a bug.
+3. **It contains real-world claims that must NOT be fact-checked** — "electric
+   cars ... 3× the emissions from production", "HS2 caused 250 hectares of
+   forest to be cut down", "£3 maximum price for all bus journeys". CLAUDE.md
+   forbids inventing, citing or correcting real-world statistics the student
+   didn't write; the tool must judge only how well the evidence was deployed.
+   Any attempt to correct these figures is a constitution violation.
+4. **A likely genuine economics error to catch:** the first paragraph claims
+   taxation results in "fully internalising the DWL and eliminating market
+   failure", which overstates what a tax achieves — and the essay's own next
+   paragraph contradicts it ("may only be partially internalised"). A good
+   marker should notice that tension. This is a real test of whether the tool
+   finds substantive analytical problems rather than surface ones.
 
 ## Test 4
 **Paper/Theme:**
