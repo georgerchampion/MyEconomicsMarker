@@ -49,8 +49,38 @@ mark, same essay each time:**
 - Run 2, with an invented diagram description not from the real essay: Level 4 (KAA) / Level 3 (Eval) ≈ 21/25.
 - Run 3, diagram field empty, before the diagram-instruction fix: Level 3 / Level 3 ≈ 18/25, incorrectly penalised for a missing diagram.
 - Run 4, diagram field empty, after the diagram-instruction fix: Level 3 / Level 2 ≈ 15/25 — lower than run 3, raising a determinism concern (seed + system_fingerprint logging added in response).
-- Run 5, diagram field empty, after adding seed + fixing a bogus "structure" issue and generic improvement-advice bug: Level 3 / Level 3 ≈ 18/25, but the specific issues raised were still not accurate to the essay (a normal topic sentence flagged as a serious structure error; the suggested improvement asked for an intro/conclusion the essay already has). Prompt fixed for both; not yet re-tested at time of writing.
-- **Still not calibrated.** No run yet has landed within a reasonable margin of the known 24-25/25.
+- Run 5, diagram field empty, after adding seed + fixing a bogus "structure" issue and generic improvement-advice bug: Level 3 / Level 3 ≈ 18/25, but the specific issues raised were still not accurate to the essay (a normal topic sentence flagged as a serious structure error; the suggested improvement asked for an intro/conclusion the essay already has). Prompt fixed for both.
+- Run 6, after the diagram fix in the USER message (the real bug — the user message was telling the model "none given — do not assume or invent a diagram" right next to the essay, overriding the system prompt): **Level 4 / Level 3 ≈ 22/25 — the closest to the known mark so far.** The false diagram issue disappeared and the commentary explicitly credited "multiple examples and diagram descriptions", confirming it now reads diagrams out of the essay prose. Remaining flaw: the improvement suggested "add clear topic sentences", which the essay already has.
+- Run 7, after tightening the improvement rule (must quote the essay, must name economics, formatting suggestions banned): the improvement was correctly fixed — it quoted a real sentence and gave a genuine economics point. **But the mark dropped to Level 3 / Level 2 ≈ 16/25 on the same essay.**
+- Run 8, identical input again: Level 3 / Level 2 ≈ 17/25.
+
+**THE REAL FINDING FROM THIS SESSION — variance, not just accuracy.** Across
+runs 6, 7 and 8, with the same essay and no change capable of explaining it,
+the result moved ~22 → ~16 → ~17 out of 25. Earlier runs spanned Level 2 to
+Level 4. This directly contradicts CLAUDE.md's rule that "the same essay marked
+twice gives the same answer", and it matters more than any individual wording
+fix: while the spread is this wide, a single run cannot tell us whether a prompt
+change helped, hurt, or did nothing. Temperature is pinned at 0.2 and a fixed
+`seed` is sent; neither has delivered reproducibility in practice.
+
+A controlled determinism test (two identical back-to-back runs, comparing
+Groq's `system_fingerprint` between them) was started but not completed — the
+project's own per-visitor rate limit blocked the second run, and a later
+attempt hit an intermittent token-budget failure. Still outstanding.
+
+**Two likely contributing causes, neither yet ruled out:**
+1. *Model non-determinism.* Groq documents `seed` as best-effort only, not
+   guaranteed. `system_fingerprint` is now logged to tell a Groq-side backend
+   change apart from the model simply varying.
+2. *Weak anchoring on the general tier.* This essay is Paper 2 Theme 2, which
+   has no exact past-paper match, so it's marked against the general banding
+   grid alone — abstract level descriptors with no worked example scripts. The
+   exact-match tier has real graded exemplars (11/25, 23/25, 14/25, 20/25);
+   the general tier has nothing comparable to anchor against. Attaching fuller
+   grounding is currently blocked by the free tier's 8000 tokens/minute ceiling.
+
+**Still not calibrated.** `CALIBRATED = false` remains correct and is doing
+exactly the job it was written for.
 
 ## Test 2
 **Paper/Theme:**

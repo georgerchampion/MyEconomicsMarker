@@ -44,6 +44,23 @@ const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 // always wins the race.
 const GROQ_TIMEOUT_MS = 6500;
 
+// ---- Groq tokens-per-minute ceiling ----
+// This single number is what forced most of 2026-08-12's failures: on Groq's
+// FREE tier, openai/gpt-oss-20b allows 8000 tokens/minute, and Groq counts
+// prompt tokens + the max_completion_tokens you ASK for (not what's used).
+// With a ~4200-token grounded prompt that leaves under 4000 for the answer,
+// which is right at what this reasoning model needs — hence intermittent
+// 413s (over the ceiling) and 400s (answer truncated mid-JSON).
+//
+// >>> AFTER UPGRADING TO GROQ'S DEVELOPER TIER: raise this to 30000. <<<
+// The Developer tier is free to enable (card on file, pay only for usage,
+// ~10x the free limits). Raising this is the single change that unlocks
+// attaching fuller grounding — specific mark schemes AND examiner reports
+// together — which the free tier physically cannot fit alongside a real
+// essay. Do not raise it before actually upgrading: a too-high value here
+// just moves the failure from our clean error message to Groq's 413.
+const TPM_CEILING = 8000;
+
 // ---- SECTION E: per-visitor request cap ----
 // No login means there's nothing else stopping one visitor (or one person
 // double-clicking, or refreshing) from spending the whole day's Groq free
@@ -235,7 +252,6 @@ exports.handler = async (event) => {
   // costing ~290 tokens of real headroom for no benefit; (b) the system
   // prompt now caps output length (max 3 issues, brief commentary), so the
   // JSON needs materially fewer tokens to complete in the first place.
-  const TPM_CEILING = 8000;
   const TPM_SAFETY_MARGIN = 150;
   const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.6);
   const maxCompletionTokens = Math.max(
