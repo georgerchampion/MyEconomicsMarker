@@ -34,7 +34,15 @@ const { SYSTEM_PROMPT_VERSION, RESPONSE_SCHEMA, buildSystemPrompt } = require('.
 
 const GROQ_MODEL = 'openai/gpt-oss-20b';
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_TIMEOUT_MS = 8500; // Netlify free plan kills the function at 10s — return our own clean timeout before that happens
+// Netlify's free plan hard-kills a synchronous function at 10s. 8500ms was
+// cutting it far too fine: a cold start (routinely 1-3s on the free plan)
+// plus an 8.5s Groq wait exceeds 10s, so the PLATFORM killed the function
+// before our own abort could return a clean 504 — which surfaces to the
+// student as Netlify's raw "Error - Request ID: ..." page rather than any
+// message we control (seen live 2026-08-12). 6500ms leaves ~3.5s of room
+// for cold start plus response handling, so our own honest timeout message
+// always wins the race.
+const GROQ_TIMEOUT_MS = 6500;
 
 // ---- SECTION E: per-visitor request cap ----
 // No login means there's nothing else stopping one visitor (or one person
