@@ -252,11 +252,20 @@ exports.handler = async (event) => {
   // costing ~290 tokens of real headroom for no benefit; (b) the system
   // prompt now caps output length (max 3 issues, brief commentary), so the
   // JSON needs materially fewer tokens to complete in the first place.
+  // CAP RAISED (2026-08-12, final): the upper cap here was 4000, left over from
+  // earlier debugging when the prompt was much larger. That cap threw away real
+  // headroom on SHORTER essays — Groq returned an explicit
+  // "max completion tokens reached before generating a valid document" on a
+  // short essay that had ~4,600 tokens available but was handed only 4,000.
+  // gpt-oss-20b spends a variable, sometimes large share of the budget on
+  // hidden reasoning before writing any JSON, so the answer needs whatever
+  // room actually exists rather than an arbitrary ceiling. The TPM formula
+  // below is what must constrain this, not a hardcoded number.
   const TPM_SAFETY_MARGIN = 150;
   const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.6);
   const maxCompletionTokens = Math.max(
     2600, // floor — gpt-oss-20b needs real room for hidden reasoning AND the full JSON; going below this is what caused the empty-completion 400
-    Math.min(4000, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
+    Math.min(5200, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
   );
 
   const controller = new AbortController();
