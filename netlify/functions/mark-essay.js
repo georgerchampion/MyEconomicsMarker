@@ -194,10 +194,18 @@ exports.handler = async (event) => {
         // validator saw an empty completion and rejected it with
         // "json_validate_failed" / empty failed_generation — a known issue
         // on Groq's community forum for gpt-oss-20b structured outputs, not
-        // a bug in our schema. Fix: raise the budget and lower reasoning
-        // effort (default is "medium") so more of it goes to the answer.
-        max_completion_tokens: 4000,
-        reasoning_effort: 'low',
+        // a bug in our schema. Fix: raise the budget so there's room for
+        // both reasoning and the answer.
+        // CALIBRATION NOTE (2026-08-12): reasoning_effort was first set to
+        // 'low' here to free up budget, but that run mis-marked Maxim's
+        // known 24-25/25 essay as Level 2 across both components — a severe
+        // miss, not a boundary call. The one thing that changed from the
+        // Aug 11 working demo is this dropping from the default 'medium' to
+        // 'low'. Reverted to 'medium' (i.e. left unset) with a bigger token
+        // budget instead, so the fix doesn't trade accuracy for reliability.
+        // Re-test against Maxim's essay again before drawing conclusions —
+        // this reasoning_effort theory is not yet confirmed.
+        max_completion_tokens: 6000,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage },
