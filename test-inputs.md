@@ -281,8 +281,85 @@ and added to the manifest, this essay becomes the first test of the
 untested, since all four essays so far are general-only. That is a more
 valuable next addition than bulk-loading unrelated papers.
 
-## Test 5
-**Paper/Theme:**
-**Question:**
+## Test 5 — globalisation essay (Luke)
+**Paper/Theme:** Paper 2, Theme 4 (A global perspective). The manifest has no
+Theme 4 entries, so **general-only** tier.
+**Question:** "Evaluate the impact of globalisation on the global economy."
+(25 marks)
+**Diagram descriptions (two given):**
+1. *AD/AS diagram:* downward-sloping AD and upward-sloping SRAS on Price Level
+   vs Real National Output axes. AD shifts right (AD→AD1) as export income
+   rises, equilibrium moving (Y, P) → (Y1, P1) — an increase in both price
+   level and real output.
+2. *Trade creation diagram:* domestic supply (Sp) and demand (Dp) curves with
+   two horizontal world-price lines, PEU+t (with tariff) and PEU (tariff
+   removed post-accession). Quantities Q1, Q2, Q3 for domestic production and
+   imports pre/post tariff removal. Triangles (a) and (b) between the price
+   lines as the deadweight welfare gains from trade creation — production
+   efficiency gain and consumer surplus gain.
 **Essay:**
-**Known correct mark:**
+
+One impact of globalisation on the global economy is an increase in economic growth for many countries. Increased containerization means that countries are able to transport goods cheaper and easier around the world. For example Nigeria can export vast amounts of crude oil around the world due to its comparative advantage. Therefore the export income in the economy leads to an improvement in net trade. As net trade is a component of AD (C+I+G+(X−M)) this therefore causes AD to shift right (AD→AD1) hence causing an increase in RNO (Y→Y1) leading to greater economic growth for many countries that have absolute and comparative advantages in certain goods.
+
+However, globalisation may not cause growth due to dutch disease. For example Nigeria's vast crude oil industry and exports means that a boom in the industry can cause rapid currency appreciation due to greater demand for the Nigerian currency. This appreciation causes other sectors in Nigeria such as manufacturing to become less internationally competitive due to exports being relatively more expensive after the appreciation, leading to less industry and potentially results in a decline in long run growth. Dutch disease is a downside of [TEXT MISSING — cut off by page break]
+
+Another impact of globalisation on the global economy is an increase in trade creation. Greater global trade agreements such as the EU (a customs union) can remove trade barriers or protectionist measures to allow countries to focus on goods that have a comparative advantage in. By for example France joining the EU, the tariff on EU countries is eliminated (PEU+t→PEU) leading to an increase in imports (Q1−Q2)→(Q−Q3). This therefore leads to greater efficiency as France experiences a deadweight welfare gain of efficiency demonstrated by area (a) and a deadweight welfare gain to French consumers (b). Therefore countries can specialise leading to lower prices and increased efficiency within the trading bloc.
+
+However, increased trade agreements can cause trade diversion also. This is where France for example is forced to switch from low cost international producers to higher cost producers within the trading bloc due to the common external tariff that the EU renders. This therefore leads to a loss of efficiency and increased prices in many areas, potentially such as cars — when France has to import from Germany which produce at a higher cost than China. This therefore causes a deadweight welfare loss of consumer surplus, French efficiency and EU efficiency.
+
+Overall, the most likely impact of globalisation is an increase in growth. This is because globalisation is increased containerization and technology, allowing the market to increase hugely, allowing transport of goods and services to increase hugely. Many countries can import with firms comparative advantage to increase more trade and growth.
+
+**Known correct mark: 18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT:**
+- **Knowledge, Application & Analysis: 12 / 16** (Level 3)
+- **Evaluation: 6 / 9** (Level 2)
+Marked by a teacher — a *different* teacher from the one who marked Tests 2–4,
+which is worth noting as an independent marking source rather than a single
+teacher's calibration.
+
+**WHY THIS IS THE MOST USEFUL CASE IN THE SET.** It is the only essay with
+component-level marks, and those two components are exactly what the tool
+outputs. Every other case can only check the total, which hides compensating
+errors — a tool that awards 14/16 KAA and 4/9 Evaluation reaches the same 18
+while being wrong about both. This case can check whether the tool gets the
+*split* right, not just the sum. It also happens to be the lowest-scoring essay
+in the set, so together with Test 1 (24–25) it defines the range the tool must
+be able to tell apart.
+
+**CAVEAT THAT MUST BE HONOURED WHEN SCORING — the transcription is incomplete.**
+1. The second paragraph is **cut off mid-sentence** at a page break ("Dutch
+   disease is a downside of..."), so material the teacher read and credited is
+   missing from what the tool will see.
+2. The final paragraph was **faint and partly best-effort transcribed**.
+Consequently the tool is being asked to mark *less* essay than the teacher
+marked. If it lands below 18, that is not automatically an error — a lower mark
+may be the correct response to a shorter answer. **Either recover the missing
+text before treating 18/25 as a strict target, or score this case as
+"directionally correct?" (is it in the Level 2/3 region, and is Evaluation
+marked below KAA?) rather than pass/fail against an exact number.**
+
+---
+
+# BASELINE STATUS — the test set as it now stands
+
+| # | Essay | Paper/Theme | Known mark | Marker | Tier |
+|---|---|---|---|---|---|
+| 1 | Interest rates (Maxim) | P2 / T2 | 24–25 / 25 | Examiner | general-only |
+| 2 | Monopoly efficiency (Seb) | P1 / T3 | 21 / 25 | Teacher | general-only |
+| 3 | Carbon emissions / road traffic | P1 / T1 | 22 / 25 | Teacher | general-only |
+| 4 | NMW / social care | P1 / T3 (ambiguous) | 19–20 / 25 | Teacher | general-only |
+| 5 | Globalisation (Luke) | P2 / T4 | 18 / 25 (12 KAA + 6 Eval) | Teacher (different) | general-only |
+
+**Five real essays, five known marks, spanning 18 to 25, across all four
+themes and both papers, from at least three independent markers.** Every mark
+was recorded here before the tool saw the essay.
+
+**What this set can and cannot prove.** It can show whether the tool *ranks*
+essays correctly — arguably more important than exact numbers, since a marker
+that consistently reads 3 marks low but ranks correctly is useful and
+correctable, while one that ranks randomly is not. It cannot yet test the
+exact-match confidence tier, because no essay in the set has its official mark
+scheme loaded (Test 4 is the candidate — see its entry).
+
+**Note for running the baseline:** Groq's free tier allows 8000 tokens/minute
+and each request uses close to that, so these must be run roughly **one per
+minute**, not back to back.
