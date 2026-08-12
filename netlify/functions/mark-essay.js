@@ -183,24 +183,31 @@ exports.handler = async (event) => {
   // Fix: estimate the real prompt size right here, every request, and size
   // the completion budget to whatever's actually left, instead of a guess
   // that has to be manually re-tuned every time either prompt file changes.
-  // ESTIMATE FIX (2026-08-12, second attempt): the first version of this
-  // used a /4 chars-per-token divisor and a 400-token safety margin — and
-  // still hit a 413 with the identical "Requested 8005" as before, because
-  // /4 underestimated this prompt's real token count by almost exactly 400
-  // tokens, silently cancelling the entire margin out. Formal/technical
-  // English (long words, punctuation, em dashes, numbers) tokenizes at
-  // closer to 3.3 characters/token than 4 — using /4 was optimistic in
-  // exactly the wrong direction (an UNDERestimate makes the completion
-  // budget too generous, which is how you overshoot the ceiling). Switched
-  // to /3.3 (produces a larger, safer prompt-token estimate) and roughly
-  // doubled the margin to 900, so a second estimation error this size still
-  // doesn't reach the ceiling.
+  // ESTIMATE CALIBRATED FROM REAL DATA (2026-08-12, third attempt).
+  // The tuning history matters, because both directions fail differently:
+  //   /4 + 400 margin  -> UNDER-estimated the prompt -> budget too generous
+  //                       -> 413 "Requested 8005" (over the ceiling).
+  //   /3.3 + 900 margin -> OVER-estimated the prompt -> budget too small
+  //                       -> 400 json_validate_failed with an EMPTY
+  //                          completion (the model ran out of room mid-JSON).
+  // The window between those two failures is narrow, so this is no longer a
+  // guess: Groq's own 413 messages give the real numbers. It reported a
+  // total of 8005 requested tokens when max_completion_tokens was 4000,
+  // meaning the prompt was really ~4005 tokens for ~14,400 characters —
+  // i.e. ~3.6 chars/token for this kind of formal English. Using 3.5 below
+  // (slightly conservative, so it errs toward over-estimating the prompt)
+  // with a modest 250-token margin, since the ceiling itself is what's
+  // tight, not the estimate's accuracy.
+  // The system prompt was ALSO condensed in the same commit — it had grown
+  // verbose across today's fixes, and prompt text and answer space compete
+  // for the same 8000 tokens, so trimming it buys real headroom rather than
+  // just moving the problem around.
   const TPM_CEILING = 8000;
-  const TPM_SAFETY_MARGIN = 900; // buffer for estimation error, never cut this thin
-  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.3);
+  const TPM_SAFETY_MARGIN = 250;
+  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.5);
   const maxCompletionTokens = Math.max(
-    1200, // floor — below this, gpt-oss-20b's own reasoning overhead risks the empty-completion 400 from earlier today
-    Math.min(4400, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
+    2600, // floor — gpt-oss-20b needs real room for hidden reasoning AND the full JSON; going below this is what caused the empty-completion 400
+    Math.min(4000, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
   );
 
   const controller = new AbortController();
