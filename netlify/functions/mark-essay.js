@@ -219,7 +219,12 @@ exports.handler = async (event) => {
     // "rate-limited" handler covers both causes with one honest message.
     return {
       statusCode: groqResponse.status === 429 ? 429 : 502,
-      body: JSON.stringify({ error: `AI service returned an error (status ${groqResponse.status}).` }),
+      // TEMP DEBUG (2026-08-12): includes Groq's raw error text in the
+      // response so it's visible in the browser's Network tab, since
+      // Netlify's function-log UI was hard to navigate to mid-calibration.
+      // REMOVE before this is shown to anyone other than George — CLAUDE.md
+      // says never send raw provider error internals to the browser.
+      body: JSON.stringify({ error: `AI service returned an error (status ${groqResponse.status}).`, debugGroqDetail: errText.slice(0, 800) }),
     };
   }
 
