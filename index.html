@@ -6,93 +6,96 @@
 <title>MyEconomicsMarker — Edexcel Economics 25-Mark Essay Marker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F5F7FA; --panel:#FFFFFF; --line:#E6E9F0; --ink:#0F172A; --sub:#64748B;
-    --indigo:#4F46E5; --indigo-light:#EEF0FF; --teal:#0D9488; --teal-light:#E6FBF8;
-    --amber:#D97706; --amber-light:#FEF3E2; --red:#DC2626; --red-light:#FEECEC;
-    --green:#16A34A;
+    --bg:#0A0E14; --panel:#11161F; --panel2:#161C28; --line:#242C3B; --ink:#EAF0FB; --sub:#8791A8;
+    --violet:#8B7CFF; --cyan:#4FD1E8; --amber:#F5A93F; --red:#F16A6A; --green:#4ADE9A;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;}
-  header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px 40px;}
-  .logo{max-width:820px;margin:0 auto;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px;}
-  .logo .dot{width:10px;height:10px;border-radius:3px;background:var(--indigo);display:inline-block;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;
+    background-image:radial-gradient(circle at 15% 0%, rgba(139,124,255,.09), transparent 40%), radial-gradient(circle at 90% 8%, rgba(79,209,232,.07), transparent 35%);
+    background-attachment:fixed;}
+  header{border-bottom:1px solid var(--line);padding:18px 40px;}
+  .logo{max-width:820px;margin:0 auto;font-weight:800;font-size:17px;display:flex;align-items:center;gap:10px;}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--violet);display:inline-block;box-shadow:0 0 12px var(--violet);}
   .wrap{max-width:820px;margin:0 auto;padding:32px 24px 80px;}
-  h1{font-size:22px;margin:0 0 6px;}
+  h1{font-size:22px;margin:0 0 6px;color:var(--ink);}
   .tagline{color:var(--sub);font-size:14px;margin:0 0 28px;}
 
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:20px;}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:20px;}
   label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
   .field{margin-bottom:18px;}
   .hint{font-size:12px;color:var(--sub);margin-top:4px;}
   select, textarea, input[type=text]{
-    width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
-    font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:#fff;
+    width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:var(--panel2);
   }
-  select:focus, textarea:focus, input:focus{outline:2px solid var(--indigo);outline-offset:1px;border-color:var(--indigo);}
+  select option{background:var(--panel2);color:var(--ink);}
+  select:focus, textarea:focus, input:focus{outline:2px solid var(--violet);outline-offset:1px;border-color:var(--violet);}
   textarea{resize:vertical;min-height:80px;}
   textarea#essay{min-height:220px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .char-count{font-size:11.5px;color:var(--sub);text-align:right;margin-top:4px;}
+  .char-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub);text-align:right;margin-top:4px;}
   .char-count.warn{color:var(--amber);font-weight:600;}
   .char-count.over{color:var(--red);font-weight:600;}
   .error-msg{font-size:12.5px;color:var(--red);margin-top:6px;display:none;}
   .field.invalid textarea, .field.invalid select{border-color:var(--red);}
   .field.invalid .error-msg{display:block;}
 
-  .tier-note{font-size:12.5px;padding:10px 12px;border-radius:8px;margin-top:8px;display:none;}
-  .tier-note.exact{display:block;background:var(--teal-light);color:#0D9488;}
-  .tier-note.general{display:block;background:var(--amber-light);color:#92400E;}
+  .tier-note{font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 12px;border-radius:8px;margin-top:8px;display:none;}
+  .tier-note.exact{display:block;background:rgba(79,209,232,.1);color:var(--cyan);border:1px solid rgba(79,209,232,.25);}
+  .tier-note.general{display:block;background:rgba(245,169,63,.1);color:var(--amber);border:1px solid rgba(245,169,63,.25);}
 
   button.submit{
-    width:100%;background:var(--indigo);color:white;border:none;border-radius:10px;
+    width:100%;background:linear-gradient(135deg,var(--violet),var(--cyan));color:#0A0E14;border:none;border-radius:12px;
     padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+    box-shadow:0 8px 24px -10px rgba(139,124,255,.5);
   }
-  button.submit:hover{background:#4338CA;}
-  button.submit:disabled{background:#B7B4F0;cursor:not-allowed;}
+  button.submit:hover{filter:brightness(1.08);}
+  button.submit:disabled{background:#33384A;color:var(--sub);cursor:not-allowed;box-shadow:none;}
 
   #resultArea{display:none;}
-  .loading{display:none;text-align:center;padding:40px 0;color:var(--sub);font-size:14px;}
-  .spinner{width:32px;height:32px;border:3px solid var(--indigo-light);border-top-color:var(--indigo);border-radius:50%;margin:0 auto 14px;animation:spin 0.8s linear infinite;}
+  .loading{display:none;text-align:center;padding:40px 0;color:var(--sub);font-size:14px;font-family:'JetBrains Mono',monospace;}
+  .spinner{width:32px;height:32px;border:3px solid #1D2432;border-top-color:var(--violet);border-radius:50%;margin:0 auto 14px;animation:spin 0.8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
-  .error-state{display:none;text-align:center;padding:30px;background:var(--red-light);border-radius:12px;color:#991B1B;}
-  .error-state button{margin-top:12px;background:white;border:1px solid #991B1B;color:#991B1B;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
+  .error-state{display:none;text-align:center;padding:30px;background:rgba(241,106,106,.08);border:1px solid rgba(241,106,106,.25);border-radius:14px;color:var(--red);}
+  .error-state button{margin-top:12px;background:var(--panel2);border:1px solid var(--red);color:var(--red);padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;}
 
-  .score-card{background:linear-gradient(135deg,#4F46E5,#4338CA);border-radius:14px;padding:22px 24px;color:white;text-align:center;margin-bottom:16px;}
-  .score-card .n{font-size:40px;font-weight:800;}
-  .score-card .of{font-size:14px;opacity:.8;}
-  .score-card .lvl{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:4px 12px;border-radius:20px;display:inline-block;}
-  .score-card .tier{margin-top:10px;font-size:12px;opacity:.85;}
+  .score-card{background:linear-gradient(135deg, rgba(139,124,255,.16), rgba(79,209,232,.08));border:1px solid var(--line);border-radius:16px;padding:26px 24px;text-align:center;margin-bottom:16px;}
+  .score-card .n{font-size:40px;font-weight:800;background:linear-gradient(135deg,#8B7CFF,#4FD1E8);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .score-card .of{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--sub);}
+  .score-card .lvl{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--ink);padding:5px 14px;border-radius:20px;display:inline-block;}
+  .score-card .tier{margin-top:10px;font-size:12px;color:var(--sub);}
 
   .component{padding:14px 0;border-top:1px solid var(--line);}
   .component:first-child{border-top:none;padding-top:0;}
   .component-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-  .component-head .name{font-size:13.5px;font-weight:700;}
-  .component-head .marks{font-size:13px;color:var(--sub);font-weight:600;}
-  .bar-track{height:7px;border-radius:5px;background:#EEF0F5;overflow:hidden;margin-bottom:8px;}
-  .bar-fill{height:100%;border-radius:5px;background:var(--indigo);}
-  .component .level-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;background:var(--indigo-light);color:var(--indigo);padding:2px 8px;border-radius:5px;margin-bottom:6px;}
-  .component p{margin:0;font-size:13px;color:#334155;}
+  .component-head .name{font-size:13.5px;font-weight:700;color:var(--ink);}
+  .component-head .marks{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cyan);font-weight:600;}
+  .bar-track{height:6px;border-radius:5px;background:#1D2432;overflow:hidden;margin-bottom:8px;}
+  .bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--violet),var(--cyan));}
+  .component .level-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.03em;background:rgba(139,124,255,.12);color:var(--violet);padding:3px 9px;border-radius:6px;margin-bottom:6px;}
+  .component p{margin:0;font-size:13px;color:#C3CBDD;line-height:1.55;}
 
   .issue{display:flex;gap:10px;padding:12px 0;border-top:1px solid var(--line);align-items:flex-start;}
   .issue:first-child{border-top:none;padding-top:0;}
   .issue .tags{display:flex;flex-direction:column;gap:4px;}
-  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;height:fit-content;text-align:center;}
-  .tag.serious{background:var(--red-light);color:var(--red);}
-  .tag.quality{background:var(--amber-light);color:var(--amber);}
-  .tag.category{background:#EEF0F5;color:var(--sub);}
-  .issue p{margin:0;font-size:13px;color:#334155;}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;height:fit-content;text-align:center;}
+  .tag.serious{background:rgba(241,106,106,.12);color:var(--red);}
+  .tag.quality{background:rgba(245,169,63,.12);color:var(--amber);}
+  .tag.category{background:#1D2432;color:var(--sub);}
+  .issue p{margin:0;font-size:13px;color:#C3CBDD;line-height:1.55;}
 
-  .improve{background:var(--teal-light);border:1px solid #99E6DA;border-radius:12px;padding:18px 20px;margin-top:16px;}
-  .improve .eyebrow{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
-  .improve p{margin:0;font-size:13.5px;color:#0F3D38;}
+  .improve{background:linear-gradient(135deg, rgba(74,222,154,.1), rgba(79,209,232,.05));border:1px solid rgba(74,222,154,.25);border-radius:14px;padding:18px 20px;margin-top:16px;}
+  .improve .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+  .improve p{margin:0;font-size:13.5px;color:var(--ink);line-height:1.6;}
 
-  .disclaimer{font-size:11.5px;color:var(--sub);margin-top:16px;text-align:center;}
+  .disclaimer{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sub);margin-top:16px;text-align:center;}
 
-  .calibration-note{background:var(--amber-light);border:1px solid #F3D19E;border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#92400E;}
-  .calibration-note strong{display:block;margin-bottom:2px;}
+  .calibration-note{background:rgba(245,169,63,.08);border:1px solid rgba(245,169,63,.3);border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#F1CB8E;}
+  .calibration-note strong{display:block;margin-bottom:2px;color:var(--amber);}
   .not-calibrated{font-size:13px;font-weight:700;color:var(--amber);}
 </style>
 </head>
@@ -161,7 +164,7 @@
   <div class="error-state" id="errorState">
     <strong id="errorHeadline">Nothing came back.</strong>
     <p id="errorDetail" style="margin:8px 0 0;font-size:13px;">The marker didn't respond — this can happen if the AI service is busy. Nothing was lost; try again.</p>
-    <pre id="debugBox" style="display:none;text-align:left;white-space:pre-wrap;background:#fff;border:1px solid #991B1B;border-radius:8px;padding:10px;margin-top:12px;font-size:11px;color:#991B1B;max-height:200px;overflow:auto;"></pre>
+    <pre id="debugBox" style="display:none;text-align:left;white-space:pre-wrap;background:var(--panel2);border:1px solid var(--red);border-radius:8px;padding:10px;margin-top:12px;font-size:11px;color:var(--red);max-height:200px;overflow:auto;font-family:'JetBrains Mono',monospace;"></pre>
     <button id="retryBtn">Try again</button>
   </div>
 
@@ -192,7 +195,7 @@
       <p id="improvementText"></p>
     </div>
 
-    <button type="button" class="submit" id="markAnotherBtn" style="margin-top:20px;background:white;color:var(--indigo);border:1.5px solid var(--indigo);">Mark another essay</button>
+    <button type="button" class="submit" id="markAnotherBtn" style="margin-top:20px;background:var(--panel2);color:var(--ink);border:1.5px solid var(--line);box-shadow:none;">Mark another essay</button>
   </div>
 </div>
 
@@ -314,7 +317,7 @@ function applyQuestionAutofill() {
   if (id && QUESTION_TEXT[id]) {
     questionEl.value = QUESTION_TEXT[id];
     questionEl.readOnly = true;
-    questionEl.style.background = '#F5F7FA';
+    questionEl.style.background = '#0D1420';
     questionAutofillNote.style.display = 'block';
     validateField(questionEl, true);
   } else {
