@@ -56,6 +56,34 @@ function readFileOrFail(filename) {
   return fs.readFileSync(fullPath, 'utf8');
 }
 
+// TOKEN ECONOMY (2026-08-12): Groq's free tier caps this model at 8000
+// tokens/minute for prompt + requested completion COMBINED, and a grounded
+// prompt plus a real essay was leaving too little room for the model to
+// finish its answer (intermittent truncated-JSON failures). The source files
+// contain two kinds of text: the level descriptors, which the marking
+// judgement genuinely depends on, and Pearson's administrative preamble for
+// human examiners ("all candidates must receive the same treatment",
+// "crossed out work should be marked", provenance headers). The latter is
+// irrelevant to assigning a level and costs ~500 tokens of the ceiling.
+//
+// This strips ONLY that administrative section from what gets SENT. The
+// source files on disk are left completely untouched, so CLAUDE.md's rule
+// still holds: any mark-scheme wording quoted in the output can still be
+// found word-for-word in the original file. The level descriptors — the part
+// that decides marks — are always sent verbatim and never trimmed.
+function stripAdminPreamble(text) {
+  // Everything before the first "===" section heading is provenance//source
+  // metadata for our records, not marking criteria.
+  const firstSection = text.indexOf('===');
+  let out = firstSection > 0 ? text.slice(firstSection) : text;
+
+  // Drop the general marking-guidance block (human-examiner admin) but keep
+  // every criteria section that follows it.
+  out = out.replace(/=== GENERAL MARKING GUIDANCE ===[\s\S]*?(?==== )/, '');
+
+  return out.trim();
+}
+
 class GroundingNotLoadedError extends Error {
   constructor(message) {
     super(message);
@@ -78,7 +106,7 @@ class GroundingNotLoadedError extends Error {
 function loadGrounding({ paper, theme, knownQuestionId }) {
   // The general banding grid is always required — if it's missing, nothing
   // can be marked at all.
-  const generalGrid = readFileOrFail(GENERAL_BANDING_FILE);
+  const generalGrid = stripAdminPreamble(readFileOrFail(GENERAL_BANDING_FILE));
 
   if (!knownQuestionId) {
     // No exact past-paper match selected. Mark against the general grid
