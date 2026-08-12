@@ -58,8 +58,13 @@ const GROQ_TIMEOUT_MS = 6500;
 // (one person's browser looping) — it is NOT a hardened defence against a
 // deliberate attacker with multiple devices. That distinction is worth
 // knowing, not hiding.
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 5 requests per 10 minutes per visitor
+// TEMP DEBUG (2026-08-12): raised from 5 to 20 so George can run several
+// back-to-back determinism-comparison requests on the dev site while it's
+// only him testing. REVERT TO 5 before any real tester (Maxim/Seb/Luke) or
+// production ever sees this — the cap exists specifically to stop one
+// visitor draining the shared Groq key, which still applies to real users.
+const RATE_LIMIT_MAX = 20;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 20 requests per 10 minutes per visitor (TEMP — normally 5)
 const requestLog = new Map(); // ip -> array of request timestamps (ms)
 
 function checkRateLimit(ip) {
