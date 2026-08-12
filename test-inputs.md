@@ -221,11 +221,65 @@ whether this was a teacher or an examiner** before treating it as a firm anchor
    marker should notice that tension. This is a real test of whether the tool
    finds substantive analytical problems rather than surface ones.
 
-## Test 4
-**Paper/Theme:**
-**Question:**
+## Test 4 — National Minimum Wage / social care essay
+**Paper/Theme:** Paper 1 — **theme genuinely ambiguous, see the finding below.**
+Recorded as Theme 3 (Business behaviour and the labour market), since the
+question is about wages and firm profitability.
+**Question:** "Evaluate the impact of an increase in the National Minimum Wage
+on the profitability of firms in the social care industry." (25 marks)
+— **this is a real past-paper question: 2021, Paper 1, Q7.**
+**Diagram descriptions (two given):**
+1. *Firm cost/revenue diagram:* AR (demand) and MR curves, with two sets of
+   MC/AC curves (MC, AC and MC1, AC1) showing a rise in costs. Shift from
+   (Q, P) earning supernormal profit (P−C)×Q to (Q1, P1, C1) representing a
+   loss (C1−P1)×Q1, as costs rise faster than revenue.
+2. *Positive externality of production diagram:* D=MSB=MPB with two supply/cost
+   curves, S=MPC and MSC, MSC below MPC. Market equilibrium at (P, Q) where
+   MPC=MPB versus the socially optimal (Pt, Qt) where MSB=MSC. Triangle (abc)
+   between the two supply curves, bounded by Q and Qt, as the potential welfare
+   gain/loss from underproduction of the positive externality (social care).
 **Essay:**
-**Known correct mark:**
+
+One disadvantage could be a decrease in the profit for firms in the social care industry. Due to the increase in national minimum wage, social care firms now have to pay its employees £10.50 an hour in comparison to £8.72 an hour in 2020. This planned increase in wages for 2024 would increase costs for firms due to having to pay higher salaries. This therefore causes both MC and AC to shift up (MC→MC1) and (AC→AC1). Due to no increase in revenue, this causes the social care firm to now be operating unprofitably, initially receiving SNP (RC×Q) to making a loss (C1−P1×Q1).
+
+However, due to higher wages this may increase worker motivation and thus lead to higher productivity. For example, workers may feel a greater sense of loyalty to the social care firm due to higher wages and therefore work harder and more efficiently than previously. This would decrease unit labour costs as the firm's labour would be more efficient and would be able to operate with less workers, thus reducing costs. Additionally, many workers in the social care sector are volunteers and are therefore not paid wages. Therefore an increase in national living wage may not have a significant impact on the firm's costs.
+
+Additionally, an increase in national minimum wage would increase market failure. Due to increased costs to firms in the social care sector, this may lead to many firms shutting down or having to make severe cutbacks on costs such as staffing and capacity. This thus leads to the provision of social care to be underprovided, leading to a positive externality to form. Due to higher costs of production, social care firms are unable to produce at socially optimum level (Pt Qt) and instead just produce at (PQ) where MPC is less than MSC. This leads to the underproduction of social care (Q − Qt) and thus an inefficient allocation of resources leading to a welfare loss to form (welfare loss abc). This is because for every additional unit produced MSB>MSC, therefore market failure occurs.
+
+However, this may not be the case if the government decides to subsidise social care due to its positive impact on the welfare of many vulnerable groups in society. By subsidising wages, firms would therefore be able to maintain profitability due to lower costs of production and therefore are prevented from having to close down, with many firms in the social care sector now able to increase their capacity and quality of care. This means the MPC curve right shifts close to the socially optimum level (Pt Qt), thus partially internalising the externality, leading to less underproduction. This therefore decreases the potential welfare gain and decreases market failure.
+
+Overall, the most important disadvantage of an increase in national living wage is a decrease in firms' profitability. Due to the increased costs causing firms loss of profit, this has both an effect on the firm but also leads to market failure due to firms having to shut down due to low profit, causing underprovision of social care.
+
+**Known correct mark: NOT A MARK — recorded as "mid A".**
+This is a grade band, not a number out of 25, and this file's own rule is that
+the known mark must come from a real source and never be inferred. Converting
+"mid A" into a figure would mean guessing a grade boundary and then treating my
+own guess as ground truth — exactly the substitution this project exists to
+prevent. **Action: ask for the actual mark out of 25.** Until then this case is
+usable for checking the tool lands in roughly the right region and ranks
+sensibly against the others, but it is NOT a precise calibration anchor and
+must not be scored as one.
+
+**FINDING — the paper/theme dropdown can't represent this essay properly.**
+This is a real design limitation, surfaced by a real essay rather than
+predicted. The question is a labour-market question (Theme 3), but the essay
+answers it half in Theme 3 (cost/revenue curves, supernormal profit, losses)
+and half in Theme 1 (positive externalities, MPC vs MSC, welfare loss,
+subsidies) — and that combination is legitimate, creditable economics, not a
+student error. The current design forces exactly one theme, which means
+whichever is picked, the tool loads a grid that only covers part of what was
+written. Worth recording in spec.md as a genuine gap. Note it does not break
+marking today, because both themes fall back to the same general 25-mark
+banding grid — but it would matter the moment theme-specific grounding is
+attached to each theme, which is the planned direction.
+
+**OPPORTUNITY — this could become the first exact-match test case.**
+Unlike Tests 1–3, this is a genuine past-paper question (2021 Paper 1 Q7). If
+the official 2021 mark scheme and examiner's report are sourced from Pearson
+and added to the manifest, this essay becomes the first test of the
+**exact-match** confidence tier against a real known mark — currently completely
+untested, since all four essays so far are general-only. That is a more
+valuable next addition than bulk-loading unrelated papers.
 
 ## Test 5
 **Paper/Theme:**
