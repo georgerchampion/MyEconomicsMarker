@@ -123,11 +123,54 @@ fix can be shown to help rather than assumed to.
 exactly the job it was written for — every number above would have been shown
 to a student as fact, and each one would have been wrong.
 
-## Test 2
-**Paper/Theme:**
-**Question:**
+## Test 2 — monopoly efficiency essay (Seb)
+**Paper/Theme:** Paper 1, Theme 3 (Business behaviour and the labour market)
+— the manifest's only Theme 3 entry is June 2024 Q8 (contestability,
+fragrance industry), which is a different question, so this is a
+**general-only** confidence-tier case.
+**Question:** "Why may monopolies not operate efficiently?" (25 marks)
+**Diagram description (given, unlike Test 1):** Monopoly cost/output diagram —
+AR (demand) and MC/AC curves, downward-sloping demand, rising MC/AC. Marks
+price (P) and cost (C) at output Q, with the gap between the productively
+efficient point (MC=AC minimum) and actual output Q illustrating
+X-inefficiency. Labels SNP = (P−C)×Q, with an annotation pointing to the firm
+"satisficing" rather than profit-maximising.
 **Essay:**
-**Known correct mark:**
+
+A monopoly may not be likely to operate efficiently due to a lack of incentive to be efficient and invest. This is especially prevalent in natural monopolies such as companies like Thames Water. Thames Water is a regional monopoly that supplies water to over 16 million customers. Due to being the sole supplier of water, Thames Water are therefore price makers and can afford to satisfice or be X-inefficient (produce even AC and still make SNP (P−C×Q). Therefore Thames water may satisfice, operate inefficiently and lose key buyers whilst still paying high dividends and wages to employees and shareholders.
+
+However, this may not be the case as increased efficiency can lead to dynamic efficiency. For example Thames water may choose to produce efficiently at low costs in order to gain higher profit, which they can use to invest in order to secure even more efficient (for example replacing labour with specialist machinery, thus reducing unit/labour costs). This would increase dividends in the long run due to lower costs and greater profit, despite lower dividends and wages in the short term.
+
+Another reason why a firm may not operate efficiently is due to high barriers to entry. Thames water for example has very high infrastructure costs for pipes and reservoirs, meaning that large fixed and sunk costs are associated with entering the market. Additionally there are high legal barriers to entry in order to prove that the new firm is trustworthy and the water is safe, incurring even greater costs on the new firm. Due to the large scale (16 million households provided to) of Thames Water, the firm benefits from large economies of scale such as financial (low interest rates for borrowing due to large company size) and purchasing (low purchase price of pipes due to large scale). New firms do not yet have the same scale as Thames water and therefore cannot compete on price even if Thames water is not greatly efficient.
+
+However, Thames water may operate efficiently due to strict regulation by Ofwat. For example Ofwat sets price caps every five years which forces Thames water to lower costs to maximise profit and dividends to shareholders, as they are unable to pass on large scale inefficiencies onto consumers through high prices. Additionally, in 2027 Ofwat approved £300 million in funding for infrastructure improvements, but only if Thames water met certain performance targets, meaning that Thames water are incentivised to be efficient due to the opportunity for high profit if targets are met.
+
+Overall, the most likely outcome is that monopolies become inefficient due to high barriers to entry. The lack of contestability of the industry and lack of external competition due to high fixed costs and EOS mean that Thames water can satisfice and pay high dividends while they are inefficient, satisfying employees who work less hard and shareholders who still earn high dividends due to SNP.
+
+**Known correct mark:** 21 out of 25.
+
+**PROVENANCE — needs confirming before this counts as a calibration anchor.**
+Recorded as "scored 21" but the marker was not specified. This matters: Seb's
+interview (see spec.md) describes him **self-marking against a real mark
+scheme** rather than being marked by a teacher or examiner. If this 21 is
+Seb's own self-assessment, it is weaker evidence than Test 1's examiner-
+confirmed range, and per this file's own rule ("must come from a real source —
+a teacher, an examiner, or your own check against the actual mark scheme")
+it should be labelled as such rather than treated as equivalent. **Ask Seb who
+marked it.** Still useful either way as a mid-range comparison case; just not
+interchangeable with an examiner mark.
+
+**Two things worth noting about this essay as a test case — both useful:**
+1. **It comes with a real diagram description**, unlike Test 1. That makes it
+   the first genuine test of the diagram-marking path with actual student-
+   written content, rather than the absent-diagram path.
+2. **It contains a factual oddity** — "in 2027 Ofwat approved £300 million"
+   is a future date. Per CLAUDE.md the tool must NOT fact-check or "correct"
+   real-world claims the student made; it should judge only how well the
+   evidence was used. So the correct behaviour here is to say nothing about
+   the date. If the tool flags it as a factual error, that is a constitution
+   violation and a genuine bug — making this an accidental but valuable test
+   of that rule.
 
 ## Test 3
 **Paper/Theme:**
