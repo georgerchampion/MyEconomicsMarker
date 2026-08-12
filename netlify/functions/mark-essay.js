@@ -201,11 +201,22 @@ exports.handler = async (event) => {
         // known 24-25/25 essay as Level 2 across both components — a severe
         // miss, not a boundary call. The one thing that changed from the
         // Aug 11 working demo is this dropping from the default 'medium' to
-        // 'low'. Reverted to 'medium' (i.e. left unset) with a bigger token
-        // budget instead, so the fix doesn't trade accuracy for reliability.
-        // Re-test against Maxim's essay again before drawing conclusions —
-        // this reasoning_effort theory is not yet confirmed.
-        max_completion_tokens: 6000,
+        // 'low'. Reverted to 'medium' (explicit now, not just left unset).
+        //
+        // TPM CEILING (2026-08-12): Groq's free tier caps openai/gpt-oss-20b
+        // at 8000 tokens/minute, and "requested tokens" = prompt tokens +
+        // max_completion_tokens, not actual usage. 6000 pushed this exact
+        // essay's request to 9313 and got a 413 rate_limit_exceeded. This
+        // essay's prompt is ~3300 tokens (general-only tier — no specific
+        // mark scheme/examiner report attached), leaving ~4700 of headroom
+        // under the 8000 ceiling. Set to 4400 for margin. NOTE: the
+        // exact-match tier loads specific mark scheme + examiner report on
+        // top of the general grid, so its prompts are meaningfully bigger —
+        // if a known-question essay (e.g. Seb/Luke, task 18) hits this same
+        // 413, the budget below needs to come down further for that tier,
+        // or the grounding text trimmed. Revisit then, don't guess now.
+        reasoning_effort: 'medium',
+        max_completion_tokens: 4400,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage },
