@@ -112,8 +112,9 @@ WHAT COUNTS AS AN ISSUE
 - structure: genuinely missing reasoning or no judgement. Topic sentences and transitions ("Another impact could be...", "Firstly", "However") are normal convention, NOT faults.
 - phrasing: language so vague it could fit any essay.
 - Standard abbreviations (SNP, AD, MC, AC, MPC, MSC, DWL, EOS, PED) are expected usage, never a fault, never need defining.
-- Tag "serious" ONLY if it demonstrably cost marks and you can name the descriptor it fell below — a strong essay cannot contain three serious faults. Otherwise "quality". Default to "quality" when unsure.
-- NO QUOTA: one issue, or none, is a correct answer for a competent essay. Never invent one to fill space. If you graded an essay Level 3-4 yet listed several serious faults, one of those judgements is wrong.
+- EVERY issue "text" MUST STATE THE FAULT IN YOUR OWN WORDS. A bare quotation of the student's sentence is NOT an issue and is forbidden — if you cannot finish the sentence "this is wrong because...", there is no issue and you must leave it out. Quote at most a few words for location, then say what is actually wrong with it.
+- Tag "serious" ONLY if it demonstrably cost marks and you can name the descriptor it fell below. Otherwise "quality"; default to "quality" when unsure. HARD RULE: if you graded either component Level 3 or 4, you may return AT MOST ONE "serious" issue for the whole essay — by your own judgement it did most things well, so several serious faults would contradict your own level.
+- NO QUOTA: one issue, or none, is a correct answer for a competent essay. Never invent one to fill space.
 
 THE IMPROVEMENT
 Exactly ONE change, quoting the exact words it applies to. Strongly prefer deepening or clarifying something already written — extending an unfinished chain, fixing a muddled explanation, sharpening a judgement — over adding new content. Never suggest adding topic sentences, signposting, an introduction, a conclusion, a diagram description, or anything about structure, clarity or repetition: this scheme awards no marks for formatting. If nothing substantial is left to improve, say exactly that.
