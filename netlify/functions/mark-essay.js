@@ -177,7 +177,17 @@ exports.handler = async (event) => {
   const userMessage = [
     `EXAM QUESTION:\n${question}`,
     `STUDENT'S ESSAY:\n${essay}`,
-    diagram ? `STUDENT'S DIAGRAM DESCRIPTION (in their own words):\n${diagram}` : `STUDENT'S DIAGRAM DESCRIPTION: (none given — do not assume or invent a diagram)`,
+    // NOTE (2026-08-12): the "none given" branch used to read "(none given —
+    // do not assume or invent a diagram)". That single line sat right beside
+    // the essay in the user message and effectively overrode the system
+    // prompt's rule that diagrams also count when narrated in the essay's
+    // own prose — the model kept reporting a missing diagram for an essay
+    // that plainly describes its AD1->AD2 / Y1->Y2 shifts in the text.
+    // Nearest, most concrete instruction wins, so this branch now points the
+    // model AT the essay instead of away from it.
+    diagram
+      ? `STUDENT'S SEPARATE DIAGRAM DESCRIPTION (in their own words):\n${diagram}`
+      : `STUDENT'S SEPARATE DIAGRAM DESCRIPTION FIELD: left blank.\nThis does NOT mean the student drew no diagram, and is NOT itself a fault. Their essay was hand-written on paper and typically narrates its diagrams in the prose above. Re-read the essay for any passage naming curves, shift directions or labelled points (e.g. "AD shifts left from AD1 to AD2, output falls from Y1 to Y2") and mark THAT as the diagram description. Only if no such passage exists anywhere in the essay should you treat the diagram as absent — and even then, raise no diagram issue and never suggest adding a diagram description.`,
   ].join('\n\n');
 
   // TPM BUDGET — SELF-SIZING (2026-08-12): Groq's free tier caps
