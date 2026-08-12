@@ -172,6 +172,27 @@ exports.handler = async (event) => {
     diagram ? `STUDENT'S DIAGRAM DESCRIPTION (in their own words):\n${diagram}` : `STUDENT'S DIAGRAM DESCRIPTION: (none given — do not assume or invent a diagram)`,
   ].join('\n\n');
 
+  // TPM BUDGET — SELF-SIZING (2026-08-12): Groq's free tier caps
+  // openai/gpt-oss-20b at 8000 tokens/minute, and "requested tokens" =
+  // prompt tokens + max_completion_tokens (the budget we ask for, not what's
+  // actually used). Three separate 413s happened today because a hardcoded
+  // max_completion_tokens number kept getting invalidated every time the
+  // system prompt grew by a few more instructions (4400 -> 8039, 4000 ->
+  // 8005) — a static number here is fragile by construction, since prompt
+  // length and completion budget both draw from the same 8000 ceiling.
+  // Fix: estimate the real prompt size right here, every request, and size
+  // the completion budget to whatever's actually left, instead of a guess
+  // that has to be manually re-tuned every time either prompt file changes.
+  // ~4 characters/token is a standard rough estimate for English text —
+  // good enough for a safety margin, not exact token-level precision.
+  const TPM_CEILING = 8000;
+  const TPM_SAFETY_MARGIN = 400; // buffer for estimation error, never cut this thin
+  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 4);
+  const maxCompletionTokens = Math.max(
+    1200, // floor — below this, gpt-oss-20b's own reasoning overhead risks the empty-completion 400 from earlier today
+    Math.min(4400, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
+  );
+
   const controller = new AbortController();
   const groqTimeout = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
 
@@ -203,23 +224,14 @@ exports.handler = async (event) => {
         // Aug 11 working demo is this dropping from the default 'medium' to
         // 'low'. Reverted to 'medium' (explicit now, not just left unset).
         //
-        // TPM CEILING (2026-08-12): Groq's free tier caps openai/gpt-oss-20b
-        // at 8000 tokens/minute, and "requested tokens" = prompt tokens +
-        // max_completion_tokens, not actual usage. 6000 pushed this exact
-        // essay's request to 9313 and got a 413. 4400 worked for a while,
-        // but after the diagram + structure/improvement prompt fixes added
-        // more system-prompt text, the same essay hit 8039 — over the
-        // limit again, by only 39 tokens, because 4400 was sized with no
-        // real margin. Dropped to 4000 for actual headroom this time
-        // (~360 tokens spare at current prompt size), not just enough to
-        // scrape by. NOTE: every time the system prompt grows, this budget
-        // needs rechecking — it is coupled to prompt length, not a
-        // one-time fix. The exact-match tier (specific mark scheme +
-        // examiner report attached) has an even bigger prompt, so it will
-        // need a smaller budget still when Seb/Luke essays are tested
-        // (task 18) if either is a known-question match.
+        // TPM CEILING — see the self-sizing calculation above
+        // (maxCompletionTokens). Three separate static numbers (6000, 4400,
+        // 4000) each got invalidated by later prompt edits and produced a
+        // 413 — this is now computed fresh every request instead of
+        // hand-tuned, so it stays correct as the prompt keeps changing,
+        // including for the exact-match tier's bigger grounding text.
         reasoning_effort: 'medium',
-        max_completion_tokens: 4000,
+        max_completion_tokens: maxCompletionTokens,
         // DETERMINISM (2026-08-12): three back-to-back runs of the exact
         // same essay/settings during calibration returned meaningfully
         // different levels (21/25, 18/25, ~15/25 — trending down, not
