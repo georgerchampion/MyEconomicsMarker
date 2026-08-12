@@ -186,6 +186,18 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: GROQ_MODEL,
         temperature: 0.2, // fixed low temperature — same essay marked twice should give the same answer (CLAUDE.md)
+        // gpt-oss-20b is a reasoning model: its hidden reasoning tokens count
+        // against max_completion_tokens, and Groq's default for that is only
+        // 1024 total. For a schema this size (two commentary fields plus an
+        // open-ended issues array) the model was burning that whole budget
+        // on hidden reasoning before writing any JSON, so Groq's own
+        // validator saw an empty completion and rejected it with
+        // "json_validate_failed" / empty failed_generation — a known issue
+        // on Groq's community forum for gpt-oss-20b structured outputs, not
+        // a bug in our schema. Fix: raise the budget and lower reasoning
+        // effort (default is "medium") so more of it goes to the answer.
+        max_completion_tokens: 4000,
+        reasoning_effort: 'low',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage },
