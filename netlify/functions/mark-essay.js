@@ -183,11 +183,21 @@ exports.handler = async (event) => {
   // Fix: estimate the real prompt size right here, every request, and size
   // the completion budget to whatever's actually left, instead of a guess
   // that has to be manually re-tuned every time either prompt file changes.
-  // ~4 characters/token is a standard rough estimate for English text —
-  // good enough for a safety margin, not exact token-level precision.
+  // ESTIMATE FIX (2026-08-12, second attempt): the first version of this
+  // used a /4 chars-per-token divisor and a 400-token safety margin — and
+  // still hit a 413 with the identical "Requested 8005" as before, because
+  // /4 underestimated this prompt's real token count by almost exactly 400
+  // tokens, silently cancelling the entire margin out. Formal/technical
+  // English (long words, punctuation, em dashes, numbers) tokenizes at
+  // closer to 3.3 characters/token than 4 — using /4 was optimistic in
+  // exactly the wrong direction (an UNDERestimate makes the completion
+  // budget too generous, which is how you overshoot the ceiling). Switched
+  // to /3.3 (produces a larger, safer prompt-token estimate) and roughly
+  // doubled the margin to 900, so a second estimation error this size still
+  // doesn't reach the ceiling.
   const TPM_CEILING = 8000;
-  const TPM_SAFETY_MARGIN = 400; // buffer for estimation error, never cut this thin
-  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 4);
+  const TPM_SAFETY_MARGIN = 900; // buffer for estimation error, never cut this thin
+  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.3);
   const maxCompletionTokens = Math.max(
     1200, // floor — below this, gpt-oss-20b's own reasoning overhead risks the empty-completion 400 from earlier today
     Math.min(4400, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
