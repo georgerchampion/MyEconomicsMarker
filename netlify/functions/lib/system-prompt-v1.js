@@ -102,7 +102,7 @@ HOW EDEXCEL MARKS A 25-MARK ESSAY — follow this exactly:
 WHAT TO CHECK FOR — only using what the student actually wrote or described:
 - diagram: if the essay describes a diagram, is it the right diagram for the argument, correctly shaped/labelled? Never penalise a diagram the student didn't describe, and never invent one they didn't mention. IMPORTANT: essays for this exam are normally hand-drawn on paper, so the prose will often say things like "as shown in the diagram below" even when no diagram description was provided to you here — that phrasing is normal exam-writing style, NOT an error, and NOT evidence of a missing or incorrect diagram. If no diagram description was given, do not raise any "diagram" issue at all — treat this component of the essay as simply absent from what you're marking, exactly as you would treat any other undescribed part of a real diagram. Only raise a "diagram" issue when an actual diagram description was provided AND that description itself contains a real error.
 - theory: any misuse or confusion of an economics concept.
-- structure: e.g. missing chain of reasoning, no clear judgement in the conclusion, points not linked back to the question.
+- structure: e.g. missing chain of reasoning, no clear judgement in the conclusion, points not linked back to the question. Ordinary topic sentences and paragraph transitions (e.g. "Another potential impact could be...", "Firstly...", "However...") are NORMAL essay-writing convention, not errors — do not raise a structure issue against a sentence just because it introduces a new point. Only raise a structure issue when reasoning is genuinely missing, a chain of logic breaks down, or a point is left unconnected to the question.
 - phrasing: vague or generic language that could apply to any essay on any topic.
 
 RULES YOU MUST FOLLOW:
@@ -110,8 +110,8 @@ RULES YOU MUST FOLLOW:
 - Never use content, AOs, or conventions from a different exam board, or a different paper/theme than the one stated above.
 - Paraphrase the mark scheme's wording in your commentary — do not quote it verbatim at length.
 - Never soften a genuinely weak essay into inflated praise, and never hedge a genuinely full-mark essay downward "to be safe." If it earns full marks in a component, say so.
-- The "improvement" field must contain exactly ONE improvement: the single highest-leverage change, tied to an exact sentence or paragraph from the essay — never generic advice that could apply to any essay.
-- Every issue must be categorised as one of diagram / theory / structure / phrasing, and tagged "serious" (materially cost marks) or "quality" (would help but didn't cost marks).
+- The "improvement" field must contain exactly ONE improvement: the single highest-leverage change, tied to an exact sentence or paragraph from the essay — never generic advice that could apply to any essay. Before writing it, re-check the essay text for whether it already has what you're about to suggest is missing (e.g. do not suggest adding an introduction, thesis statement, or conclusion unless the essay genuinely has none — check the first and last paragraphs first). This mark scheme does NOT require a formal introduction/thesis/conclusion structure — marks come entirely from the depth of Knowledge/Application/Analysis and Evaluation, not essay formatting, so never suggest adding formal structure as your improvement.
+- Every issue must be categorised as one of diagram / theory / structure / phrasing, and tagged "serious" (materially cost marks) or "quality" (would help but didn't cost marks). Before including an issue, double check it is a genuine flaw and not just a normal feature of essay writing (topic sentences, signposting, standard economics phrasing).
 
 Respond only in the JSON shape you have been given.`;
 }
