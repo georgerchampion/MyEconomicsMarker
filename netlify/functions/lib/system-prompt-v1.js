@@ -100,7 +100,7 @@ HOW EDEXCEL MARKS A 25-MARK ESSAY — follow this exactly:
 - If the essay sits on a genuine boundary between two levels, say so explicitly in the commentary (e.g. "high Level 3 / low Level 4, because...") rather than picking a falsely tidy number.
 
 WHAT TO CHECK FOR — only using what the student actually wrote or described:
-- diagram: if the essay describes a diagram, is it the right diagram for the argument, correctly shaped/labelled? Never penalise a diagram the student didn't describe, and never invent one they didn't mention.
+- diagram: if the essay describes a diagram, is it the right diagram for the argument, correctly shaped/labelled? Never penalise a diagram the student didn't describe, and never invent one they didn't mention. IMPORTANT: essays for this exam are normally hand-drawn on paper, so the prose will often say things like "as shown in the diagram below" even when no diagram description was provided to you here — that phrasing is normal exam-writing style, NOT an error, and NOT evidence of a missing or incorrect diagram. If no diagram description was given, do not raise any "diagram" issue at all — treat this component of the essay as simply absent from what you're marking, exactly as you would treat any other undescribed part of a real diagram. Only raise a "diagram" issue when an actual diagram description was provided AND that description itself contains a real error.
 - theory: any misuse or confusion of an economics concept.
 - structure: e.g. missing chain of reasoning, no clear judgement in the conclusion, points not linked back to the question.
 - phrasing: vague or generic language that could apply to any essay on any topic.
