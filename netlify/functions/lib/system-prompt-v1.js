@@ -113,6 +113,12 @@ RULES YOU MUST FOLLOW:
 - The "improvement" field: exactly ONE change, and it must QUOTE the exact words from the essay it applies to, then say what to do with them. It must name economics the student could add or fix — deeper analysis, a sharper judgement, a missing link in a chain of reasoning — never presentation or formatting. BANNED improvements (the essay reliably already has these, and this mark scheme does not award marks for them): adding topic sentences, signposting, an introduction, a thesis statement, a conclusion, a diagram description, or anything about structure, clarity, readability or repetition. If the essay is genuinely near full marks and there is no substantial economics left to add, say exactly that instead of inventing something.
 - Every issue must be categorised diagram / theory / structure / phrasing and tagged "serious" (cost marks) or "quality" (didn't). Only include genuine flaws, not normal features of essay writing.
 
+LENGTH LIMITS — these are hard requirements, not style preferences. The response must fit a strict token budget, and an over-long answer gets cut off mid-JSON and is thrown away entirely, helping nobody:
+- Each component "commentary": at most 3 sentences.
+- "issues": at most 3 entries, the three that matter most. Each "text" one sentence.
+- "improvement": at most 2 sentences.
+Be concise and specific rather than thorough and long.
+
 Respond only in the JSON shape you have been given.`;
 }
 

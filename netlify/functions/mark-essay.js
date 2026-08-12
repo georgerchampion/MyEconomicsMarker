@@ -225,9 +225,19 @@ exports.handler = async (event) => {
   // verbose across today's fixes, and prompt text and answer space compete
   // for the same 8000 tokens, so trimming it buys real headroom rather than
   // just moving the problem around.
+  // TIGHTENED AGAIN (2026-08-12): the 400 empty-completion failure came back
+  // INTERMITTENTLY on the same essay — succeeding some runs, failing others.
+  // That pattern is the tell: gpt-oss-20b's hidden reasoning length varies
+  // run to run, so a budget that's merely adequate on an average run runs dry
+  // on a heavy-reasoning run. Two changes together: (a) use 3.6 chars/token
+  // here, which is the ratio actually derived from Groq's own 413 numbers
+  // rather than the deliberately-conservative 3.5 — the over-estimate was
+  // costing ~290 tokens of real headroom for no benefit; (b) the system
+  // prompt now caps output length (max 3 issues, brief commentary), so the
+  // JSON needs materially fewer tokens to complete in the first place.
   const TPM_CEILING = 8000;
-  const TPM_SAFETY_MARGIN = 250;
-  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.5);
+  const TPM_SAFETY_MARGIN = 150;
+  const estimatedPromptTokens = Math.ceil((systemPrompt.length + userMessage.length) / 3.6);
   const maxCompletionTokens = Math.max(
     2600, // floor — gpt-oss-20b needs real room for hidden reasoning AND the full JSON; going below this is what caused the empty-completion 400
     Math.min(4000, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
