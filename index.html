@@ -214,13 +214,31 @@ const THEMES = {
   ],
 };
 
+// ---- HOW TO ADD ANOTHER PAST PAPER (no code changes needed) ----
+// This list is deliberately data, not logic. To add a question:
+//   1. Download the official Pearson mark scheme AND examiner's report for it.
+//   2. Extract each to plain text into
+//      netlify/functions/lib/mark-schemes/ , then HAND-CHECK the extracted
+//      text against the original PDF — PDFs routinely extract scrambled, and
+//      grounding nobody verified is worse than none.
+//   3. Add one entry to KNOWN_QUESTIONS in mark-scheme-loader.js (server) and
+//      one matching entry here (browser), plus the verbatim question wording
+//      in QUESTION_TEXT below.
+// Every entry carries a `year` so the dropdown groups by year and stays
+// readable as this grows.
+//
+// DELIBERATELY NOT LISTING PAPERS WE HAVE NO MARK SCHEME FOR. Offering
+// "June 2022 Paper 2" with no grounding behind it would change nothing about
+// the marking while implying exact-match precision — which CLAUDE.md forbids
+// ("never blend the two silently"). A question appears here only once its
+// real, verified source text exists in the repo.
 const KNOWN_QUESTIONS = {
   paper1: {
     theme1: [
-      { value: 'june2024-paper1-q7', label: 'June 2024, Q7 — rising energy bills (hotel industry)' },
+      { value: 'june2024-paper1-q7', year: 'June 2024', label: 'Q7 — rising energy bills (hotel industry)' },
     ],
     theme3: [
-      { value: 'june2024-paper1-q8', label: 'June 2024, Q8 — contestability (fragrance industry)' },
+      { value: 'june2024-paper1-q8', year: 'June 2024', label: 'Q8 — contestability (fragrance industry)' },
     ],
   },
   paper2: { theme2: [], theme4: [] },
@@ -269,8 +287,22 @@ themeEl.addEventListener('change', () => {
   }
   const matches = (KNOWN_QUESTIONS[paper] && KNOWN_QUESTIONS[paper][theme]) || [];
   knownQuestionEl.disabled = false;
-  const options = ['<option value="">A different question (general marking only)</option>']
-    .concat(matches.map(q => `<option value="${q.value}">${q.label}</option>`));
+
+  // Group by exam year so this stays readable as more papers are added.
+  // Questions with no year fall into an "Other" group rather than vanishing.
+  const byYear = matches.reduce((acc, q) => {
+    const year = q.year || 'Other';
+    (acc[year] = acc[year] || []).push(q);
+    return acc;
+  }, {});
+
+  const options = ['<option value="">A different question (general marking only)</option>'];
+  Object.keys(byYear).sort().reverse().forEach((year) => {
+    options.push(`<optgroup label="${year}">`);
+    byYear[year].forEach((q) => options.push(`<option value="${q.value}">${q.label}</option>`));
+    options.push('</optgroup>');
+  });
+
   knownQuestionEl.innerHTML = options.join('');
   updateTierNote();
 });
