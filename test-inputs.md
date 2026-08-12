@@ -79,8 +79,49 @@ attempt hit an intermittent token-budget failure. Still outstanding.
    the general tier has nothing comparable to anchor against. Attaching fuller
    grounding is currently blocked by the free tier's 8000 tokens/minute ceiling.
 
+- Runs 9 and 10, submitted back to back with nothing changed between them, after
+  freeing ~500 tokens by trimming the examiner-admin preamble out of the
+  grounding: **no errors at all** (the intermittent 400/413 failures are gone —
+  the token squeeze is genuinely fixed). But the marks still differed:
+  run 9 = Level 3 / Level 3 (≈19–20/25), run 10 = Level 3 / Level 2 (≈16/25).
+  Run 10 also flagged the sentence "Another potential impact of high interest
+  rates on the economy could be reduced inflation." as a **serious structure
+  error** — an ordinary topic sentence, and precisely the fault the prompt now
+  explicitly forbids flagging. So the model follows that instruction on some
+  runs and ignores it on others.
+
+**CONCLUSION — WEDNESDAY'S "CONFIDENTLY WRONG" FINDING (the deliverable).**
+This is the documented answer to the playbook's Wednesday task 7. The product
+is confidently wrong in a specific, reproducible-in-kind way: given the exact
+same essay, exam question and settings, it returns materially different marks
+between runs (observed spread across the session: ≈16/25 to ≈22/25 on an essay
+with a confirmed real mark of 24–25/25), and it intermittently reports normal
+essay-writing conventions as serious errors while its own instructions forbid
+exactly that. It states each of these verdicts in the same confident register,
+with plausible-sounding justification, every time.
+
+**Why no further prompt fixes were attempted after run 10.** With a spread this
+wide, a single run cannot distinguish "this fix worked" from "this run happened
+to land higher" — so continuing to tweak the prompt and re-testing once is not
+evidence, it's guessing. Six prompt fixes were made during this session and
+each was validated against one run; in hindsight that method could not have
+worked. The correct place to fix this is Thursday's evaluation set: ten cases,
+scored by hand against known-correct answers, re-run after every change, so a
+fix can be shown to help rather than assumed to.
+
+**Two candidate causes, still not distinguished:**
+1. Model non-determinism. Temperature is pinned at 0.2 and a fixed `seed` is
+   sent, but Groq documents `seed` as best-effort only. A controlled
+   fingerprint comparison remains outstanding.
+2. Weak anchoring on the general tier. This essay has no exact past-paper
+   match, so it's marked against abstract level descriptors with no worked
+   exemplar scripts, unlike the exact-match tier which has real graded
+   examples. Adding graded exemplars is the most promising fix, and now fits
+   within the token ceiling.
+
 **Still not calibrated.** `CALIBRATED = false` remains correct and is doing
-exactly the job it was written for.
+exactly the job it was written for — every number above would have been shown
+to a student as fact, and each one would have been wrong.
 
 ## Test 2
 **Paper/Theme:**
