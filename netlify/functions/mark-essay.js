@@ -217,6 +217,16 @@ exports.handler = async (event) => {
         // or the grounding text trimmed. Revisit then, don't guess now.
         reasoning_effort: 'medium',
         max_completion_tokens: 4400,
+        // DETERMINISM (2026-08-12): three back-to-back runs of the exact
+        // same essay/settings during calibration returned meaningfully
+        // different levels (21/25, 18/25, ~15/25 — trending down, not
+        // random noise around one true value), which breaks CLAUDE.md's
+        // "same essay marked twice gives the same answer" rule. Groq
+        // documents `seed` as a best-effort determinism control (NOT
+        // guaranteed) — worth trying before concluding this is
+        // unfixable. system_fingerprint is logged below so a change in
+        // Groq's backend can be told apart from a change caused by us.
+        seed: 42,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMessage },
@@ -295,7 +305,12 @@ exports.handler = async (event) => {
   // can never state one that's inconsistent with its own components.
   const mark = parsed.components.reduce((sum, c) => sum + c.marksAwarded, 0);
 
-  logRequest({ startedAt, success: true, reason: 'ok' });
+  // DETERMINISM DEBUG (2026-08-12): system_fingerprint changes when Groq's
+  // backend configuration changes — logging it (and temporarily returning
+  // it) lets us tell "Groq's infra changed under us" apart from "our seed
+  // isn't actually pinning anything." Never essay/question content.
+  const systemFingerprint = groqBody && groqBody.system_fingerprint;
+  logRequest({ startedAt, success: true, reason: 'ok', detail: systemFingerprint ? `fp=${systemFingerprint}` : undefined });
 
   return {
     statusCode: 200,
@@ -305,6 +320,9 @@ exports.handler = async (event) => {
       sourceNote: grounding.sourceNote,
       mark,
       outOf: 25,
+      // TEMP DEBUG (2026-08-12): remove alongside the other debug fields
+      // once determinism is sorted — see mark-essay.js notes.
+      debugSystemFingerprint: systemFingerprint || null,
       overallLevel: parsed.overallLevel,
       components: parsed.components,
       issues: parsed.issues,
