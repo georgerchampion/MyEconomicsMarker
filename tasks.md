@@ -237,6 +237,48 @@ existed in a chat session's working files, never actually committed to the
 repo on either branch — meaning the project's own constitution wasn't
 version-controlled alongside the code it governs. Added to the repo now.
 
+## F1 — Does the constitution actually control the agent? (Tuesday task 4)
+The staged version of this test — delete a rule, ask a fresh agent for the
+thing it forbade, watch the behaviour change, restore the rule — was
+**attempted but not completed**, and that's recorded honestly rather than
+claimed. Two attempts failed for practical reasons: a fresh chat session had
+no access to the project folder, so it couldn't read `CLAUDE.md` at all and
+simply asked for context (itself a small demonstration of the point — the file
+only works when the agent is running in the project), and the Claude Code CLI
+route stalled at a login step.
+
+**Why it was not then run in the existing session.** The agent in that session
+had already read the whole day's conversation, so it knew the rule regardless
+of whether the file contained it. A refusal would have proven nothing about
+the file. Following the playbook's own logic about weaker substitutes, this is
+labelled a gap rather than dressed up as a pass.
+
+**The stronger evidence, observed rather than staged.** The constitution
+demonstrably shaped this project's behaviour in specific, checkable ways
+today:
+1. **The rule was missing from the repo entirely** until 2026-08-12. It existed
+   only inside a chat session, meaning any genuinely fresh agent would have
+   built from nothing — which is exactly the failure the file exists to
+   prevent, met in real life rather than in a drill. Caught by George, then
+   committed (`bd23634`), along with spec/plan/tasks/test-inputs.
+2. **"Never show a numeric mark until calibrated" held under pressure.** Marks
+   were computed and available all day, and repeatedly wanted, but stayed
+   hidden behind `CALIBRATED = false`. Given the observed 16-to-22 spread on
+   one essay, every number would have been shown as fact and been wrong.
+3. **"Never send raw provider internals to the browser" was cited against our
+   own debug code** — the temporary `debugGroqDetail` field was flagged as a
+   constitution violation the moment it was added, and marked for removal
+   rather than quietly left in.
+4. **"No database unless a task explicitly needs one"** is why rate limiting
+   is an in-memory Map with its limitations documented, rather than a quietly
+   added dependency.
+5. **"A single pinned Groq model"** is why switching to llama-3.3-70b was
+   raised as a decision for George rather than made unilaterally when the
+   token ceiling got painful.
+
+**Still outstanding:** the staged removal test, to be run from a fresh session
+that can read the file. Worth ten minutes when the login path is working.
+
 ## F2 — Prompt injection / refusal testing  ✅ done, both attempts passed
 Wednesday's "decide what it must refuse, then try to talk it out of refusing"
 task. Run live on the dev site, 2026-08-12. Recorded here rather than just
