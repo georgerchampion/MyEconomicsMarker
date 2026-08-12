@@ -206,17 +206,20 @@ exports.handler = async (event) => {
         // TPM CEILING (2026-08-12): Groq's free tier caps openai/gpt-oss-20b
         // at 8000 tokens/minute, and "requested tokens" = prompt tokens +
         // max_completion_tokens, not actual usage. 6000 pushed this exact
-        // essay's request to 9313 and got a 413 rate_limit_exceeded. This
-        // essay's prompt is ~3300 tokens (general-only tier — no specific
-        // mark scheme/examiner report attached), leaving ~4700 of headroom
-        // under the 8000 ceiling. Set to 4400 for margin. NOTE: the
-        // exact-match tier loads specific mark scheme + examiner report on
-        // top of the general grid, so its prompts are meaningfully bigger —
-        // if a known-question essay (e.g. Seb/Luke, task 18) hits this same
-        // 413, the budget below needs to come down further for that tier,
-        // or the grounding text trimmed. Revisit then, don't guess now.
+        // essay's request to 9313 and got a 413. 4400 worked for a while,
+        // but after the diagram + structure/improvement prompt fixes added
+        // more system-prompt text, the same essay hit 8039 — over the
+        // limit again, by only 39 tokens, because 4400 was sized with no
+        // real margin. Dropped to 4000 for actual headroom this time
+        // (~360 tokens spare at current prompt size), not just enough to
+        // scrape by. NOTE: every time the system prompt grows, this budget
+        // needs rechecking — it is coupled to prompt length, not a
+        // one-time fix. The exact-match tier (specific mark scheme +
+        // examiner report attached) has an even bigger prompt, so it will
+        // need a smaller budget still when Seb/Luke essays are tested
+        // (task 18) if either is a known-question match.
         reasoning_effort: 'medium',
-        max_completion_tokens: 4400,
+        max_completion_tokens: 4000,
         // DETERMINISM (2026-08-12): three back-to-back runs of the exact
         // same essay/settings during calibration returned meaningfully
         // different levels (21/25, 18/25, ~15/25 — trending down, not
