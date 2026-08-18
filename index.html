@@ -213,43 +213,64 @@ const THEMES = {
   ],
 };
 
-// ---- HOW TO ADD ANOTHER PAST PAPER (no code changes needed) ----
-// This list is deliberately data, not logic. To add a question:
-//   1. Download the official Pearson mark scheme AND examiner's report for it.
-//   2. Extract each to plain text into
-//      netlify/functions/lib/mark-schemes/ , then HAND-CHECK the extracted
-//      text against the original PDF — PDFs routinely extract scrambled, and
-//      grounding nobody verified is worse than none.
-//   3. Add one entry to KNOWN_QUESTIONS in mark-scheme-loader.js (server) and
-//      one matching entry here (browser), plus the verbatim question wording
-//      in QUESTION_TEXT below.
-// Every entry carries a `year` so the dropdown groups by year and stays
-// readable as this grows.
+// ---- THE QUESTION LIST: TWO KINDS, NEVER BLURRED ----
+// Every entry has a `tier`, and the difference is not cosmetic:
 //
-// DELIBERATELY NOT LISTING PAPERS WE HAVE NO MARK SCHEME FOR. Offering
-// "June 2022 Paper 2" with no grounding behind it would change nothing about
-// the marking while implying exact-match precision — which CLAUDE.md forbids
-// ("never blend the two silently"). A question appears here only once its
-// real, verified source text exists in the repo.
+//   tier: 'exact'    The official Pearson mark scheme AND examiner's report
+//                    for this exact question are in the repo. Picking it loads
+//                    them, and marking really is question-specific.
+//
+//   tier: 'autofill' Only the verified question WORDING is held. Picking it
+//                    saves the student typing, and nothing else — the essay is
+//                    marked against the general 25-mark grid, exactly as if
+//                    they had pasted the question themselves.
+//
+// The tier is shown honestly on screen for both, because CLAUDE.md forbids
+// blending the two silently: a student must never believe they received
+// question-specific marking when they received the general grid.
+// Implementation detail that enforces it: for 'autofill' entries the browser
+// sends knownQuestionId = null, so the server cannot load grounding that
+// doesn't exist.
+//
+// TO ADD MORE QUESTIONS (data, not code):
+//   Auto-fill only — copy the question wording verbatim from the real Pearson
+//   paper, add an entry with tier:'autofill' plus its text in QUESTION_TEXT.
+//   Check the wording against the source; a wrong question is worse than none,
+//   because the student is then marked against something they didn't answer.
+//
+//   Exact match — additionally save the official mark scheme and examiner's
+//   report as .txt in netlify/functions/lib/mark-schemes/, HAND-CHECK the
+//   extraction against the original PDF (PDFs extract scrambled), add a
+//   matching entry to KNOWN_QUESTIONS in mark-scheme-loader.js, then set
+//   tier:'exact' here.
+//
+// NOTE (2026-08-18): the exact-match tier has never been tested against an
+// essay with a known mark — all five calibration essays ran on the general
+// grid. Until it has been, "exact match" is an architectural claim, not a
+// measured improvement.
 const KNOWN_QUESTIONS = {
   paper1: {
     theme1: [
-      { value: 'june2024-paper1-q7', year: 'June 2024', label: 'Q7 — rising energy bills (hotel industry)' },
+      { value: 'june2024-paper1-q7', year: 'June 2024', tier: 'exact', label: 'Q7 — rising energy bills (hotel industry)' },
     ],
     theme3: [
-      { value: 'june2024-paper1-q8', year: 'June 2024', label: 'Q8 — contestability (fragrance industry)' },
+      { value: 'june2024-paper1-q8', year: 'June 2024', tier: 'exact', label: 'Q8 — contestability (fragrance industry)' },
+      { value: 'june2021-paper1-q7', year: 'June 2021', tier: 'autofill', label: 'Q7 — National Minimum Wage (social care)' },
     ],
   },
   paper2: { theme2: [], theme4: [] },
 };
 
-// Exact question wording, sourced verbatim from the real Pearson question
-// paper — used to auto-fill the question box when a known question is
-// picked, so it's never retyped by hand (and can't drift from the real
-// text).
+// Verbatim question wording, taken from the real Pearson papers. Used to
+// auto-fill the question box so it is never retyped by hand and cannot drift
+// from the text the essay is actually graded against.
 const QUESTION_TEXT = {
   'june2024-paper1-q7': `"A small hotel in Scarborough has seen its energy bills increase from £2000 to £8000 per month. Small businesses do not have the energy management teams of larger companies to negotiate better deals."\n\nEvaluate the microeconomic effects of rising energy bills on the hotel industry or an industry of your choice. (25 marks)`,
   'june2024-paper1-q8': `"Bytedance, which owns TikTok, has launched its own fragrance 'Emotif'. The Beijing-based social media giant has already entered the food and drink markets."\n\nEvaluate the level of contestability in the fragrance industry or another industry of your choice. (25 marks)`,
+  // Wording as recorded in test-inputs.md Test 4, which came from the student's
+  // own paper. Flagged for checking against the official Pearson paper before
+  // this is relied on.
+  'june2021-paper1-q7': `Evaluate the impact of an increase in the National Minimum Wage on the profitability of firms in the social care industry. (25 marks)`,
 };
 
 const paperEl = document.getElementById('paper');
@@ -298,7 +319,12 @@ themeEl.addEventListener('change', () => {
   const options = ['<option value="">A different question (general marking only)</option>'];
   Object.keys(byYear).sort().reverse().forEach((year) => {
     options.push(`<optgroup label="${year}">`);
-    byYear[year].forEach((q) => options.push(`<option value="${q.value}">${q.label}</option>`));
+    byYear[year].forEach((q) => {
+      // Marked in the option itself as well as the note below, so the
+      // difference is visible while choosing rather than only after.
+      const badge = q.tier === 'exact' ? ' ✓ mark scheme loaded' : ' (general marking)';
+      options.push(`<option value="${q.value}">${q.label}${badge}</option>`);
+    });
     options.push('</optgroup>');
   });
 
@@ -314,10 +340,29 @@ knownQuestionEl.addEventListener('change', () => {
   applyQuestionAutofill();
 });
 
+// Look up an entry by its id, so the tier can never be guessed from whether
+// something was merely selected.
+function findQuestion(id) {
+  for (const paper of Object.values(KNOWN_QUESTIONS)) {
+    for (const list of Object.values(paper)) {
+      const hit = list.find((q) => q.value === id);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
 function updateTierNote() {
-  if (knownQuestionEl.value) {
+  const q = findQuestion(knownQuestionEl.value);
+  if (q && q.tier === 'exact') {
     tierNote.className = 'tier-note exact';
-    tierNote.textContent = 'Exact match — will be marked against the real, specific mark scheme and examiner\'s report for this question.';
+    tierNote.textContent = 'Exact match — marked against the real, specific mark scheme and examiner\'s report for this question.';
+  } else if (q && q.tier === 'autofill') {
+    // Says plainly that picking the question saved typing and nothing more.
+    // Without this line a student would reasonably assume that choosing their
+    // exact question meant it was marked against that question's mark scheme.
+    tierNote.className = 'tier-note general';
+    tierNote.textContent = 'Question wording filled in for you — but there is no mark scheme loaded for this question, so it is marked against the general 25-mark banding grid, the same as any unlisted question.';
   } else if (themeEl.value) {
     tierNote.className = 'tier-note general';
     tierNote.textContent = 'No exact past-paper match — will be marked against the general 25-mark banding grid only.';
@@ -480,7 +525,13 @@ form.addEventListener('submit', async (e) => {
     const result = await markEssay({
       paper: paperEl.value,
       theme: themeEl.value,
-      knownQuestionId: knownQuestionEl.value || null,
+      // Only 'exact' questions have grounding on the server. Sending an
+      // 'autofill' id would make the server refuse the request (it has no mark
+      // scheme file for it), so those are sent as null — which is also the
+      // honest description of what happens: general-grid marking.
+      knownQuestionId: (findQuestion(knownQuestionEl.value) || {}).tier === 'exact'
+        ? knownQuestionEl.value
+        : null,
       question: document.getElementById('question').value,
       essay: essayEl.value,
       diagram: document.getElementById('diagram').value,
