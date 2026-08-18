@@ -1,0 +1,131 @@
+{
+  "ranAt": "2026-08-18T11:59:58.507Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-20b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 2709,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (10/16)",
+      "evaluation": "Level 3 (7/9)",
+      "computedMark": 17,
+      "seriousIssues": 1,
+      "qualityIssues": 0,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "interest rates only increase the cost of borrowing, does not therefore reduced disposable incomes of consumers."
+        }
+      ],
+      "improvement": "Rephrase the sentence “interest rates only increase the cost of borrowing, does not therefore reduced disposable incomes of consumers.” to correctly explain that higher rates reduce disposable income by increasing borrowing costs, which in turn reduces consumption.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 5899,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (10/16)",
+      "evaluation": "Level 2 (6/9)",
+      "computedMark": 16,
+      "seriousIssues": 1,
+      "qualityIssues": 0,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The essay incorrectly uses the term ‘SNP’ and fails to explain X‑inefficiency clearly, leading to confusion."
+        }
+      ],
+      "improvement": "Clarify the explanation of X‑inefficiency and dynamic efficiency in the paragraph beginning ‘However, this may not be the case as increased efficiency can lead to dynamic efficiency’, explicitly linking lower costs to higher investment and defining SNP clearly.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": false,
+      "durationMs": 2329,
+      "overallLevel": null,
+      "kaa": null,
+      "evaluation": null,
+      "computedMark": null,
+      "seriousIssues": null,
+      "qualityIssues": null,
+      "issues": null,
+      "improvement": null,
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 2327,
+      "overallLevel": "Level 3",
+      "kaa": "Level 3 (10/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 18,
+      "seriousIssues": 1,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The claim that an increase in the national minimum wage would increase market failure (e.g., 'Additionally, an increase in national minimum wage would increase market failure') is incorrect because wage increases do not directly create market failure; market failure arises from externalities, not wage changes."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The explanation of the subsidy effect is vague and lacks a clear causal chain (e.g., 'By subsidising wages, firms would therefore be able to maintain profitability due to lower costs of production...')."
+        }
+      ],
+      "improvement": "Add a clear causal explanation that a wage subsidy reduces the wage component of MC, shifting the MC curve downwards and restoring profitability.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3557,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The essay states ‘Dutch disease is a downside of [TEXT MISSING — cut off by page break]’ but does not explain how a resource boom leads to currency appreciation and manufacturing decline."
+        }
+      ],
+      "improvement": "After the sentence ‘AD→AD1’, add: ‘This shift raises both output and the price level, increasing real national income and potentially leading to inflationary pressures.’",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ]
+}

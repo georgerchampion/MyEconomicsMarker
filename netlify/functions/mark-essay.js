@@ -32,7 +32,12 @@ const CALIBRATED = false;
 const { loadGrounding, GroundingNotLoadedError } = require('./lib/mark-scheme-loader');
 const { SYSTEM_PROMPT_VERSION, RESPONSE_SCHEMA, buildSystemPrompt } = require('./lib/system-prompt-v1');
 
-const GROQ_MODEL = 'openai/gpt-oss-20b';
+// Overridable so the evaluation runner can A/B a different model against the
+// same five known-mark essays without touching production. Only the two
+// gpt-oss models support Groq's strict Structured Outputs, so the realistic
+// alternatives are openai/gpt-oss-20b (default, fast) and openai/gpt-oss-120b
+// (about six times larger, roughly half the speed).
+const GROQ_MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 // Netlify's free plan hard-kills a synchronous function at 10s. 8500ms was
 // cutting it far too fine: a cold start (routinely 1-3s on the free plan)
@@ -364,13 +369,36 @@ exports.handler = async (event) => {
   let attempt = await callGroq(GROQ_TIMEOUT_MS);
   let retried = false;
 
-  // Retry once when Groq itself rejected the model's output as invalid JSON /
-  // schema — transient, and the same input usually passes on a second attempt.
-  if (!attempt.error && attempt.response.status === 400) {
+  // Two distinct things can produce a useless answer, and BOTH are transient:
+  //   (a) Groq's own validator rejects the model's output      -> HTTP 400
+  //   (b) Groq accepts it but OUR shape check rejects it       -> HTTP 200
+  // (b) is real and was measured on 2026-08-18: Groq's strict schema cannot
+  // enforce array length (minItems/maxItems are unsupported), so the model can
+  // return one or three components, pass Groq, and fail us. Retrying only on
+  // 400 therefore missed a whole class of failure. This peeks at the body to
+  // decide, so both cases get the same second chance.
+  async function isUnusable(a) {
+    if (a.error) return false;                    // network/timeout — not retryable
+    if (a.response.status === 400) return true;   // (a)
+    if (a.response.status !== 200) return false;  // 429 etc — retry won't help
+    try {
+      const body = JSON.parse(await a.response.clone().text());
+      const content = body?.choices?.[0]?.message?.content;
+      const parsed = JSON.parse(content);
+      const ok = Array.isArray(parsed.components) && parsed.components.length === 2 &&
+        parsed.components.every((c) => c && typeof c.marksAwarded === 'number') &&
+        Array.isArray(parsed.issues) && typeof parsed.improvement === 'string';
+      return !ok;                                  // (b)
+    } catch (e) {
+      return true;                                 // unparseable — also retryable
+    }
+  }
+
+  if (await isUnusable(attempt)) {
     const elapsed = Date.now() - startedAt;
     const remaining = GROQ_TIMEOUT_MS - elapsed;
     if (remaining >= RETRY_MIN_REMAINING_MS) {
-      logRequest({ startedAt, success: false, reason: 'groq-400-retrying', detail: `elapsed=${elapsed}ms` });
+      logRequest({ startedAt, success: false, reason: 'unusable-retrying', detail: `elapsed=${elapsed}ms` });
       attempt = await callGroq(remaining);
       retried = true;
     }
