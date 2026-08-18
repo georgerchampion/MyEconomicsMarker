@@ -176,6 +176,12 @@ async function runCase(handler, c) {
     process.exit(1);
   }
 
+  // Wait longer than production so slow-but-valid answers can still be judged.
+  // Cases exceeding the real 6500ms production limit are flagged in the report
+  // rather than silently passing — a mark nobody can wait for is still a fail.
+  const PRODUCTION_TIMEOUT_MS = 6500;
+  process.env.GROQ_TIMEOUT_MS = '25000';
+
   const { handler } = require('./netlify/functions/mark-essay.js');
   const { SYSTEM_PROMPT_VERSION } = require('./netlify/functions/lib/system-prompt-v1.js');
 
@@ -202,14 +208,22 @@ async function runCase(handler, c) {
   // ---- Report ----
   console.log(`\n${'='.repeat(70)}\nRESULTS — prompt ${SYSTEM_PROMPT_VERSION}, model openai/gpt-oss-20b`);
   console.log(`${'='.repeat(70)}`);
-  console.log('Test | Known         | KAA           | Evaluation    | Tool | Sev | Time');
-  console.log('-----|---------------|---------------|---------------|------|-----|------');
+  console.log('Test | Known         | KAA           | Evaluation    | Tool | Sev | Time  | Live?');
+  console.log('-----|---------------|---------------|---------------|------|-----|-------|------');
   for (const r of results) {
     const known = (r.known || '').replace(/\s+/g, ' ').slice(0, 13).padEnd(13);
+    const tooSlow = r.durationMs && r.durationMs > PRODUCTION_TIMEOUT_MS;
     console.log(
       `  ${String(r.case).padEnd(2)} | ${known} | ${(r.kaa || 'FAILED').padEnd(13)} | ${(r.evaluation || '-').padEnd(13)} | ` +
-      `${String(r.computedMark ?? '-').padEnd(4)} | ${String(r.seriousIssues ?? '-').padEnd(3)} | ${r.durationMs ? (r.durationMs / 1000).toFixed(1) + 's' : '-'}`
+      `${String(r.computedMark ?? '-').padEnd(4)} | ${String(r.seriousIssues ?? '-').padEnd(3)} | ` +
+      `${(r.durationMs ? (r.durationMs / 1000).toFixed(1) + 's' : '-').padEnd(5)} | ${tooSlow ? 'TIMEOUT' : 'ok'}`
     );
+  }
+
+  const tooSlowCount = results.filter((r) => r.durationMs > PRODUCTION_TIMEOUT_MS).length;
+  if (tooSlowCount) {
+    console.log(`\n!! ${tooSlowCount} case(s) took longer than production's ${PRODUCTION_TIMEOUT_MS}ms limit.`);
+    console.log('   They produced a mark here, but a real student would have seen a timeout.');
   }
 
   const stamp = new Date().toISOString().replace(/[:.]/g, '-');

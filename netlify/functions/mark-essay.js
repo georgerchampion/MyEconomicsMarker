@@ -42,7 +42,12 @@ const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 // message we control (seen live 2026-08-12). 6500ms leaves ~3.5s of room
 // for cold start plus response handling, so our own honest timeout message
 // always wins the race.
-const GROQ_TIMEOUT_MS = 6500;
+// Overridable so the evaluation runner can wait longer than production does.
+// A runner that kills slow requests can't measure marking quality — but the
+// production default must stay tight because of Netlify's 10s platform kill,
+// so the runner reports separately which cases would have timed out live.
+const GROQ_TIMEOUT_MS = Number(process.env.GROQ_TIMEOUT_MS) || 6500;
+const PRODUCTION_TIMEOUT_MS = 6500;
 
 // ---- Groq tokens-per-minute ceiling ----
 // This single number is what forced most of 2026-08-12's failures: on Groq's

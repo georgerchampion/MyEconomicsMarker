@@ -551,7 +551,14 @@ document.getElementById('markAnotherBtn').addEventListener('click', () => {
 });
 
 function renderResult(r) {
-  const calibrated = r.calibrated !== false; // default true only if the field is genuinely absent (fake/older responses)
+  // FAIL SHUT (2026-08-13). This was `r.calibrated !== false`, which meant a
+  // MISSING field evaluated to true and the page displayed real marks — the
+  // gate failed OPEN. Any response that dropped the field, any older or
+  // hand-made payload, any future refactor that forgot it, would silently
+  // start showing numbers this tool has not earned the right to show. That is
+  // the exact failure the calibration rule exists to prevent, so the default
+  // must be the safe direction: only an explicit `true` unlocks marks.
+  const calibrated = r.calibrated === true;
   document.getElementById('calibrationNote').style.display = calibrated ? 'none' : 'block';
 
   const scoreN = document.getElementById('scoreN');
