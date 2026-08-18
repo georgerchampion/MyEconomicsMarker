@@ -1,0 +1,142 @@
+{
+  "ranAt": "2026-08-18T13:51:11.116Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3294,
+      "overallLevel": "boundary Level 3/4 – high Level 3",
+      "kaa": "boundary Level 3/4 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement ‘interest rates only increase the cost of borrowing, does not therefore reduced disposable incomes of consumers’ is inaccurate and weakens the theoretical explanation."
+        }
+      ],
+      "improvement": "Correct the claim about disposable income by explaining that higher interest rates raise debt‑service costs, reducing real disposable income and thus reinforcing the consumption channel.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3750,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (7/9)",
+      "computedMark": 21,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "\"produce even AC and still make SNP (P−C×Q)\" misstates X‑inefficiency, which should be production above the minimum AC."
+        }
+      ],
+      "improvement": "Revise the sentence to read: \"A monopoly may produce above the minimum average cost (X‑inefficiency) and still earn a profit (P‑C)\\u00D7Q,\" thereby correcting the definition of X‑inefficiency.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 7141,
+      "overallLevel": "boundary Level 3/4 – high Level 3",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (7/9)",
+      "computedMark": 18,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement that \"MPC=MSC, thus shifting behaviour to switch (MPC + tax) fully internalising the DWL\" misrepresents the effect of a tax, which raises private marginal cost to equal marginal social cost rather than equating MPC and MSC without the tax."
+        }
+      ],
+      "improvement": "Clarify the tax mechanism by stating that the tax raises the private marginal cost (MPC) so that MPC + tax = MSC, thereby internalising the external cost.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 5529,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 1,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "‘...instead just produce at (PQ) where MPC is less than MSC.’ – the inequality is reversed, misrepresenting the externality relationship."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "‘However, due to higher wages this may increase worker motivation and thus lead to higher productivity.’ – the causal link is asserted without explanation or evidence."
+        },
+        {
+          "category": "diagram",
+          "severity": "quality",
+          "text": "Diagram description list (e.g., ‘Firm cost/revenue diagram: AR and MR curves…’) is not referenced or integrated into the essay’s analysis."
+        }
+      ],
+      "improvement": "Replace the sentence ‘...where MPC is less than MSC’ with ‘...where MPC is greater than MSC’, correcting the externality relationship and briefly note that this implies a negative externality and a welfare loss.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3532,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The Dutch disease paragraph ends abruptly with \"Dutch disease is a downside of [TEXT MISSING — cut off by page break]\" leaving the explanation incomplete."
+        }
+      ],
+      "improvement": "Extend the Dutch disease paragraph (e.g., after \"This appreciation causes other sectors…\") to fully explain how currency appreciation reduces competitiveness, lowers manufacturing output and can offset growth gains, providing a clearer evaluation of its impact.",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ]
+}

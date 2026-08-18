@@ -275,6 +275,53 @@ stalls, roughly 4% of the time."**
 The retry logic does not help here by design: retrying a timeout guarantees
 breaching the platform limit.
 
+## Six 120b runs — the settled, final picture
+
+| Essay | Known | All 120b results | Mean | Spread |
+|---|---|---|---|---|
+| 1 Maxim | 24–25 | 19, 22, —, 23, 22, 16 | ~20.4 | **16–23 (7 marks)** |
+| 2 Seb | 21 | 23, 23, 16, 22, 19, 21 | ~20.7 | 16–23 (7 marks) |
+| 3 Carbon | 22 | 22, 22, 19, 22, —, 18 | ~20.6 | 18–22 |
+| 4 NMW | 19–20 | 16, 16, 19, 16, 16, 16 | **16.5** | 16–19 |
+| 5 Luke | 18 | 21, 21, 19, 19, 19, 19 | **19.7** | 19–21 |
+
+### The finding that settles it
+
+**The tool cannot distinguish the top three essays.** Maxim (24–25), Carbon (22)
+and Seb (21) all average ~20.5. Their real marks span 3.5 marks; the tool's
+averages span 0.3. Whatever it is measuring, it is not what separates a strong
+essay from an excellent one.
+
+**The two it does separate, it separates backwards.** NMW sits reliably ~3.5
+marks too low, Luke reliably ~1.7 too high, in every run, on both models.
+
+**Range compression, quantified.** Known marks span 18 to 24.5 (6.5 marks).
+The tool's per-essay means span 16.5 to 20.7 (4.2 marks) — and in the wrong
+order. This is regression to the mean surviving a model upgrade that otherwise
+fixed a great deal.
+
+**An earlier single run showed a mean error of 1.4 marks.** It was the fortunate
+end of the spread, not progress. Recording it here specifically because it is
+exactly the kind of result that would be tempting to quote and dishonest to
+rely on — the same essay scored 16 two runs later.
+
+### Latency is drifting toward the ceiling
+
+Durations across runs: 3.2s, 3.6s, 4.1s, 4.9s, 5.5s, 7.1s, and one 38.4s stall.
+Two runs have now exceeded production's 6,500ms limit. The variance is
+Groq-side and not controllable from here.
+
+### What this means for the product
+
+The calibration gate must stay shut, and on this evidence it should stay shut
+permanently unless something structural changes (exemplar anchoring, which the
+free tier's token ceiling blocks, or a materially better model).
+
+The honest product is: **level plus written critique, no numeric mark**, with a
+plain statement of why. The written feedback is genuinely specific and useful —
+it quotes the student's own sentences and identifies real weaknesses. The number
+is the part that cannot be trusted, so the number is the part that goes.
+
 ## Conclusion: bias AND noise, in different places
 
 The question this set of runs was designed to answer — bias or noise — has the
