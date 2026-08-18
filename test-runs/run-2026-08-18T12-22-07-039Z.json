@@ -1,0 +1,147 @@
+{
+  "ranAt": "2026-08-18T12:22:07.039Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4057,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 22,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement \"interest rates only increae the cost of borrowing, does not therefore reduced disposable incomes of consumers\" misrepresents the mechanism linking rates to disposable income."
+        }
+      ],
+      "improvement": "Correct the explanation of how higher interest rates affect disposable income, e.g., note that higher rates increase interest payments on existing debt, thereby reducing disposable income and reinforcing the consumption channel.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 6466,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The profit formula is written as “SNP (P−C×Q)” which is ambiguous; it should be expressed as SNP = (P‑C)×Q."
+        }
+      ],
+      "improvement": "Correct the profit expression to “SNP = (P‑C)×Q” to clarify the calculation of monopoly profit.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4170,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 22,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The essay states “MPC=MSC” after taxation, which misrepresents the mechanism; the correct condition is MPC+tax = MSC."
+        }
+      ],
+      "improvement": "Correct the sentence to read “the tax raises marginal private cost so that MPC+tax = MSC, fully internalising the externality.”",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3864,
+      "overallLevel": "Level 3 – high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 1,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The essay states 'MPC is less than MSC' which reverses the correct relationship for a positive externality (MSC < MPC)."
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "Several statements such as 'may increase worker motivation' are vague and provide no concrete evidence or mechanism."
+        }
+      ],
+      "improvement": "Replace the sentence 'MPC is less than MSC' with 'MSC is less than MPC' to correctly describe the cost relationship for a positive externality.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3864,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (7/9)",
+      "computedMark": 21,
+      "seriousIssues": 1,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "Dutch disease paragraph ends abruptly with '[TEXT MISSING — cut off by page break]'"
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The trade creation explanation uses unclear notation '(Q1−Q2)→(Q−Q3)' which is not clearly linked to the diagram"
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "Conclusion contains vague phrasing such as 'globalisation is increased containerization and technology, allowing the market to increase hugely'"
+        }
+      ],
+      "improvement": "Add the missing explanation after 'Dutch disease is a downside of' to complete the argument, e.g., 'the rapid appreciation of the real exchange rate, which reduces export competitiveness and can lower long‑run growth.'",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ]
+}

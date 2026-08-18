@@ -1,0 +1,131 @@
+{
+  "ranAt": "2026-08-18T12:27:40.865Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 429,
+      "ok": false,
+      "durationMs": 100,
+      "overallLevel": null,
+      "kaa": null,
+      "evaluation": null,
+      "computedMark": null,
+      "seriousIssues": null,
+      "qualityIssues": null,
+      "issues": null,
+      "improvement": null,
+      "error": "AI service returned an error (status 429).",
+      "debugGroqDetail": "{\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kznv6g32eedrqbkr567y4xhz` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 3878, Requested 5079. Please try again in 7.177499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}\n"
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4224,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The explanation of X‑inefficiency is vague – the essay states \"produce even AC and still make SNP\" without describing why a monopoly would be X‑inefficient (lack of competitive pressure)."
+        }
+      ],
+      "improvement": "Expand the sentence on X‑inefficiency (e.g., \"Because a monopoly faces no competitive pressure, it may produce at a higher average cost than the minimum, leading to X‑inefficiency\") to explain the mechanism linking monopoly power to inefficiency.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3249,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 19,
+      "seriousIssues": 1,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The statement 'MPC=MSC, thus shifting behaviour to switch (MPC + tax) fully internalising the DWL' incorrectly equates MPC with MSC after a tax."
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "The description 'maximum price set below the equilibrium price P1>Pmax' mislabels the price relationship and is unclear."
+        }
+      ],
+      "improvement": "Correct the inaccurate equality by replacing the sentence with: 'The tax raises private marginal cost so that MPC + tax = MSC, fully internalising the externality.'",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 2859,
+      "overallLevel": "Level 3 – high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement \"MPC is less than MSC\" incorrectly reverses the usual relationship between marginal private and social costs."
+        }
+      ],
+      "improvement": "Correct the sentence that reads \"MPC is less than MSC\" to reflect that marginal social cost (MSC) lies above marginal private cost (MPC), and clarify the resulting welfare loss accordingly.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3046,
+      "overallLevel": "Level 3 – high",
+      "kaa": "Level 4 – high (14/16)",
+      "evaluation": "Level 2 – high (5/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The welfare‑gain explanation for trade creation is vague – the link between lower prices, consumer surplus (area b) and overall efficiency (area a) is not fully articulated."
+        }
+      ],
+      "improvement": "Clarify the causal chain for trade creation by stating that removing the EU tariff lowers the price of imported goods, which raises consumer surplus (area b) and allows resources to be reallocated to more efficient domestic production, generating the efficiency gain shown by area a.",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ]
+}

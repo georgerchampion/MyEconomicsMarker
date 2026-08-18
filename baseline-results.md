@@ -185,11 +185,51 @@ has not fixed it.
 toward the middle. 120b now over-marks weak essays (+2, +3) while still
 under-marking the best (−5). The range is still compressed; the bias moved.
 
-### Honest status of this comparison
+### Repeated: three 120b runs
 
-**One run.** 20b needed four runs to reveal its pattern, and single runs are
-exactly what misled Wednesday. This is promising, not proven — it must be
-repeated before it justifies a permanent switch.
+| Test | Known | Run A | Run B | Run C | Spread |
+|---|---|---|---|---|---|
+| 1 Maxim | 24–25 | 19 | 22 | *429* | 19–22 |
+| 2 Seb | 21 | 23 | 23 | 16 | 16–23 |
+| 3 Carbon | 22 | 22 | 22 | 19 | 19–22 |
+| 4 NMW | 19–20 | 16 | 16 | 19 | 16–19 |
+| 5 Luke | 18 | 21 | 21 | 19 | 19–21 |
+
+**Runs A and B returned identical marks on four of five essays** (23, 22, 16,
+21 both times). That is by far the most stable behaviour observed all week —
+20b never repeated a single essay's mark exactly. Run C diverged more, so
+120b is steadier, not steady.
+
+**Reliability across three runs: 14/15.** The single failure was a 429 caused
+by starting one run immediately after another, i.e. the test runner's pacing,
+not the product. Against 11/20 on 20b.
+
+**Mean absolute error ≈2.4 marks** (best run 2.2), versus ≈3.8 on 20b.
+
+### The error that survives both models
+
+Two essays are consistently misplaced, in the same direction every time:
+- **NMW (known 19–20) marked 16, 16, 19** — pushed down.
+- **Luke (known 18) marked 21, 21, 19** — pushed up.
+
+They are ranked in the wrong order relative to each other in every single run,
+on both models. That is systematic, not noise, and it is worth investigating on
+its own: Luke's essay is the truncated one, so the tool rates an incomplete
+answer above a complete one. A plausible reading is that the tool rewards
+fluent, confident, well-signposted writing over the substance underneath —
+which would be a meaningful finding about what AI marking actually measures.
+
+### Decision: switching the default to gpt-oss-120b
+
+Better on every axis measured — reliability, discrimination, accuracy — and the
+speed objection that drove the original choice turned out to be wrong.
+
+**What this does NOT fix:** the ranking. Maxim (24–25) still lands 19–22, and
+the Luke/NMW inversion persists. The calibration gate stays shut.
+
+**New constraint introduced:** one essay took 6.5s, exactly the production
+timeout. 120b is fast enough on average but has less margin than 20b did, so
+Netlify's 10s limit is now the binding constraint rather than a comfortable one.
 
 ## Conclusion: bias AND noise, in different places
 

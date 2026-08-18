@@ -190,7 +190,21 @@ async function runCase(handler, c) {
     const c = cases[i];
     process.stdout.write(`Running test ${c.num} (${c.title})... `);
     try {
-      const r = await runCase(handler, c);
+      let r = await runCase(handler, c);
+
+      // A 429 here is the RUNNER's fault, not the product's — starting a
+      // second run straight after a first leaves tokens still counted against
+      // Groq's minute window. Groq states exactly how long to wait, so wait
+      // and repeat rather than recording a false failure. Counting these as
+      // product failures would understate reliability in our own evidence.
+      if (!r.ok && r.httpStatus === 429) {
+        const wait = parseFloat((r.debugGroqDetail || '').match(/try again in ([\d.]+)s/)?.[1] || '30');
+        console.log(`rate-limited, waiting ${Math.ceil(wait) + 5}s then repeating...`);
+        await new Promise((res) => setTimeout(res, (wait + 5) * 1000));
+        process.stdout.write(`  retrying test ${c.num}... `);
+        r = await runCase(handler, c);
+      }
+
       results.push(r);
       console.log(r.ok ? `ok in ${(r.durationMs / 1000).toFixed(1)}s` : `FAILED (${r.httpStatus}) ${r.error || ''}`);
     } catch (err) {

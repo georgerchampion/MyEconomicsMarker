@@ -37,7 +37,23 @@ const { SYSTEM_PROMPT_VERSION, RESPONSE_SCHEMA, buildSystemPrompt } = require('.
 // gpt-oss models support Groq's strict Structured Outputs, so the realistic
 // alternatives are openai/gpt-oss-20b (default, fast) and openai/gpt-oss-120b
 // (about six times larger, roughly half the speed).
-const GROQ_MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
+// SWITCHED TO 120b (2026-08-18) on measured evidence, not preference. Four
+// runs of the five known-mark essays on 20b versus three on 120b:
+//   reliability   20b 11/20 valid    ->  120b 14/15 (its one failure was the
+//                                        test runner's own pacing, not Groq)
+//   discrimination 20b returned exactly 10/16 for KAA in 11 of 15 markings
+//                                     ->  120b spans 11-15/16, so it actually
+//                                        separates essays instead of parking
+//                                        in the middle (regression to the mean)
+//   accuracy      20b mean error ~3.8 marks -> 120b ~2.4
+//   speed         20b 1.6-5.9s       ->  120b 2.9-6.5s. The Tuesday assumption
+//                                        that 120b was too slow for Netlify's
+//                                        10s limit was simply wrong — though
+//                                        one essay did touch 6.5s, so the
+//                                        production timeout is now the binding
+//                                        constraint rather than a comfort.
+// See baseline-results.md for the full tables.
+const GROQ_MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
 // Netlify's free plan hard-kills a synchronous function at 10s. 8500ms was
 // cutting it far too fine: a cold start (routinely 1-3s on the free plan)
