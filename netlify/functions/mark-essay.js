@@ -140,6 +140,13 @@ function getClientIp(event) {
     || 'unknown';
 }
 
+// Exported so the evaluation runner reports the model actually in use rather
+// than re-deriving it. The runner previously guessed by reading the same env
+// var, which printed "gpt-oss-20b" on a run where the handler's own default
+// had already changed to 120b — a measuring tool disagreeing with the thing it
+// measures. One source of truth avoids that whole class of mistake.
+exports.GROQ_MODEL = GROQ_MODEL;
+
 exports.handler = async (event) => {
   const startedAt = Date.now();
 

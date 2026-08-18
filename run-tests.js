@@ -182,7 +182,7 @@ async function runCase(handler, c) {
   const PRODUCTION_TIMEOUT_MS = 6500;
   process.env.GROQ_TIMEOUT_MS = '25000';
 
-  const { handler } = require('./netlify/functions/mark-essay.js');
+  const { handler, GROQ_MODEL: modelUsed } = require('./netlify/functions/mark-essay.js');
   const { SYSTEM_PROMPT_VERSION } = require('./netlify/functions/lib/system-prompt-v1.js');
 
   const results = [];
@@ -223,11 +223,11 @@ async function runCase(handler, c) {
   }
 
   // ---- Report ----
-  // Report the model ACTUALLY used, not a hardcoded string. This printed
-  // "gpt-oss-20b" during a gpt-oss-120b comparison run on 2026-08-18 — a
-  // measuring tool that mislabels what it measured is worse than no tool,
-  // because the saved JSON becomes evidence for the wrong conclusion.
-  const modelUsed = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
+  // modelUsed comes from the handler module itself (see its export), not from
+  // re-reading the env var here. The first version of this fix re-derived it
+  // and STILL printed the wrong name, because the handler's own default had
+  // changed underneath it — the same bug twice, in the tool whose entire job
+  // is telling the truth about what was measured.
   console.log(`\n${'='.repeat(70)}\nRESULTS — prompt ${SYSTEM_PROMPT_VERSION}, model ${modelUsed}`);
   console.log(`${'='.repeat(70)}`);
   console.log('Test | Known         | KAA           | Evaluation    | Tool | Sev | Time  | Live?');

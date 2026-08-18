@@ -1,0 +1,148 @@
+{
+  "ranAt": "2026-08-18T13:21:35.123Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3949,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "\"interest rates only increae the cost of borrowing, does not therefore reduced disposable incomes of consumers\" – the causal link is misstated and contradictory."
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "\"the GDK consumer confidence\" – unclear terminology that obscures the intended meaning."
+        }
+      ],
+      "improvement": "Revise the sentence about disposable income to read, for example: \"Higher interest rates increase borrowing costs, which can reduce borrowers' disposable income and therefore lower consumption.\" This clarifies the mechanism and removes the contradictory phrasing.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3238,
+      "overallLevel": "boundary Level 3/4",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 22,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The sentence \"However, this may not be the case as increased efficiency can lead to dynamic efficiency\" is vague and does not explain the mechanism linking short‑run efficiency gains to long‑run dynamic efficiency."
+        }
+      ],
+      "improvement": "Expand the dynamic‑efficiency paragraph to explain how short‑run cost reductions allow the monopoly to invest in innovation, which lowers long‑run average costs and creates dynamic efficiency (e.g., add a sentence detailing this causal link).",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4481,
+      "overallLevel": "Level 4 – high",
+      "kaa": "Level 4 – high (14/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 22,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "In the diagram description the student writes ‘MPB=MSB (demand)’ which mislabels the demand curve; MPB is the private benefit and differs from MSB in a negative externality diagram."
+        }
+      ],
+      "improvement": "Correct the diagram description by replacing ‘MPB=MSB (demand)’ with a proper labeling such as ‘MPB (demand) lies above MSC, and MSC lies above MPC; a tax shifts MPC up to coincide with MSC.’",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4069,
+      "overallLevel": "Level 3 – high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 1,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The statement 'MPC is less than MSC' incorrectly reverses the relationship for a positive externality."
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "The claim 'higher wages may increase worker motivation and thus lead to higher productivity' is vague and unsupported by evidence."
+        }
+      ],
+      "improvement": "Correct the inaccurate claim that 'MPC is less than MSC' to the proper relationship (MPC > MSC for a positive externality) and briefly explain how this creates under‑production, strengthening both the analysis and evaluation.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3348,
+      "overallLevel": "Level 3 — high",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "Dutch disease is a downside of [TEXT MISSING — cut off by page break]"
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "This therefore leads to a deadweight welfare loss of consumer surplus, French efficiency and EU efficiency."
+        }
+      ],
+      "improvement": "Complete the Dutch‑disease paragraph by adding a sentence such as: “The resulting currency appreciation reduces export competitiveness, cuts net exports and therefore slows long‑run growth.”",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ],
+  "note": "Model field corrected: runner reported the old hardcoded default. Per-request logs confirm gpt-oss-120b."
+}
