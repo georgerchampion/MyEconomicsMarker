@@ -68,12 +68,90 @@ raised without moving to a paid plan.
 Maxim would have been told 18 for an essay an examiner gave 24–25 — a worse
 error than the 21 from ChatGPT that started this whole project.
 
-## What is NOT yet known
+## Runs 2 and 3 — same set, same prompt, nothing changed
 
-Whether these errors are stable bias or noise. One run cannot distinguish them.
-The immediate next step is to re-run the identical set two more times with no
-changes, which the runner now makes cheap, and compare. If Test 1 lands 18, 22
-and 15 across runs, the problem is variance. If it lands 18, 18, 18, the
-problem is systematic under-marking — a completely different fix.
+| Test | Known | Run 1 | Run 2 | Run 3 | Spread |
+|---|---|---|---|---|---|
+| 1 Maxim | 24–25 | 18 | 19 | *429* | 18–19 |
+| 2 Seb | 21 | *timeout* | 8 | 13 | 8–13 |
+| 3 Carbon | 22 | 17 | 17 | *schema* | 17–17 |
+| 4 NMW | 19–20 | 17 | 15 | 15 | 15–17 |
+| 5 Luke | 18 | 20 | *schema* | 18 | 18–20 |
 
-Measure before changing anything. Wednesday was lost to fixing before measuring.
+Component detail (KAA / Evaluation):
+
+| Test | Run 1 | Run 2 | Run 3 |
+|---|---|---|---|
+| 1 Maxim | 10/16, 8/9 | 11/16, 8/9 | — |
+| 2 Seb | — | 6/16, 2/9 | 10/16, 3/9 |
+| 3 Carbon | 10/16, 7/9 | 10/16, 7/9 | — |
+| 4 NMW | 10/16, 7/9 | 10/16, 5/9 | 10/16, 5/9 |
+| 5 Luke | 14/16, 6/9 | — | 10/16, 8/9 |
+
+## Finding 5 — the two components fail in DIFFERENT ways. This is the key result.
+
+**KAA is biased and flat.** It returned exactly **10/16 in six of the nine
+successful markings**, across essays a teacher separated by seven marks. It is
+not varying much — it is stuck near the middle regardless of quality. This is
+regression to the mean, and it is a systematic bias, not noise.
+
+**Evaluation is noisy, not flat.** It swung 8/9, 2/9, 7/9, 5/9, 3/9, 8/9, 6/9.
+On Seb's essay it gave 2/9 then 3/9; on Luke's, 6/9 then 8/9. The spread within
+a single essay approaches the full range of the component.
+
+These need opposite fixes. A flat, biased component needs better discrimination
+— anchoring on what distinguishes a 10 from a 14. A noisy component needs
+steadiness — repeat sampling, or a model that doesn't reroute every call. Any
+single prompt change aimed at "accuracy" would have addressed at most one of
+them, which is why Wednesday's tuning went nowhere.
+
+## Finding 6 — under-marking is systematic at the top, accurate at the bottom
+
+Maxim (24–25) → 18, 19. Carbon (22) → 17, 17. NMW (19–20) → 17, 15, 15.
+Luke (18) → 20, 18.
+
+The error grows with essay quality: roughly −6 on the best essay, −5 on the
+next, −3 in the middle, and slightly *over* on the weakest. The tool compresses
+the range — exactly the "sounds plausible, lands in the middle" behaviour that
+gave Maxim a 21 from ChatGPT.
+
+**Seb's essay is a separate outlier**: 8 and 13 against a known 21, plus one
+timeout. It is the shortest essay (2,925 chars), contains the most garbled
+transcription ("produce even AC and still make SNP (P−C×Q)"), and is the only
+one to fail in three different ways. Worth investigating on its own rather than
+lumping in with the trend.
+
+## Finding 7 — reliability is 73%, which would be visible on Friday
+
+Across three runs of five essays: **11 of 15 calls returned a valid mark.**
+Four distinct failure modes, all real:
+- **timeout** (>6.5s production limit) — run 1, Seb
+- **truncated JSON** (`failed_generation` empty) — run 2, Luke
+- **schema violation** — run 3, Carbon: the model returned an `issues[2].category`
+  outside the allowed enum. Groq's strict mode correctly rejected it, but the
+  whole request is lost rather than degrading. Notably this is strict Structured
+  Outputs *working* — it caught a malformed answer — while still costing the user
+  their result.
+- **429 rate limit** — run 3, Maxim: the runner's 65s spacing is not enough when
+  one run starts immediately after another; Groq reported 4,933 tokens still
+  counted against the window.
+
+With five real testers on Friday, roughly one in four attempts failing is not a
+background detail — it is the first thing they would notice.
+
+## Conclusion: bias AND noise, in different places
+
+The question this set of runs was designed to answer — bias or noise — has the
+answer **both, in different components**. KAA is systematically compressed
+toward the middle; Evaluation is genuinely unstable. Plus a reliability problem
+independent of either.
+
+Priority order, following "steadiness first, accuracy second":
+1. **Reliability** — retry transient failures so 73% becomes closer to 100%.
+   This is a product fix, not prompt tuning, and it is measurable.
+2. **Evaluation noise** — the component that swings most.
+3. **KAA compression** — needs discrimination anchoring (worked exemplars of a
+   10 vs a 14), which the free tier's token ceiling currently blocks.
+
+The calibration gate stays shut. On these numbers Maxim would have been shown
+18 for an essay worth 24–25 — worse than the ChatGPT result that started this.

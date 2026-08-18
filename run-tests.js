@@ -199,8 +199,11 @@ async function runCase(handler, c) {
     }
     // Respect the free tier's per-minute token ceiling.
     if (i < cases.length - 1) {
-      process.stdout.write('  waiting 65s for the token window... ');
-      await new Promise((r) => setTimeout(r, 65000));
+      // 65s was not enough: starting a second run straight after a first hit a
+      // 429 with ~4,900 tokens still counted against the window, because the
+      // minute is measured from Groq's side, not from when our run started.
+      process.stdout.write('  waiting 80s for the token window... ');
+      await new Promise((r) => setTimeout(r, 80000));
       console.log('go');
     }
   }

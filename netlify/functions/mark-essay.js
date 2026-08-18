@@ -273,12 +273,38 @@ exports.handler = async (event) => {
     Math.min(5200, TPM_CEILING - estimatedPromptTokens - TPM_SAFETY_MARGIN)
   );
 
-  const controller = new AbortController();
-  const groqTimeout = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
+  // ---- RETRY ON TRANSIENT FAILURES (2026-08-13) ----
+  // Thursday's baseline measured 11 of 15 real calls returning a valid mark —
+  // 73%. The failures were not all the same thing, and two of them are
+  // genuinely transient: Groq's strict validator rejecting a malformed answer
+  // (a category outside the enum, or a completion truncated mid-JSON). Those
+  // are the model having a bad roll, not a broken request — the identical
+  // input succeeds on the next attempt. Retrying once turns most of them into
+  // a normal result instead of "nothing came back".
+  //
+  // Deliberately NOT retried: 429 (needs a wait we don't have), and timeouts
+  // (the clock is the constraint — retrying guarantees breaching it).
+  //
+  // BUDGET-AWARE: Netlify's free plan kills the function at 10s, so a retry is
+  // only attempted when enough time remains for it to finish. Better to return
+  // one honest error than to be killed mid-retry and show Netlify's raw error
+  // page, which is what happened on Wednesday.
+  const RETRY_MIN_REMAINING_MS = 3500;
 
-  let groqResponse;
-  try {
-    groqResponse = await fetch(GROQ_ENDPOINT, {
+  async function callGroq(timeoutMs) {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return { response: await doFetch(controller.signal) };
+    } catch (err) {
+      return { error: err };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  function doFetch(signal) {
+    return fetch(GROQ_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -331,25 +357,42 @@ exports.handler = async (event) => {
           json_schema: { name: 'essay_mark', strict: true, schema: RESPONSE_SCHEMA },
         },
       }),
-      signal: controller.signal,
+      signal,
     });
-  } catch (fetchErr) {
-    clearTimeout(groqTimeout);
-    const isAbort = fetchErr.name === 'AbortError';
+  }
+
+  let attempt = await callGroq(GROQ_TIMEOUT_MS);
+  let retried = false;
+
+  // Retry once when Groq itself rejected the model's output as invalid JSON /
+  // schema — transient, and the same input usually passes on a second attempt.
+  if (!attempt.error && attempt.response.status === 400) {
+    const elapsed = Date.now() - startedAt;
+    const remaining = GROQ_TIMEOUT_MS - elapsed;
+    if (remaining >= RETRY_MIN_REMAINING_MS) {
+      logRequest({ startedAt, success: false, reason: 'groq-400-retrying', detail: `elapsed=${elapsed}ms` });
+      attempt = await callGroq(remaining);
+      retried = true;
+    }
+  }
+
+  if (attempt.error) {
+    const isAbort = attempt.error.name === 'AbortError';
     logRequest({ startedAt, success: false, reason: isAbort ? 'groq-timeout' : 'groq-network-error' });
     return {
       statusCode: isAbort ? 504 : 500,
       body: JSON.stringify({ error: isAbort ? 'Timed out waiting for the AI service.' : 'Could not reach the AI service.' }),
     };
   }
-  clearTimeout(groqTimeout);
+
+  const groqResponse = attempt.response;
 
   if (!groqResponse.ok) {
     const errText = await groqResponse.text().catch(() => '');
     // Log Groq's own error message, truncated. Without this the logs only
     // say "something failed" — this is the difference between a fixable
     // bug report and a guess. Contains no student essay text.
-    logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}`, detail: errText.slice(0, 500) });
+    logRequest({ startedAt, success: false, reason: `groq-http-${groqResponse.status}${retried ? '-after-retry' : ''}`, detail: errText.slice(0, 500) });
     // Groq's own rate-limit status is 429 too — passed through as the same
     // status code our own per-visitor cap uses, so the frontend's one
     // "rate-limited" handler covers both causes with one honest message.
