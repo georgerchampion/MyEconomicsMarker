@@ -14,9 +14,18 @@ only what was described and never penalises a diagram it wasn't shown.
 - Backend: a Netlify serverless function (Node 20) — the only place the AI
   call happens.
 - AI: a single pinned Groq model, called server-side only, at a fixed low
-  temperature (≤0.2) so the same essay marked twice gives the same answer.
-  Name the exact model once chosen — "whatever's available" is not a
-  decision.
+  temperature (≤0.2). Name the exact model once chosen — "whatever's
+  available" is not a decision.
+- **Reproducibility, restated 2026-08-18 after independent review.** This
+  previously demanded "the same essay marked twice gives the same answer".
+  That is the wrong requirement for a stochastic model and measurement showed
+  it is unachievable here — identical inputs produced marks 7 apart despite
+  fixed temperature and a fixed seed. The binary same/different test also
+  throws away the distinction that actually matters: 19,19,20,19,20 is
+  functionally stable, 16,23,18,21,17 is not. **The requirement is now: at
+  least 90% of repeated runs on the same essay fall within ±1 mark, and 95%
+  within the same level.** The current system does not meet this, which is
+  why numeric marks remain hidden.
 - API key lives in `.env` locally (gitignored) and in Netlify's environment
   settings in production. Never in the repo, never in the client.
 - No database unless a later task explicitly needs one.

@@ -1,5 +1,45 @@
 # Baseline results — Thursday 2026-08-18
 
+> **CORRECTIONS FOLLOWING INDEPENDENT REVIEW (2026-08-18).** A fresh session of
+> a different model reviewed this file, the test cases and the code, with no
+> knowledge of the project. It identified several places where this document
+> stated hypotheses as findings. Those are corrected in place below and listed
+> here so the error is visible rather than quietly edited away:
+>
+> 1. **The ranking claim is not valid evidence.** The five essays answer five
+>    different questions and were marked by three different people. Comparing
+>    them as points on one scale — which this document did repeatedly — assumes
+>    a 22 on one question is objectively better than a 21 on another. It isn't
+>    established. Rank comparisons are only meaningful *within* the same
+>    question, which this dataset cannot support.
+> 2. **"Regression to the mean" was the wrong term.** The correct description is
+>    **score compression / central-tendency bias**. The observation stands; the
+>    statistical label was wrong.
+> 3. **The fluency-bias explanation is a HYPOTHESIS, not a finding.** Luke
+>    scoring above NMW is observed. The claim that fluent prose *causes* it is
+>    not demonstrated — the essays differ in question, topic, author, marker,
+>    length and transcription completeness. See the designed experiment below.
+> 4. **The fingerprint evidence was overstated.** Different `system_fingerprint`
+>    values show backend configuration varies. They do not prove that variation
+>    caused the score variance. The defensible claim is narrower: identical
+>    inputs produced materially different outputs despite fixed temperature and
+>    seed — empirical non-reproducibility, cause unestablished.
+> 5. **Averaging flatters the tool.** Per-essay means across six runs are
+>    reported below, but a real student receives ONE draw from that spread. The
+>    single-call figures are what the product actually delivers.
+> 6. **Human marks are reference labels, not ground truth.** One examiner range
+>    and several teacher marks, no double-marking. If two teachers would place
+>    an essay at 20 and 22, a model saying 20 is not "wrong by 1". There is
+>    currently no measure of human disagreement to compare against — so there is
+>    no denominator for what "good" would mean.
+> 7. **"The written feedback is genuinely useful" is unevidenced.** It was
+>    asserted, never measured. No teacher has rated the issues raised, and
+>    false-positive/false-negative rates for flagged issues are unknown.
+>
+> The review's central verdict is accepted: this project is currently much
+> stronger as an investigation into *why* LLM essay marking fails than as
+> evidence of a working marker.
+
 The first honest measurement of this tool. Five real essays with known marks,
 run in one command via `run-tests.js`, prompt v1, model `openai/gpt-oss-20b`.
 Raw output saved in `test-runs/run-2026-08-18T11-39-38-946Z.json`.
