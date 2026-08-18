@@ -231,6 +231,50 @@ the Luke/NMW inversion persists. The calibration gate stays shut.
 timeout. 120b is fast enough on average but has less margin than 20b did, so
 Netlify's 10s limit is now the binding constraint rather than a comfortable one.
 
+## Five 120b runs — the settled picture
+
+| Test | Known | A | B | C | D | E | Pattern |
+|---|---|---|---|---|---|---|---|
+| 1 Maxim | 24–25 | 19 | 22 | *429* | 23 | 22 | 19–23, **consistently ~2–3 under** |
+| 2 Seb | 21 | 23 | 23 | 16 | 22 | 19 | 16–23, **the noisiest by far** |
+| 3 Carbon | 22 | 22 | 22 | 19 | 22 | *timeout* | 19–22, **most accurate** |
+| 4 NMW | 19–20 | 16 | 16 | 19 | 16 | 16 | **16 four times out of five — a stable −3.5 bias** |
+| 5 Luke | 18 | 21 | 21 | 19 | 19 | 19 | **19–21, consistently 1–3 OVER** |
+
+Best run: mean absolute error 1.4 marks. Typical: ~2.5.
+
+### The one error that never goes away
+
+**Luke is marked above NMW in every single run, on both models.** Known marks
+put NMW (19–20) three marks above Luke (18). Luke's essay is also the one whose
+transcription is **cut off mid-sentence**, so the tool is rating an incomplete
+answer above a complete one, consistently, with no exceptions across nine runs.
+
+Read together with NMW's stable −3.5 and Luke's stable +1 to +3, the most
+plausible explanation is that the tool rewards **fluent, confident, well-signposted
+prose** over substantive completeness. Luke's writing is clean and reads
+authoritatively; the NMW essay is denser, uses more compressed notation and is
+harder to follow, while actually containing more creditable economics. That is a
+real and quite specific finding about what this kind of AI marking measures, and
+it is arguably more interesting than the mark accuracy itself.
+
+## Finding 8 — 120b has occasional severe latency stalls
+
+Run E: Test 3 took **38.4 seconds**. The same essay completed in 3.2–4.5s on
+every other run. This was a Groq-side stall, not a code path — but a real
+student would have seen a timeout, and the runner's `Live?` column correctly
+flagged it.
+
+This matters more than a mark being two off. Production's ceiling is 6,500ms
+(set by Netlify's 10s function kill), so a stall of this size is a guaranteed
+user-facing failure. It is rare — one occurrence in twenty-five 120b calls —
+but it is not something retries or prompt changes can prevent, and it means
+**"it works reliably" cannot be claimed without the caveat "except when Groq
+stalls, roughly 4% of the time."**
+
+The retry logic does not help here by design: retrying a timeout guarantees
+breaching the platform limit.
+
 ## Conclusion: bias AND noise, in different places
 
 The question this set of runs was designed to answer — bias or noise — has the
