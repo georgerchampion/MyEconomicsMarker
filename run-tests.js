@@ -181,6 +181,10 @@ async function runCase(handler, c) {
   // rather than silently passing — a mark nobody can wait for is still a fail.
   const PRODUCTION_TIMEOUT_MS = 6500;
   process.env.GROQ_TIMEOUT_MS = '25000';
+  // Local harness only. Production never sets this, so real visitors never see
+  // provider internals — but the runner needs Groq's stated retry-after delay
+  // to wait out a rate limit rather than record a false failure.
+  process.env.EXPOSE_PROVIDER_ERRORS = '1';
 
   const { handler, GROQ_MODEL: modelUsed } = require('./netlify/functions/mark-essay.js');
   const { SYSTEM_PROMPT_VERSION } = require('./netlify/functions/lib/system-prompt-v1.js');

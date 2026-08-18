@@ -101,13 +101,8 @@ const TPM_CEILING = 8000;
 // (one person's browser looping) — it is NOT a hardened defence against a
 // deliberate attacker with multiple devices. That distinction is worth
 // knowing, not hiding.
-// TEMP DEBUG (2026-08-12): raised from 5 to 20 so George can run several
-// back-to-back determinism-comparison requests on the dev site while it's
-// only him testing. REVERT TO 5 before any real tester (Maxim/Seb/Luke) or
-// production ever sees this — the cap exists specifically to stop one
-// visitor draining the shared Groq key, which still applies to real users.
-const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 20 requests per 10 minutes per visitor (TEMP — normally 5)
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 5 requests per 10 minutes per visitor
 const requestLog = new Map(); // ip -> array of request timestamps (ms)
 
 function checkRateLimit(ip) {
@@ -482,14 +477,17 @@ exports.handler = async (event) => {
     // Groq's own rate-limit status is 429 too — passed through as the same
     // status code our own per-visitor cap uses, so the frontend's one
     // "rate-limited" handler covers both causes with one honest message.
+    // Provider internals are NEVER sent to a browser (CLAUDE.md). They are
+    // exposed only when EXPOSE_PROVIDER_ERRORS is explicitly set, which the
+    // local test runner does so it can read Groq's stated retry-after delay.
+    // Netlify's production environment does not set it, so a real visitor sees
+    // the plain message and nothing else. The raw text is still written to the
+    // server log above, where it belongs.
+    const body = { error: `AI service returned an error (status ${groqResponse.status}).` };
+    if (process.env.EXPOSE_PROVIDER_ERRORS === '1') body.debugGroqDetail = errText.slice(0, 800);
     return {
       statusCode: groqResponse.status === 429 ? 429 : 502,
-      // TEMP DEBUG (2026-08-12): includes Groq's raw error text in the
-      // response so it's visible in the browser's Network tab, since
-      // Netlify's function-log UI was hard to navigate to mid-calibration.
-      // REMOVE before this is shown to anyone other than George — CLAUDE.md
-      // says never send raw provider error internals to the browser.
-      body: JSON.stringify({ error: `AI service returned an error (status ${groqResponse.status}).`, debugGroqDetail: errText.slice(0, 800) }),
+      body: JSON.stringify(body),
     };
   }
 
@@ -544,9 +542,6 @@ exports.handler = async (event) => {
       sourceNote: grounding.sourceNote,
       mark,
       outOf: 25,
-      // TEMP DEBUG (2026-08-12): remove alongside the other debug fields
-      // once determinism is sorted — see mark-essay.js notes.
-      debugSystemFingerprint: systemFingerprint || null,
       overallLevel: parsed.overallLevel,
       components: parsed.components,
       issues: parsed.issues,
