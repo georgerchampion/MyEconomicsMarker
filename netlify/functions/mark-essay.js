@@ -163,6 +163,41 @@ exports.handler = async (event) => {
     };
   }
 
+  // ---- SERVER-SIDE INPUT LIMITS (2026-08-18) ----
+  // The 8,000-character cap existed ONLY in index.html until now. A browser
+  // check improves the experience but protects nothing: anyone can POST
+  // straight to this endpoint and skip it entirely. Since the address is
+  // public and every request spends shared Groq quota, one oversized paste —
+  // accidental or not — could drain the day's allowance in a single call.
+  // These limits are generous against real essays (the longest known-mark
+  // essay in test-inputs.md is ~6,100 characters) and exist to stop abuse,
+  // not to constrain students.
+  const MAX_ESSAY_CHARS = 8000;
+  const MAX_QUESTION_CHARS = 2000;
+  const MAX_DIAGRAM_CHARS = 3000;
+
+  if (String(essay).length > MAX_ESSAY_CHARS) {
+    logRequest({ startedAt, success: false, reason: 'essay-too-long' });
+    return {
+      statusCode: 413,
+      body: JSON.stringify({ error: `That essay is too long (${String(essay).length} characters, maximum ${MAX_ESSAY_CHARS}). Trim it and try again.` }),
+    };
+  }
+  if (String(question).length > MAX_QUESTION_CHARS) {
+    logRequest({ startedAt, success: false, reason: 'question-too-long' });
+    return {
+      statusCode: 413,
+      body: JSON.stringify({ error: `That question is too long (maximum ${MAX_QUESTION_CHARS} characters).` }),
+    };
+  }
+  if (diagram && String(diagram).length > MAX_DIAGRAM_CHARS) {
+    logRequest({ startedAt, success: false, reason: 'diagram-too-long' });
+    return {
+      statusCode: 413,
+      body: JSON.stringify({ error: `That diagram description is too long (maximum ${MAX_DIAGRAM_CHARS} characters).` }),
+    };
+  }
+
   const essayLower = String(essay).toLowerCase();
 
   // ---- Free testing switches — never reach Groq, never cost quota, and
