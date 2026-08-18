@@ -1,0 +1,143 @@
+{
+  "ranAt": "2026-08-18T12:11:05.349Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3584,
+      "overallLevel": "high Level 3",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The sentence \"interest rates only increae the cost of borrowing, does not therefore reduced dispoable incomes of consumers\" misstates the relationship between rates and disposable income."
+        }
+      ],
+      "improvement": "Correct the statement on disposable income to explain that higher interest rates can reduce disposable income for borrowers, e.g., \"Higher interest rates increase borrowing costs, which can lower disposable income for households with debt, reducing their spending capacity.\"",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3236,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The essay relies almost exclusively on the single example of Thames Water, limiting the breadth of application of monopoly theory."
+        }
+      ],
+      "improvement": "In the sentence \"However, Thames water may operate efficiently due to strict regulation by Ofwat,\" add a brief note that the effectiveness of regulation can be uncertain and may be subject to regulatory capture, thereby deepening the evaluation of this viewpoint.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3558,
+      "overallLevel": "boundary Level 3/4",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 22,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement 'MPC=MSC' after taxation is inaccurate; the correct condition is 'MPC+tax = MSC'."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The claim that a maximum price set below equilibrium may be set 'too high or low' is contradictory, as a price below equilibrium cannot be too high."
+        }
+      ],
+      "improvement": "Replace the sentence 'MPC=MSC' with 'MPC+tax = MSC' to correctly describe the effect of the tax on marginal private cost.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3759,
+      "overallLevel": "Level 3 – low",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 1,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "serious",
+          "text": "The essay states \"MPC is less than MSC\" for a positive externality, which reverses the correct relationship (MSC < MPC)."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The link between higher wages and lower unit labour cost is asserted without explaining the mechanism (e.g., how productivity offsets wage rises)."
+        }
+      ],
+      "improvement": "Correct the statement to \"MSC is less than MPC\" and briefly explain that a positive externality means the social marginal cost is lower than the private marginal cost, which helps clarify why higher wages can lead to under‑production and affect firm profitability.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3370,
+      "overallLevel": "Level 4 — high",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 3 (7/9)",
+      "computedMark": 21,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The sentence 'Dutch disease is a downside of [TEXT MISSING — cut off by page break]' leaves the mechanism of currency appreciation and its impact on other sectors unexplained."
+        }
+      ],
+      "improvement": "Complete the Dutch disease paragraph by adding a sentence such as: 'The appreciation makes Nigerian exports more expensive, reducing demand for non‑oil goods and lowering investment in manufacturing, which can curb long‑run growth.'",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ],
+  "note": "Model field corrected 2026-08-18: the runner hardcoded gpt-oss-20b in its report. This run was executed with GROQ_MODEL=openai/gpt-oss-120b, confirmed by the per-request log lines in the terminal output."
+}

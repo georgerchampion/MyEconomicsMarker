@@ -139,6 +139,58 @@ Four distinct failure modes, all real:
 With five real testers on Friday, roughly one in four attempts failing is not a
 background detail — it is the first thing they would notice.
 
+## The model A/B — gpt-oss-120b, same five essays, same prompt
+
+Run with `GROQ_MODEL=openai/gpt-oss-120b node run-tests.js`. One run only.
+
+| Test | Known | 20b (4 runs) | 120b | 120b error |
+|---|---|---|---|---|
+| 1 Maxim | 24–25 | 18, 19, —, 17 | **19** (11/16, 8/9) | −5 to −6 |
+| 2 Seb | 21 | —, 8, 13, 16 | **23** (15/16, 8/9) | +2 |
+| 3 Carbon | 22 | 17, 17, —, — | **22** (14/16, 8/9) | **0** |
+| 4 NMW | 19–20 | 17, 15, 15, 18 | **16** (11/16, 5/9) | −3 to −4 |
+| 5 Luke | 18 | 20, —, 18, 19 | **21** (14/16, 7/9) | +3 |
+
+### What clearly improved
+
+**Reliability: 5/5.** No timeouts, no schema failures, no truncation. Against
+73–75% on 20b across four runs. This alone changes what Friday looks like.
+
+**The regression to the mean is gone.** 20b returned exactly 10/16 for KAA in
+eleven of fifteen markings. 120b returned 11, 15, 14, 11, 14 — it is now
+actually discriminating between essays rather than parking in the middle.
+
+**Mean absolute error roughly 2.8 marks, down from ~3.75.** And one essay
+(Carbon) landed exactly on its known mark of 22.
+
+**Speed was not the problem it was predicted to be.** 3.2–3.8s, comfortably
+inside the 6,500ms production timeout, and *more consistent* than 20b (which
+ranged 1.6–5.9s). The earlier assumption that 120b would be too slow for
+Netlify's free plan was wrong — worth recording, since it was the original
+reason for choosing 20b on Tuesday.
+
+### What did NOT improve
+
+**The ranking is still wrong.** Tool order: Seb 23 > Carbon 22 > Luke 21 >
+Maxim 19 > NMW 16. Known order: Maxim 24–25 > Carbon 22 > Seb 21 > NMW 19–20 >
+Luke 18. Only Carbon sits in the right place.
+
+**Maxim is still the core failure.** The essay this entire project exists
+because of — an examiner-confirmed 24–25 that ChatGPT marked 21 — is now marked
+**19**, and ranked *fourth of five*. The tool rates Luke's truncated 18/25 essay
+higher than it. On the specific problem the product was built to solve, 120b
+has not fixed it.
+
+**The compression flipped rather than resolved.** 20b under-marked everything
+toward the middle. 120b now over-marks weak essays (+2, +3) while still
+under-marking the best (−5). The range is still compressed; the bias moved.
+
+### Honest status of this comparison
+
+**One run.** 20b needed four runs to reveal its pattern, and single runs are
+exactly what misled Wednesday. This is promising, not proven — it must be
+repeated before it justifies a permanent switch.
+
 ## Conclusion: bias AND noise, in different places
 
 The question this set of runs was designed to answer — bias or noise — has the

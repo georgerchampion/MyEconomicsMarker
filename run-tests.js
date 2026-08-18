@@ -209,7 +209,12 @@ async function runCase(handler, c) {
   }
 
   // ---- Report ----
-  console.log(`\n${'='.repeat(70)}\nRESULTS — prompt ${SYSTEM_PROMPT_VERSION}, model openai/gpt-oss-20b`);
+  // Report the model ACTUALLY used, not a hardcoded string. This printed
+  // "gpt-oss-20b" during a gpt-oss-120b comparison run on 2026-08-18 — a
+  // measuring tool that mislabels what it measured is worse than no tool,
+  // because the saved JSON becomes evidence for the wrong conclusion.
+  const modelUsed = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
+  console.log(`\n${'='.repeat(70)}\nRESULTS — prompt ${SYSTEM_PROMPT_VERSION}, model ${modelUsed}`);
   console.log(`${'='.repeat(70)}`);
   console.log('Test | Known         | KAA           | Evaluation    | Tool | Sev | Time  | Live?');
   console.log('-----|---------------|---------------|---------------|------|-----|-------|------');
@@ -236,7 +241,7 @@ async function runCase(handler, c) {
   fs.writeFileSync(outFile, JSON.stringify({
     ranAt: new Date().toISOString(),
     promptVersion: SYSTEM_PROMPT_VERSION,
-    model: 'openai/gpt-oss-20b',
+    model: modelUsed,
     results,
   }, null, 2));
 
