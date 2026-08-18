@@ -250,15 +250,12 @@ However, this may not be the case if the government decides to subsidise social 
 
 Overall, the most important disadvantage of an increase in national living wage is a decrease in firms' profitability. Due to the increased costs causing firms loss of profit, this has both an effect on the firm but also leads to market failure due to firms having to shut down due to low profit, causing underprovision of social care.
 
-**Known correct mark: NOT A MARK — recorded as "mid A".**
-This is a grade band, not a number out of 25, and this file's own rule is that
-the known mark must come from a real source and never be inferred. Converting
-"mid A" into a figure would mean guessing a grade boundary and then treating my
-own guess as ground truth — exactly the substitution this project exists to
-prevent. **Action: ask for the actual mark out of 25.** Until then this case is
-usable for checking the tool lands in roughly the right region and ranks
-sensibly against the others, but it is NOT a precise calibration anchor and
-must not be scored as one.
+**Known correct mark:** 19–20 out of 25, marked by the teacher (confirmed with
+George 2026-08-13). Originally reported only as "mid A", which is a grade band
+rather than a mark — the real figure was obtained rather than inferred from a
+grade boundary, since guessing it and then treating the guess as ground truth
+is exactly the substitution this project exists to prevent. Kept as a range,
+which is honest, rather than forced to one number.
 
 **FINDING — the paper/theme dropdown can't represent this essay properly.**
 This is a real design limitation, surfaced by a real essay rather than
