@@ -1,0 +1,217 @@
+{
+  "ranAt": "2026-08-20T12:53:28.601Z",
+  "promptVersion": "v1",
+  "model": "openai/gpt-oss-120b",
+  "results": [
+    {
+      "case": 1,
+      "title": "interest rates essay (Maxim)",
+      "known": "24–25 out of 25, per the examiner (a real confirmed range, not a single invented number — deliberately kept as a range here rather than forced to one figure).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3690,
+      "overallLevel": "Level 4",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 3,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The sentence \"interest rates only increae the cost of borrowing, does not therefore reduced disposable incomes of consumers\" contains a contradictory claim about disposable income."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The essay repeats the AD‑leftward shift explanation without distinguishing how consumption and investment channels differ, limiting analytical depth."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The 1960s example of high consumption despite high rates is mentioned without explaining the underlying mechanism, leaving the causal link incomplete."
+        }
+      ],
+      "improvement": "Revise the contradictory sentence to clearly state that higher interest rates raise borrowing costs, which can reduce households' disposable income and therefore lower consumption.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 2,
+      "title": "monopoly efficiency essay (Seb)",
+      "known": "21 out of 25, marked by his teacher (confirmed with George 2026-08-12 — not Seb's own self-assessment, which was the thing worth ruling out given Seb's interview describes him self-marking).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3471,
+      "overallLevel": "Level 4",
+      "kaa": "Level 4 (14/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 19,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The essay does not discuss allocative inefficiency (dead‑weight loss) that arises when monopoly price exceeds marginal cost."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The evaluation of regulation’s impact is brief and lacks a deeper analysis of possible unintended consequences or assumptions."
+        }
+      ],
+      "improvement": "Add a brief explanation of the dead‑weight loss arising from monopoly pricing after the opening sentence, e.g., \"...and invest, leading to a dead‑weight loss as price exceeds marginal cost.\"",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 3,
+      "title": "carbon emissions / road traffic essay",
+      "known": "22 out of 25. Marker not yet specified — confirm whether this was a teacher or an examiner before treating it as a firm anchor (same standard applied to Test 2).",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3938,
+      "overallLevel": "Level 4",
+      "kaa": "Level 4 (16/16)",
+      "evaluation": "Level 3 (9/9)",
+      "computedMark": 25,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The statement \"so MPC=MSC\" misstates the condition for internalisation; it should be \"MPC+tax = MSC\"."
+        }
+      ],
+      "improvement": "Correct the internalisation sentence to read \"so MPC+tax = MSC, fully internalising the DWL\".",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 4,
+      "title": "National Minimum Wage / social care essay",
+      "known": "19–20 out of 25, marked by the teacher (confirmed with George 2026-08-13). Originally reported only as \"mid A\", which is a grade band rather than a mark — the real figure was obtained rather than inferred from a grade boundary, since guessing it and then treating the guess as ground truth is exactly the substitution this project exists to prevent. Kept as a range, which is honest, rather than forced to one number.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 4274,
+      "overallLevel": "Level 3",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 0,
+      "qualityIssues": 3,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "\"This leads to the provision of social care to be underprovided, leading to a positive externality to form\" – the description of the externality is vague and conflates a positive externality with under‑provision."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "\"many workers in the social care sector are volunteers and are therefore not paid wages. Therefore an increase in national living wage may not have a significant impact on the firm's costs\" – the claim is unsupported and oversimplifies the cost impact."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "\"By subsidising wages, firms would therefore be able to maintain profitability due to lower costs of production\" – a subsidy does not lower production costs; the mechanism is inaccurately described."
+        }
+      ],
+      "improvement": "Extend the evaluation of the productivity argument by explaining the conditions under which higher wages raise efficiency (e.g., reduced turnover, higher morale) and link this explicitly to the profit impact, rather than stating it only in passing.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 5,
+      "title": "globalisation essay (Luke)",
+      "known": "18 out of 25 — and uniquely, BROKEN DOWN BY COMPONENT: - Knowledge, Application & Analysis: 12 / 16 (Level 3) - Evaluation: 6 / 9 (Level 2) Marked by a teacher — a *different* teacher from the one who marked Tests 2–4, which is worth noting as an independent marking source rather than a single teacher's calibration.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3354,
+      "overallLevel": "Level 4",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The Dutch disease paragraph ends abruptly ('Dutch disease is a downside of ...'), leaving the explanation incomplete."
+        },
+        {
+          "category": "phrasing",
+          "severity": "quality",
+          "text": "The conclusion uses vague language ('globalisation is increased containerization and technology, allowing the market to increase hugely') without a clear balanced judgement."
+        }
+      ],
+      "improvement": "Complete the Dutch disease sentence by explicitly linking currency appreciation to reduced export competitiveness and its consequent impact on long‑run growth.",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 6,
+      "title": "sound economics, poor prose (constructed)",
+      "known": "none — constructed. Compare against Test 7 only.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 6629,
+      "overallLevel": "Level 4",
+      "kaa": "Level 4 (15/16)",
+      "evaluation": "Level 3 (8/9)",
+      "computedMark": 23,
+      "seriousIssues": 0,
+      "qualityIssues": 1,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "the essay states AD shifts left and output falls but does not explain the accompanying fall in the price level, leaving the price mechanism under‑explained."
+        }
+      ],
+      "improvement": "Add a brief sentence after describing the AD leftward shift, e.g., \"The lower aggregate demand also reduces price pressures, so the price level falls from P1 to P2, reinforcing the output decline.\"",
+      "error": null,
+      "debugGroqDetail": null
+    },
+    {
+      "case": 7,
+      "title": "fluent prose, hollow economics (constructed)",
+      "known": "none — constructed. Compare against Test 6 only.",
+      "scoreable": true,
+      "httpStatus": 200,
+      "ok": true,
+      "durationMs": 3278,
+      "overallLevel": "Level 3",
+      "kaa": "Level 3 (11/16)",
+      "evaluation": "Level 2 (5/9)",
+      "computedMark": 16,
+      "seriousIssues": 0,
+      "qualityIssues": 2,
+      "issues": [
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The causal link between rising unemployment and a fall in aggregate demand is stated but not explained (e.g., how lower household income reduces consumption)."
+        },
+        {
+          "category": "theory",
+          "severity": "quality",
+          "text": "The impact on public finances mentions lower revenue and higher spending but does not detail the mechanisms (e.g., reduced tax receipts, increased benefit payments)."
+        }
+      ],
+      "improvement": "After the sentence ‘As unemployment increases, aggregate demand is adversely affected…’, add a brief explanation that reduced household income lowers consumption, which shifts the AD curve left.",
+      "error": null,
+      "debugGroqDetail": null
+    }
+  ]
+}

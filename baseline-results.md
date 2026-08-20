@@ -362,6 +362,55 @@ plain statement of why. The written feedback is genuinely specific and useful �
 it quotes the student's own sentences and identifies real weaknesses. The number
 is the part that cannot be trusted, so the number is the part that goes.
 
+## THE PROSE EXPERIMENT — hypothesis tested and DISPROVEN (2026-08-20)
+
+Two constructed essays, same question, same topic, same length, differing only
+in prose quality versus economic substance (Tests 6 and 7 in test-inputs.md).
+
+| Essay | What it is | Tool's mark |
+|---|---|---|
+| Test 6 | Sound economics, developed chains, real evaluation — written badly, misspelt, clumsy | **23 / 25** (KAA 15/16, Eval 8/9) |
+| Test 7 | Fluent, confident, well-signposted prose — assertions with no mechanisms, evaluation deciding nothing | **16 / 25** (KAA 11/16, Eval 5/9) |
+
+**A seven-mark gap in favour of substance.** The tool marks the economics, not
+the writing. It gave a badly-spelt, ungrammatical essay with real reasoning
+seven marks more than a polished one that says nothing.
+
+**This kills the fluency hypothesis.** Earlier notes in this file suggested the
+tool "rewards fluent, confident, well-signposted prose over substantive
+completeness", offered to explain why Luke's essay consistently outscored NMW's.
+The independent review correctly called that a hypothesis stated as a finding
+and proposed exactly this experiment. Run properly, with the confounders
+removed, it goes the other way. **The explanation was wrong and is withdrawn.**
+
+What remains true: Luke is still over-marked relative to NMW. The cause is now
+unknown rather than assumed — a strictly better position than a confident wrong
+answer, and the honest thing to report.
+
+## REGRESSION — the "top of the band" change traded accuracy for generosity
+
+Following live testing where a strong essay was marked 21–23 while showing only
+one minor issue, the prompt was changed to place marks at the top of a band when
+no serious faults were found. It fixed the case it was aimed at and made others
+worse:
+
+| Essay | Known | Before | After | Change |
+|---|---|---|---|---|
+| Maxim | 24–25 | 19–23 | 23 | improved |
+| Seb | 21 | 16–23 | 19 | ~same |
+| Carbon | 22 | 19–22 | 25 | **+3 over** |
+| NMW | 19–20 | 16 | 16 | unchanged |
+| Luke | 18 | 19–21 | **23** | **+5 over** |
+
+Mean absolute error rose from ~2.4 to **3.0**. The instruction lifted marks
+generally rather than only where deserved, so the tool now cannot separate
+Maxim (24–25) from Luke (18) — both 23.
+
+**Recorded rather than quietly reverted**, because it is the clearest example
+this week of fixing the case in front of you and breaking two you weren't
+looking at. Wednesday's whole problem in one change — and this time the runner
+caught it in seven minutes instead of it going unnoticed.
+
 ## Conclusion: bias AND noise, in different places
 
 The question this set of runs was designed to answer — bias or noise — has the
