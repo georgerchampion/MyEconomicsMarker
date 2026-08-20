@@ -169,8 +169,8 @@
 
   <div id="resultArea">
     <div class="calibration-note" id="calibrationNote" style="display:none;">
-      <strong>Marks aren't shown yet.</strong>
-      This tool hasn't been checked against a real essay with a known, correct mark yet — so numeric marks are hidden until that's done, rather than showing a number that might be wrong. The level and written feedback below are still real.
+      <strong>No number, on purpose.</strong>
+      This tool was tested against five real essays with marks from actual teachers and an examiner. It placed the level correctly most of the time, but the mark moved by up to several points when the same essay was submitted twice — so a single figure would look precise without being reliable. The level and the written feedback below are what it can stand behind, so that's what it shows.
     </div>
     <div class="score-card">
       <div class="n" id="scoreN">—</div>
@@ -292,7 +292,7 @@ paperEl.addEventListener('change', () => {
   }
   themeEl.disabled = false;
   themeEl.innerHTML = '<option value="">Select a theme…</option>' +
-    THEMES[paper].map(t => `<option value="${t.value}">${t.label}</option>`).join('');
+    THEMES[paper].map(t => `<option value="${esc(t.value)}">${esc(t.label)}</option>`).join('');
 });
 
 themeEl.addEventListener('change', () => {
@@ -318,12 +318,12 @@ themeEl.addEventListener('change', () => {
 
   const options = ['<option value="">A different question (general marking only)</option>'];
   Object.keys(byYear).sort().reverse().forEach((year) => {
-    options.push(`<optgroup label="${year}">`);
+    options.push(`<optgroup label="${esc(year)}">`);
     byYear[year].forEach((q) => {
       // Marked in the option itself as well as the note below, so the
       // difference is visible while choosing rather than only after.
       const badge = q.tier === 'exact' ? ' ✓ mark scheme loaded' : ' (general marking)';
-      options.push(`<option value="${q.value}">${q.label}${badge}</option>`);
+      options.push(`<option value="${esc(q.value)}">${esc(q.label)}${badge}</option>`);
     });
     options.push('</optgroup>');
   });
@@ -587,6 +587,40 @@ document.getElementById('markAnotherBtn').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// ---- ESCAPING USER-DERIVED TEXT BEFORE IT REACHES THE PAGE ----
+// Flagged 2026-08-19. Everything rendered below arrives from the AI, and the
+// AI is explicitly instructed to QUOTE the student's own sentences back — so
+// student input reaches innerHTML by a slightly indirect route. A student
+// pasting <img src=x onerror=...> as their "essay" could therefore have it
+// echoed into the results page and executed. It is their own browser, so the
+// blast radius is small today, but the same page would run anything a shared
+// link delivered, and the habit is what matters.
+//
+// Note the reviewer on Thursday did not spot this either. A review only finds
+// what it goes looking for — worth remembering before trusting one.
+function esc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Numbers are interpolated into markup and CSS widths. Coerce and bound them
+// rather than trusting the model to have sent an integer.
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+// severity is written into a CSS class attribute, so escaping alone isn't
+// enough — an unexpected value would silently produce a broken or attacker-
+// chosen class. Whitelist it against the only two values the schema allows.
+function safeSeverity(v) {
+  return v === 'serious' || v === 'quality' ? v : 'quality';
+}
+
 function renderResult(r) {
   // FAIL SHUT (2026-08-13). This was `r.calibrated !== false`, which meant a
   // MISSING field evaluated to true and the page displayed real marks — the
@@ -598,18 +632,25 @@ function renderResult(r) {
   const calibrated = r.calibrated === true;
   document.getElementById('calibrationNote').style.display = calibrated ? 'none' : 'block';
 
+  // THE HONEST VERSION (2026-08-19). Previously the headline slot showed the
+  // words "Not yet calibrated" — an apology where the answer should be. The
+  // level IS the answer: it's what Edexcel actually assesses, and it's the part
+  // measurement showed this tool gets right most of the time. So the level is
+  // now the headline and the number stays hidden, rather than leading with what
+  // the tool can't do.
   const scoreN = document.getElementById('scoreN');
   const scoreOf = document.getElementById('scoreOf');
   if (calibrated) {
-    scoreN.textContent = `${r.mark}`;
+    scoreN.textContent = `${num(r.mark)}`;
     scoreN.style.fontSize = '';
-    scoreOf.textContent = `out of ${r.outOf || 25}`;
+    scoreOf.textContent = `out of ${num(r.outOf) || 25}`;
+    document.getElementById('scoreLevel').textContent = r.overallLevel;
   } else {
-    scoreN.textContent = 'Not yet calibrated';
-    scoreN.style.fontSize = '20px';
-    scoreOf.textContent = '';
+    scoreN.textContent = r.overallLevel || '—';
+    scoreN.style.fontSize = '32px';
+    scoreOf.textContent = 'estimated level';
+    document.getElementById('scoreLevel').textContent = 'mark not shown — see below';
   }
-  document.getElementById('scoreLevel').textContent = r.overallLevel;
   document.getElementById('scoreTier').textContent = r.sourceNote || (r.confidenceTier === 'exact-match'
     ? 'Matched to a real past question'
     : 'General grid only — no exact past-paper match');
@@ -617,22 +658,22 @@ function renderResult(r) {
   document.getElementById('componentBreakdown').innerHTML = r.components.map(c => `
     <div class="component">
       <div class="component-head">
-        <span class="name">${c.label}</span>
-        <span class="marks">${calibrated ? `${c.marksAwarded} / ${c.maxMarks}` : ''}</span>
+        <span class="name">${esc(c.label)}</span>
+        <span class="marks">${calibrated ? `${num(c.marksAwarded)} / ${num(c.maxMarks)}` : ''}</span>
       </div>
-      ${calibrated ? `<div class="bar-track"><div class="bar-fill" style="width:${Math.round((c.marksAwarded / c.maxMarks) * 100)}%"></div></div>` : ''}
-      <span class="level-badge">${c.level}</span>
+      ${calibrated ? `<div class="bar-track"><div class="bar-fill" style="width:${Math.round((num(c.marksAwarded) / (num(c.maxMarks) || 1)) * 100)}%"></div></div>` : ''}
+      <span class="level-badge">${esc(c.level)}</span>
       ${!calibrated ? '<span class="not-calibrated"> — not yet calibrated to an exact mark</span>' : ''}
-      <p>${c.commentary}</p>
+      <p>${esc(c.commentary)}</p>
     </div>`).join('');
 
   document.getElementById('issuesList').innerHTML = r.issues.map(i => `
     <div class="issue">
       <div class="tags">
-        <span class="tag category">${i.category}</span>
-        <span class="tag ${i.severity}">${i.severity}</span>
+        <span class="tag category">${esc(i.category)}</span>
+        <span class="tag ${safeSeverity(i.severity)}">${esc(i.severity)}</span>
       </div>
-      <p>${i.text}</p>
+      <p>${esc(i.text)}</p>
     </div>`).join('');
 
   document.getElementById('improvementText').textContent = r.improvement;

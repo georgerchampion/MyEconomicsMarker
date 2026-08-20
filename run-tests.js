@@ -73,7 +73,11 @@ function parseTestInputs() {
 
     const essay = (block.match(/\*\*Essay:\*\*\n([\s\S]*?)(?=\n\*\*Known correct mark)/) || [, ''])[1].trim();
 
-    const knownRaw = (block.match(/\*\*Known correct mark[:\s]*([\s\S]*?)(?=\n\n)/) || [, ''])[1];
+    // `|$` matters: when a Known-mark line is the LAST line of its block it has
+    // no trailing blank line, so a bare (?=\n\n) silently captured nothing.
+    // Caught by the validator rather than by a wrong result — which is the
+    // whole reason the runner checks its own parsing before calling anything.
+    const knownRaw = (block.match(/\*\*Known correct mark[:\s]*([\s\S]*?)(?=\n\n|$)/) || [, ''])[1];
     const known = knownRaw.replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
     // A case whose "mark" is a grade band, not a number, cannot be scored numerically.
     const scoreable = !/NOT A MARK/i.test(known);

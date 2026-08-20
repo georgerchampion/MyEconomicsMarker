@@ -336,6 +336,77 @@ marked below KAA?) rather than pass/fail against an exact number.**
 
 ---
 
+# CONSTRUCTED PAIR — does the tool mark prose or economics?
+
+Tests 6 and 7 are **not real student work and have no human mark.** They exist
+to test one specific hypothesis, and they are only meaningful *against each
+other*, never against a mark scheme.
+
+**The hypothesis being tested.** Analysis of Tests 1–5 noted that Luke's essay
+scores consistently above NMW's despite being worth three marks less, and
+suggested the tool may reward fluent, confident prose over substantive
+economics. An independent review correctly pointed out that this was a
+hypothesis stated as a finding: the two essays differ in question, topic,
+author, marker, length and transcription completeness, so nothing could be
+attributed to prose style. This pair removes those confounders.
+
+**Design.** Both answer the same question on the same topic at the same length.
+- **Test 6** contains genuinely sound economics — correct chains of reasoning,
+  real evaluation, accurate diagram work — written badly: misspellings, poor
+  punctuation, clumsy sentences, no signposting.
+- **Test 7** is fluent, confident, well-signposted and uses impressive
+  vocabulary, but the economics is hollow: assertions without mechanisms, no
+  developed chains, evaluation that sounds balanced while deciding nothing.
+
+**What the result means.**
+- If **Test 6 scores higher**, the tool is reading economics, not style. The
+  fluency hypothesis is wrong and should be struck from the findings.
+- If **Test 7 scores higher or equal**, the tool is substantially rewarding
+  presentation over substance — a real and serious finding about what this kind
+  of AI marking measures, and directly relevant to any student using it.
+
+Run each three times, since single runs have proved unreliable all week.
+
+## Test 6 — sound economics, poor prose (constructed)
+**Paper/Theme:** Paper 2, Theme 2 (The UK economy)
+**Question:** "Assess the likely impact of a rise in unemployment on the UK economy." (25 marks)
+**Diagram description:** AD/AS diagram, AD shifts left from AD1 to AD2, real output falls Y1 to Y2 and price level falls P1 to P2.
+**Essay:**
+
+one impact of unenployment rising is that consumption will fall. this is becuase when peple lose there jobs there disposable income falls, so they have less money to spend on goods and servcies. consumption is the biggest componant of AD (C+I+G+X-M) makeing up around 60% of it, so if C falls then AD falls to. this shifts AD left from AD1 to AD2 as in the diagram, and real output falls from Y1 to Y2. so unenployment rising causes lower economic growth. also there is a multiplier effect here becuase the peple who lost jobs spend less at shops, so shops make less revenue, so shops lay off staff to, and this repeats. so the final fall in AD is bigger then the first fall.
+
+however it depends how big the rise in unenployment is and weather it is structural or cyclical. if its cyclical then when the econmy recovers those jobs come back, so the fall in AD is temperary. but if its structural, like coal mining in the 1980s, the workers skills dont match the new jobs, so unenployment stays high for years and the fall in AD is permanant. so the impact depends on the type.
+
+another impact is on government finances. when unenployment rises the goverment pays out more in benifits like universal credit, and also collects less in income tax and national insurance becuase fewer peple are working. so the budget defecit gets bigger. in 2020 during covid unenployment rose and goverment borrowing went up a lot. this means the goverment may have to borrow more, which increases the national debt and the intrest payments on it, which is an oppertunity cost becuase that money could of been spent on the NHS or schools instead.
+
+however this depends on weather the goverment can borrow cheaply. if intrest rates are low then borrowing more is not very costly and the goverment can use fiscal stimulus to bring unenployment back down, which then fixes the defecit anyway. but if intrest rates are high, borrowing is expensive and the goverment might have to do austerity, which lowers AD further and makes unenployment worse. so it depends on the intrest rate enviroment.
+
+overall i think the biggest impact is the fall in consumption and AD, becuase this is what causes the multiplier and the rise in the defecit both. the goverment finances problem is really a consequence of the AD problem not a seperate thing. so tackleing AD directly, for example through expansionary fiscal policy, would deal with both at once, althrough only if the unenployment is cyclical rather then structural.
+
+**Known correct mark:** none — constructed. Compare against Test 7 only.
+
+## Test 7 — fluent prose, hollow economics (constructed)
+**Paper/Theme:** Paper 2, Theme 2 (The UK economy)
+**Question:** "Assess the likely impact of a rise in unemployment on the UK economy." (25 marks)
+**Diagram description:** An AD/AS diagram illustrating the macroeconomic consequences, with aggregate demand adjusting and equilibrium repositioning accordingly.
+**Essay:**
+
+A rise in unemployment represents one of the most significant macroeconomic challenges facing the United Kingdom, with far-reaching consequences across multiple dimensions of economic performance. This essay will assess these impacts systematically, considering both the immediate effects and the wider implications for long-run economic prosperity.
+
+Firstly, and perhaps most fundamentally, rising unemployment exerts considerable downward pressure on aggregate demand. As unemployment increases, aggregate demand is adversely affected, and this in turn has notable implications for the level of national output and the overall health of the macroeconomy. The relationship here is well established within economic theory, and the aggregate demand diagram illustrates the resulting adjustment clearly. Consequently, economic growth is likely to be materially weaker than it otherwise would have been.
+
+However, it is important to recognise that the magnitude of this effect should not be overstated. A range of factors will determine the ultimate outcome, and economists have long debated the precise nature of these relationships. The impact may therefore be more modest than initially anticipated, particularly when broader contextual considerations are taken into account.
+
+Secondly, rising unemployment carries substantial implications for the public finances. Government expenditure and revenue are both affected, and the fiscal position deteriorates as a consequence. This is a significant concern for policymakers, who must balance competing objectives within a constrained fiscal envelope. The sustainability of the public finances is therefore called into question, with potential ramifications for future policy flexibility.
+
+Nevertheless, one must be careful not to draw overly pessimistic conclusions. The government retains a number of policy instruments with which to respond, and the effectiveness of these will shape the eventual outcome considerably. Much depends on the particular circumstances prevailing at the time, and on the judgement exercised by the relevant authorities.
+
+In conclusion, a rise in unemployment clearly has meaningful and multifaceted impacts upon the UK economy, affecting both aggregate demand and the public finances in ways that policymakers cannot afford to ignore. The precise magnitude of these effects will depend upon a variety of factors, and careful analysis is therefore required before firm conclusions can be reached. On balance, the impacts are likely to be significant, though the extent of that significance remains contingent upon the wider economic context.
+
+**Known correct mark:** none — constructed. Compare against Test 6 only.
+
+---
+
 # BASELINE STATUS — the test set as it now stands
 
 | # | Essay | Paper/Theme | Known mark | Marker | Tier |
