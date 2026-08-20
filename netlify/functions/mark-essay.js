@@ -527,6 +527,62 @@ exports.handler = async (event) => {
   // can never state one that's inconsistent with its own components.
   const mark = parsed.components.reduce((sum, c) => sum + c.marksAwarded, 0);
 
+  // ---- LEVELS AND MARK RANGES, DERIVED NOT TRUSTED (2026-08-19) ----
+  // Two things were going wrong, both visible on the live site:
+  //
+  // 1. The two components use DIFFERENT level scales. KAA runs Levels 1-4;
+  //    Evaluation runs Levels 1-3 ONLY, with 7-9 as its top band. The model
+  //    returned "Evaluation Level 3" (full marks) alongside "boundary Level
+  //    3/4" overall — incoherent, because both components were actually at
+  //    their ceiling. Deriving the level from the awarded mark against the
+  //    real grid removes the possibility of that contradiction.
+  //
+  // 2. Hiding every number left students with nothing actionable. Repeat runs
+  //    move by more than a mark, so a single figure would be false precision —
+  //    but the LEVEL BAND is a real, published range from Pearson's own grid,
+  //    and a narrow estimate around the awarded mark is honest if labelled as
+  //    an estimate. Both are returned; the page shows the estimate and names it
+  //    as one.
+  const BANDS = {
+    kaa: [{ level: 1, low: 1, high: 4 }, { level: 2, low: 5, high: 8 }, { level: 3, low: 9, high: 12 }, { level: 4, low: 13, high: 16 }],
+    eval: [{ level: 1, low: 1, high: 3 }, { level: 2, low: 4, high: 6 }, { level: 3, low: 7, high: 9 }],
+  };
+
+  function bandFor(key, awarded) {
+    const scale = BANDS[key] || BANDS.kaa;
+    return scale.find((b) => awarded >= b.low && awarded <= b.high) || scale[0];
+  }
+
+  const componentsOut = parsed.components.map((c) => {
+    const band = bandFor(c.key, c.marksAwarded);
+    // Estimate range: the awarded mark ±1, kept inside the level band so the
+    // range can never straddle a level the model didn't award.
+    const low = Math.max(band.low, c.marksAwarded - 1);
+    const high = Math.min(band.high, c.marksAwarded + 1);
+    return {
+      ...c,
+      derivedLevel: band.level,
+      levelMax: c.key === 'eval' ? 3 : 4,
+      bandLow: band.low,
+      bandHigh: band.high,
+      estimateLow: low,
+      estimateHigh: high,
+    };
+  });
+
+  // Overall level follows KAA, which carries 16 of the 25 marks and uses the
+  // full 1-4 scale. Stated plainly rather than as the model's free text, which
+  // is what produced the contradictory "boundary Level 3/4" above.
+  const kaaOut = componentsOut.find((c) => c.key === 'kaa') || componentsOut[0];
+  const overallLevelDerived = `Level ${kaaOut.derivedLevel}`;
+  // Total range is ±1 on the summed mark, NOT the sum of the two component
+  // ranges — adding ±1 twice compounds to ±2 and produced a 21-25 spread that
+  // is too vague to act on. Note the honest caveat: measured run-to-run
+  // variation is wider than ±1, which is why the page calls this an estimate
+  // and the calibration gate stays shut.
+  const estimateLow = Math.max(0, mark - 1);
+  const estimateHigh = Math.min(25, mark + 1);
+
   // DETERMINISM DEBUG (2026-08-12): system_fingerprint changes when Groq's
   // backend configuration changes — logging it (and temporarily returning
   // it) lets us tell "Groq's infra changed under us" apart from "our seed
@@ -542,8 +598,11 @@ exports.handler = async (event) => {
       sourceNote: grounding.sourceNote,
       mark,
       outOf: 25,
-      overallLevel: parsed.overallLevel,
-      components: parsed.components,
+      estimateLow,
+      estimateHigh,
+      overallLevel: overallLevelDerived,
+      modelOverallLevel: parsed.overallLevel, // kept for the logs/test runner, not shown
+      components: componentsOut,
       issues: parsed.issues,
       improvement: parsed.improvement,
       calibrated: CALIBRATED,

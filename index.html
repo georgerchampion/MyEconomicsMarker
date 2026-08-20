@@ -169,8 +169,8 @@
 
   <div id="resultArea">
     <div class="calibration-note" id="calibrationNote" style="display:none;">
-      <strong>No number, on purpose.</strong>
-      This tool was tested against five real essays with marks from actual teachers and an examiner. It placed the level correctly most of the time, but the mark moved by up to several points when the same essay was submitted twice — so a single figure would look precise without being reliable. The level and the written feedback below are what it can stand behind, so that's what it shows.
+      <strong>This is an estimated range, not a mark.</strong>
+      Tested against five real essays marked by teachers and an examiner, this tool usually places the level correctly, but the exact mark moves when the same essay is submitted twice. So it shows a range rather than pretending to a single figure. Treat the level and the written feedback as the useful part — and the range as a rough guide, not a result.
     </div>
     <div class="score-card">
       <div class="n" id="scoreN">—</div>
@@ -646,10 +646,15 @@ function renderResult(r) {
     scoreOf.textContent = `out of ${num(r.outOf) || 25}`;
     document.getElementById('scoreLevel').textContent = r.overallLevel;
   } else {
-    scoreN.textContent = r.overallLevel || '—';
-    scoreN.style.fontSize = '32px';
-    scoreOf.textContent = 'estimated level';
-    document.getElementById('scoreLevel').textContent = 'mark not shown — see below';
+    // Show an estimated RANGE rather than either a single figure (false
+    // precision — repeat runs move by more than a mark) or nothing at all
+    // (useless to a student). The range comes from the awarded mark ±1, held
+    // inside the level band from Pearson's own grid.
+    const lo = num(r.estimateLow), hi = num(r.estimateHigh);
+    scoreN.textContent = lo && hi ? (lo === hi ? `${lo}` : `${lo}–${hi}`) : '—';
+    scoreN.style.fontSize = '40px';
+    scoreOf.textContent = `estimated, out of ${num(r.outOf) || 25}`;
+    document.getElementById('scoreLevel').textContent = r.overallLevel || '—';
   }
   document.getElementById('scoreTier').textContent = r.sourceNote || (r.confidenceTier === 'exact-match'
     ? 'Matched to a real past question'
@@ -659,11 +664,13 @@ function renderResult(r) {
     <div class="component">
       <div class="component-head">
         <span class="name">${esc(c.label)}</span>
-        <span class="marks">${calibrated ? `${num(c.marksAwarded)} / ${num(c.maxMarks)}` : ''}</span>
+        <span class="marks">${calibrated
+          ? `${num(c.marksAwarded)} / ${num(c.maxMarks)}`
+          : `${num(c.estimateLow)}–${num(c.estimateHigh)} / ${num(c.maxMarks)}`}</span>
       </div>
-      ${calibrated ? `<div class="bar-track"><div class="bar-fill" style="width:${Math.round((num(c.marksAwarded) / (num(c.maxMarks) || 1)) * 100)}%"></div></div>` : ''}
-      <span class="level-badge">${esc(c.level)}</span>
-      ${!calibrated ? '<span class="not-calibrated"> — not yet calibrated to an exact mark</span>' : ''}
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round((num(c.marksAwarded) / (num(c.maxMarks) || 1)) * 100)}%"></div></div>
+      <span class="level-badge">Level ${num(c.derivedLevel)} of ${num(c.levelMax)}</span>
+      ${num(c.derivedLevel) === num(c.levelMax) ? '<span class="not-calibrated" style="color:var(--green);"> — top band</span>' : ''}
       <p>${esc(c.commentary)}</p>
     </div>`).join('');
 
